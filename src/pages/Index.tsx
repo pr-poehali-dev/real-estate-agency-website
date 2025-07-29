@@ -3,8 +3,30 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
+import { useState, useEffect } from "react";
 
 export default function Index() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(prev => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const sections = document.querySelectorAll('[data-animate]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-black font-open-sans">
       {/* Header */}
@@ -18,15 +40,36 @@ export default function Index() {
             <a href="#services" className="text-gray-700 hover:text-primary transition-colors">Услуги</a>
             <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">Контакты</a>
           </div>
-          <Button className="bg-primary hover:bg-primary/90 text-white">
-            Оставить заявку
-          </Button>
+          <div className="flex items-center space-x-4">
+            <Button className="bg-primary hover:bg-primary/90 text-white hidden sm:block">
+              Оставить заявку
+            </Button>
+            <button 
+              className="md:hidden"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <Icon name={isMenuOpen ? "X" : "Menu"} size={24} />
+            </button>
+          </div>
         </nav>
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-t shadow-lg">
+            <div className="container mx-auto px-6 py-4 space-y-4">
+              <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>О нас</a>
+              <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Услуги</a>
+              <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Контакты</a>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-white mt-4">
+                Оставить заявку
+              </Button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto text-center">
+      <section className="py-20 px-6" data-animate id="hero">
+        <div className={`container mx-auto text-center transition-all duration-1000 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h1 className="text-5xl md:text-6xl font-bold font-montserrat mb-6">
             🏡 <span className="text-primary">WSE.AM</span>
           </h1>
@@ -49,8 +92,8 @@ export default function Index() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
+      <section className="py-16 bg-gray-50" data-animate id="stats">
+        <div className={`container mx-auto px-6 transition-all duration-1000 delay-200 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
               <div className="text-4xl font-bold text-primary mb-2">1000+</div>
@@ -69,8 +112,8 @@ export default function Index() {
       </section>
 
       {/* Features Section */}
-      <section id="about" className="py-20 px-6">
-        <div className="container mx-auto">
+      <section id="about" className="py-20 px-6" data-animate>
+        <div className={`container mx-auto transition-all duration-1000 delay-300 ${isVisible.about ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
             Почему выбирают нас
           </h2>
@@ -115,8 +158,8 @@ export default function Index() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 bg-gray-50 px-6">
-        <div className="container mx-auto">
+      <section id="services" className="py-20 bg-gray-50 px-6" data-animate>
+        <div className={`container mx-auto transition-all duration-1000 delay-400 ${isVisible.services ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
             Наши услуги
           </h2>
@@ -161,8 +204,8 @@ export default function Index() {
       </section>
 
       {/* Contact Form Section */}
-      <section id="contact" className="py-20 px-6">
-        <div className="container mx-auto max-w-4xl">
+      <section id="contact" className="py-20 px-6" data-animate>
+        <div className={`container mx-auto max-w-4xl transition-all duration-1000 delay-500 ${isVisible.contact ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
             Оставить заявку
           </h2>
@@ -210,7 +253,7 @@ export default function Index() {
                     <Icon name="MessageCircle" size={24} className="text-primary" />
                     <div>
                       <div className="font-medium">Telegram</div>
-                      <a href="#" className="text-primary hover:underline">@wse_am</a>
+                      <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">WSEManager</a>
                     </div>
                   </div>
                   
@@ -218,7 +261,7 @@ export default function Index() {
                     <Icon name="Instagram" size={24} className="text-primary" />
                     <div>
                       <div className="font-medium">Instagram</div>
-                      <a href="#" className="text-primary hover:underline">@wse.am</a>
+                      <a href="https://www.instagram.com/w.s.e._am/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">w.s.e._am</a>
                     </div>
                   </div>
                   
@@ -226,7 +269,7 @@ export default function Index() {
                     <Icon name="MapPin" size={24} className="text-primary" />
                     <div>
                       <div className="font-medium">Адрес</div>
-                      <div className="text-gray-600">Ереван, Армения</div>
+                      <a href="https://yandex.com/maps/org/white_safe_estate/194631976201/?ll=44.516867%2C40.165353&z=20.23" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Ереван ул. Хоренаци 47/7</a>
                     </div>
                   </div>
                 </div>
@@ -278,9 +321,9 @@ export default function Index() {
             <div>
               <h4 className="font-semibold mb-4">Контакты</h4>
               <div className="space-y-2 text-gray-300">
-                <div>Telegram: @wse_am</div>
-                <div>Instagram: @wse.am</div>
-                <div>Ереван, Армения</div>
+                <div>Telegram: <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">WSEManager</a></div>
+                <div>Instagram: <a href="https://www.instagram.com/w.s.e._am/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">w.s.e._am</a></div>
+                <div><a href="https://yandex.com/maps/org/white_safe_estate/194631976201/?ll=44.516867%2C40.165353&z=20.23" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Ереван ул. Хоренаци 47/7</a></div>
               </div>
             </div>
           </div>
