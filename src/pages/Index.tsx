@@ -8,6 +8,36 @@ import { useState, useEffect } from "react";
 export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState({});
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    service: 'Аренда',
+    message: ''
+  });
+
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const emailBody = `
+      Имя: ${formData.name}
+      Телефон: ${formData.phone}
+      Email: ${formData.email}
+      Тип услуги: ${formData.service}
+      Сообщение: ${formData.message}
+    `;
+    
+    const mailtoLink = `mailto:2023wse@gmail.com?subject=С сайта&body=${encodeURIComponent(emailBody)}`;
+    window.location.href = mailtoLink;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,7 +71,7 @@ export default function Index() {
             <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">Контакты</a>
           </div>
           <div className="flex items-center space-x-4">
-            <Button className="bg-primary hover:bg-primary/90 text-white hidden sm:block">
+            <Button onClick={scrollToContact} className="bg-primary hover:bg-primary/90 text-white hidden sm:block">
               Оставить заявку
             </Button>
             <button 
@@ -59,7 +89,7 @@ export default function Index() {
               <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>О нас</a>
               <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Услуги</a>
               <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Контакты</a>
-              <Button className="w-full bg-primary hover:bg-primary/90 text-white mt-4">
+              <Button onClick={scrollToContact} className="w-full bg-primary hover:bg-primary/90 text-white mt-4">
                 Оставить заявку
               </Button>
             </div>
@@ -81,10 +111,10 @@ export default function Index() {
             находить идеальное жильё для жизни и отдыха.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3" onClick={() => window.open('https://t.me/erevan_kvartira', '_blank')}>
               Найти жильё
             </Button>
-            <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white px-8 py-3">
+            <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white px-8 py-3" onClick={scrollToContact}>
               Связаться с нами
             </Button>
           </div>
@@ -213,34 +243,68 @@ export default function Index() {
             {/* Form */}
             <Card className="p-8">
               <CardContent className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Имя</label>
-                  <Input placeholder="Ваше имя" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Телефон</label>
-                  <Input placeholder="+374 XX XXX XXX" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Email</label>
-                  <Input placeholder="your@email.com" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Тип услуги</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-md">
-                    <option>Аренда</option>
-                    <option>Покупка</option>
-                    <option>Продажа</option>
-                    <option>Консультация</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Сообщение</label>
-                  <Textarea placeholder="Расскажите о ваших требованиях..." />
-                </div>
-                <Button className="w-full bg-primary hover:bg-primary/90 text-white py-3">
-                  Отправить заявку
-                </Button>
+                <form onSubmit={handleSubmit}>
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Имя</label>
+                      <Input 
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder="Ваше имя" 
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Телефон</label>
+                      <Input 
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder="+374 XX XXX XXX" 
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Email</label>
+                      <Input 
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="your@email.com" 
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Тип услуги</label>
+                      <select 
+                        name="service"
+                        value={formData.service}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                      >
+                        <option>Аренда</option>
+                        <option>Покупка</option>
+                        <option>Продажа</option>
+                        <option>Консультация</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Сообщение</label>
+                      <Textarea 
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        placeholder="Расскажите о ваших требованиях..." 
+                        required
+                      />
+                    </div>
+                    <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white py-3">
+                      Отправить заявку
+                    </Button>
+                  </div>
+                </form>
               </CardContent>
             </Card>
 
@@ -249,6 +313,14 @@ export default function Index() {
               <div>
                 <h3 className="text-2xl font-semibold font-montserrat mb-6">Контакты</h3>
                 <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Icon name="Phone" size={24} className="text-primary" />
+                    <div>
+                      <div className="font-medium">Телефон</div>
+                      <a href="tel:+37495129260" className="text-primary hover:underline">+374 95129260</a>
+                    </div>
+                  </div>
+                  
                   <div className="flex items-center space-x-3">
                     <Icon name="MessageCircle" size={24} className="text-primary" />
                     <div>
@@ -280,7 +352,7 @@ export default function Index() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Пн-Пт:</span>
-                    <span>09:00 - 19:00</span>
+                    <span>11:00 - 19:00</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Сб:</span>
@@ -321,6 +393,7 @@ export default function Index() {
             <div>
               <h4 className="font-semibold mb-4">Контакты</h4>
               <div className="space-y-2 text-gray-300">
+                <div>Телефон: <a href="tel:+37495129260" className="text-primary hover:underline">+374 95129260</a></div>
                 <div>Telegram: <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">WSEManager</a></div>
                 <div>Instagram: <a href="https://www.instagram.com/w.s.e._am/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">w.s.e._am</a></div>
                 <div><a href="https://yandex.com/maps/org/white_safe_estate/194631976201/?ll=44.516867%2C40.165353&z=20.23" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Ереван ул. Хоренаци 47/7</a></div>
