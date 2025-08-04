@@ -188,23 +188,14 @@ export default function Index() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Создаем данные для отправки
-    const emailData = {
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email,
-      service: formData.service,
-      message: formData.message
-    };
+    // Простая отправка через Web API
+    const formElement = e.target as HTMLFormElement;
+    const formData = new FormData(formElement);
     
-    // Отправляем POST запрос на ваш сервер или сервис
     try {
-      const response = await fetch('https://formspree.io/f/2023wse@gmail.com', {
+      const response = await fetch('https://formsubmit.co/2023wse@gmail.com', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailData)
+        body: formData
       });
       
       if (response.ok) {
@@ -221,7 +212,17 @@ export default function Index() {
       }
     } catch (error) {
       console.error('Ошибка отправки:', error);
-      alert(language === 'ru' ? 'Произошла ошибка при отправке. Попробуйте еще раз.' : 'An error occurred while sending. Please try again.');
+      // Fallback - показываем данные пользователю для ручной отправки
+      const message = `
+Имя: ${formData.get('name')}
+Телефон: ${formData.get('phone')} 
+Email: ${formData.get('email')}
+Услуга: ${formData.get('service')}
+Сообщение: ${formData.get('message')}
+
+Скопируйте эти данные и отправьте на 2023wse@gmail.com
+      `;
+      alert(language === 'ru' ? 'Ошибка отправки. ' + message : 'Sending error. ' + message);
     }
   };
 
@@ -264,19 +265,21 @@ export default function Index() {
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setLanguage('ru')}
-                className={`px-2 py-1 text-sm rounded ${
+                className={`flex items-center space-x-1 px-2 py-1 text-sm rounded ${
                   language === 'ru' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
                 }`}
               >
-                RU
+                <span>🇷🇺</span>
+                <span>RU</span>
               </button>
               <button
                 onClick={() => setLanguage('en')}
-                className={`px-2 py-1 text-sm rounded ${
+                className={`flex items-center space-x-1 px-2 py-1 text-sm rounded ${
                   language === 'en' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
                 }`}
               >
-                EN
+                <span>🇬🇧</span>
+                <span>EN</span>
               </button>
             </div>
             <Button onClick={scrollToContact} className="bg-primary hover:bg-primary/90 text-white hidden sm:block">
@@ -300,19 +303,21 @@ export default function Index() {
               <div className="flex space-x-2 mt-2">
                 <button
                   onClick={() => setLanguage('ru')}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`flex items-center space-x-1 px-3 py-1 text-sm rounded ${
                     language === 'ru' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
                   }`}
                 >
-                  RU
+                  <span>🇷🇺</span>
+                  <span>RU</span>
                 </button>
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`flex items-center space-x-1 px-3 py-1 text-sm rounded ${
                     language === 'en' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
                   }`}
                 >
-                  EN
+                  <span>🇬🇧</span>
+                  <span>EN</span>
                 </button>
               </div>
               <Button onClick={scrollToContact} className="w-full bg-primary hover:bg-primary/90 text-white mt-4">
