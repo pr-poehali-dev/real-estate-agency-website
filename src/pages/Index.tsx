@@ -4,231 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
 import { useState, useEffect } from "react";
-import emailjs from 'emailjs-com';
-
-const translations = {
-  ru: {
-    nav: {
-      about: 'О нас',
-      services: 'Услуги',
-      contact: 'Контакты',
-      submitRequest: 'Оставить заявку'
-    },
-    hero: {
-      title: 'WSE.AM',
-      subtitle: 'Агентство недвижимости в Ереване, основанное в 2023 году релокантами из России.',
-      description: 'Наша миссия — помогать тем, кто уже живёт в Ереване или только собирается переехать, находить идеальное жильё для жизни и отдыха.',
-      findHousing: 'Найти жильё',
-      contactUs: 'Связаться с нами'
-    },
-    stats: {
-      happyClients: 'Довольных клиентов',
-      propertiesRented: 'Сданных объектов',
-      yearsExperience: 'Лет на рынке'
-    },
-    about: {
-      title: 'Почему выбирают нас',
-      card1: {
-        title: 'Опытные агенты',
-        description: 'Профессиональные и внимательные специалисты с глубоким знанием рынка Еревана'
-      },
-      card2: {
-        title: 'Проверенная база',
-        description: 'Все квартиры и собственники проходят тщательную проверку на надёжность'
-      },
-      card3: {
-        title: 'Полная поддержка',
-        description: 'Сопровождаем на всех этапах сделки от просмотра до заключения договора'
-      }
-    },
-    services: {
-      title: 'Наши услуги',
-      rental: {
-        title: 'Аренда квартир',
-        description: 'Широкий выбор квартир в разных районах Еревана'
-      },
-      purchase: {
-        title: 'Покупка недвижимости',
-        description: 'Помощь в покупке квартир и домов в Армении'
-      },
-      consultation: {
-        title: 'Консультации',
-        description: 'Экспертные советы по всем вопросам недвижимости'
-      }
-    },
-    contact: {
-      title: 'Свяжитесь с нами',
-      phone: 'Телефон',
-      workHours: 'Режим работы',
-      monday: 'Пн-Пт:',
-      saturday: 'Сб:',
-      sunday: 'Вс:',
-      closed: 'Выходной',
-      form: {
-        title: 'Оставить заявку',
-        name: 'Имя',
-        namePlaceholder: 'Ваше имя',
-        phonePlaceholder: '+374 XX XXX XXX',
-        emailPlaceholder: 'your@email.com',
-        serviceType: 'Тип услуги',
-        serviceOptions: {
-          rental: 'Аренда',
-          purchase: 'Покупка',
-          sale: 'Продажа',
-          consultation: 'Консультация'
-        },
-        message: 'Сообщение',
-        messagePlaceholder: 'Расскажите о ваших требованиях...',
-        submit: 'Отправить заявку'
-      }
-    },
-    footer: {
-      description: 'Ваш надёжный партнёр в мире недвижимости Еревана'
-    }
-  },
-  en: {
-    nav: {
-      about: 'About',
-      services: 'Services',
-      contact: 'Contact',
-      submitRequest: 'Submit Request'
-    },
-    hero: {
-      title: 'WSE.AM',
-      subtitle: 'Real estate agency in Yerevan, founded in 2023 by relocants from Russia.',
-      description: 'Our mission is to help those who already live in Yerevan or are just planning to move, find perfect housing for living and vacation.',
-      findHousing: 'Find Housing',
-      contactUs: 'Contact Us'
-    },
-    stats: {
-      happyClients: 'Happy Clients',
-      propertiesRented: 'Properties Rented',
-      yearsExperience: 'Years in Market'
-    },
-    about: {
-      title: 'Why Choose Us',
-      card1: {
-        title: 'Experienced Agents',
-        description: 'Professional and attentive specialists with deep knowledge of Yerevan market'
-      },
-      card2: {
-        title: 'Verified Database',
-        description: 'All apartments and property owners undergo thorough reliability verification'
-      },
-      card3: {
-        title: 'Full Support',
-        description: 'We accompany you at all stages from viewing to contract signing'
-      }
-    },
-    services: {
-      title: 'Our Services',
-      rental: {
-        title: 'Apartment Rental',
-        description: 'Wide selection of apartments in different districts of Yerevan'
-      },
-      purchase: {
-        title: 'Property Purchase',
-        description: 'Assistance in buying apartments and houses in Armenia'
-      },
-      consultation: {
-        title: 'Consultations',
-        description: 'Expert advice on all real estate matters'
-      }
-    },
-    contact: {
-      title: 'Contact Us',
-      phone: 'Phone',
-      workHours: 'Working Hours',
-      monday: 'Mon-Fri:',
-      saturday: 'Sat:',
-      sunday: 'Sun:',
-      closed: 'Closed',
-      form: {
-        title: 'Submit Request',
-        name: 'Name',
-        namePlaceholder: 'Your name',
-        phonePlaceholder: '+374 XX XXX XXX',
-        emailPlaceholder: 'your@email.com',
-        serviceType: 'Service Type',
-        serviceOptions: {
-          rental: 'Rental',
-          purchase: 'Purchase',
-          sale: 'Sale',
-          consultation: 'Consultation'
-        },
-        message: 'Message',
-        messagePlaceholder: 'Tell us about your requirements...',
-        submit: 'Submit Request'
-      }
-    },
-    footer: {
-      description: 'Your reliable partner in Yerevan real estate world'
-    }
-  }
-};
 
 export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState({});
-  const [language, setLanguage] = useState<'ru' | 'en'>('ru');
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    service: 'Аренда',
-    message: ''
-  });
-  
-  const t = translations[language];
-
-  const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Простая отправка через Web API
-    const formElement = e.target as HTMLFormElement;
-    const formData = new FormData(formElement);
-    
-    try {
-      const response = await fetch('https://formsubmit.co/2023wse@gmail.com', {
-        method: 'POST',
-        body: formData
-      });
-      
-      if (response.ok) {
-        alert(language === 'ru' ? 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.' : 'Request sent successfully! We will contact you soon.');
-        setFormData({
-          name: '',
-          phone: '',
-          email: '',
-          service: language === 'ru' ? 'Аренда' : 'Rental',
-          message: ''
-        });
-      } else {
-        throw new Error('Ошибка отправки');
-      }
-    } catch (error) {
-      console.error('Ошибка отправки:', error);
-      // Fallback - показываем данные пользователю для ручной отправки
-      const message = `
-Имя: ${formData.get('name')}
-Телефон: ${formData.get('phone')} 
-Email: ${formData.get('email')}
-Услуга: ${formData.get('service')}
-Сообщение: ${formData.get('message')}
-
-Скопируйте эти данные и отправьте на 2023wse@gmail.com
-      `;
-      alert(language === 'ru' ? 'Ошибка отправки. ' + message : 'Sending error. ' + message);
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -257,31 +36,13 @@ Email: ${formData.get('email')}
             WSE.AM
           </div>
           <div className="hidden md:flex space-x-8">
-            <a href="#about" className="text-gray-700 hover:text-primary transition-colors">{t.nav.about}</a>
-            <a href="#services" className="text-gray-700 hover:text-primary transition-colors">{t.nav.services}</a>
-            <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">{t.nav.contact}</a>
+            <a href="#about" className="text-gray-700 hover:text-primary transition-colors">О нас</a>
+            <a href="#services" className="text-gray-700 hover:text-primary transition-colors">Услуги</a>
+            <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">Контакты</a>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setLanguage('ru')}
-                className={`px-3 py-1 text-sm font-medium rounded ${
-                  language === 'ru' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
-                }`}
-              >
-                RU
-              </button>
-              <button
-                onClick={() => setLanguage('en')}
-                className={`px-3 py-1 text-sm font-medium rounded ${
-                  language === 'en' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
-                }`}
-              >
-                EN
-              </button>
-            </div>
-            <Button onClick={scrollToContact} className="bg-primary hover:bg-primary/90 text-white hidden sm:block">
-              {t.nav.submitRequest}
+            <Button className="bg-primary hover:bg-primary/90 text-white hidden sm:block">
+              Оставить заявку
             </Button>
             <button 
               className="md:hidden"
@@ -295,29 +56,11 @@ Email: ${formData.get('email')}
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t shadow-lg">
             <div className="container mx-auto px-6 py-4 space-y-4">
-              <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.about}</a>
-              <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.services}</a>
-              <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.contact}</a>
-              <div className="flex space-x-2 mt-2">
-                <button
-                  onClick={() => setLanguage('ru')}
-                  className={`px-4 py-2 text-sm font-medium rounded ${
-                    language === 'ru' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
-                  }`}
-                >
-                  RU
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`px-4 py-2 text-sm font-medium rounded ${
-                    language === 'en' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
-              <Button onClick={scrollToContact} className="w-full bg-primary hover:bg-primary/90 text-white mt-4">
-                {t.nav.submitRequest}
+              <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>О нас</a>
+              <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Услуги</a>
+              <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Контакты</a>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-white mt-4">
+                Оставить заявку
               </Button>
             </div>
           </div>
@@ -325,31 +68,24 @@ Email: ${formData.get('email')}
       </header>
 
       {/* Hero Section */}
-      <section 
-        className="py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
-        style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/5c2f0638-16fa-49ea-be4a-94f4ec07846f.jpg)'
-        }}
-        data-animate 
-        id="hero"
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-        <div className={`container mx-auto text-center transition-all duration-1000 relative z-10 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-5xl md:text-6xl font-bold font-montserrat mb-6 text-white">
-            🏡 <span className="text-primary">{t.hero.title}</span>
+      <section className="py-20 px-6" data-animate id="hero">
+        <div className={`container mx-auto text-center transition-all duration-1000 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h1 className="text-5xl md:text-6xl font-bold font-montserrat mb-6">
+            🏡 <span className="text-primary">WSE.AM</span>
           </h1>
-          <p className="text-xl md:text-2xl text-white mb-8 max-w-4xl mx-auto leading-relaxed">
-            {t.hero.subtitle}
+          <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
+            Агентство недвижимости в Ереване, основанное в 2023 году релокантами из России.
           </p>
-          <p className="text-lg text-gray-200 mb-12 max-w-3xl mx-auto">
-            {t.hero.description}
+          <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
+            Наша миссия — помогать тем, кто уже живёт в Ереване или только собирается переехать, 
+            находить идеальное жильё для жизни и отдыха.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3" onClick={() => window.open('https://t.me/Arenda_kvartir_yerevan', '_blank')}>
-              {t.hero.findHousing}
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3">
+              Найти жильё
             </Button>
-            <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white px-8 py-3" onClick={scrollToContact}>
-              {t.hero.contactUs}
+            <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white px-8 py-3">
+              Связаться с нами
             </Button>
           </div>
         </div>
@@ -361,15 +97,15 @@ Email: ${formData.get('email')}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
               <div className="text-4xl font-bold text-primary mb-2">1000+</div>
-              <div className="text-gray-600">{t.stats.happyClients}</div>
+              <div className="text-gray-600">Довольных клиентов</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-primary mb-2">500+</div>
-              <div className="text-gray-600">{t.stats.propertiesRented}</div>
+              <div className="text-4xl font-bold text-primary mb-2">2023</div>
+              <div className="text-gray-600">Год основания</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-primary mb-2">2+</div>
-              <div className="text-gray-600">{t.stats.yearsExperience}</div>
+              <div className="text-4xl font-bold text-primary mb-2">100%</div>
+              <div className="text-gray-600">Проверенная база</div>
             </div>
           </div>
         </div>
@@ -379,7 +115,7 @@ Email: ${formData.get('email')}
       <section id="about" className="py-20 px-6" data-animate>
         <div className={`container mx-auto transition-all duration-1000 delay-300 ${isVisible.about ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
-            {t.about.title}
+            Почему выбирают нас
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="p-6 hover:shadow-lg transition-shadow">
@@ -387,9 +123,9 @@ Email: ${formData.get('email')}
                 <div className="text-primary text-4xl mb-4">
                   <Icon name="Users" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-xl font-semibold font-montserrat">{t.about.card1.title}</h3>
+                <h3 className="text-xl font-semibold font-montserrat">Опытные агенты</h3>
                 <p className="text-gray-600">
-                  {t.about.card1.description}
+                  Профессиональные и внимательные специалисты с глубоким знанием рынка Еревана
                 </p>
               </CardContent>
             </Card>
@@ -399,9 +135,9 @@ Email: ${formData.get('email')}
                 <div className="text-primary text-4xl mb-4">
                   <Icon name="Shield" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-xl font-semibold font-montserrat">{t.about.card2.title}</h3>
+                <h3 className="text-xl font-semibold font-montserrat">Проверенная база</h3>
                 <p className="text-gray-600">
-                  {t.about.card2.description}
+                  Все квартиры и собственники проходят тщательную проверку на надёжность
                 </p>
               </CardContent>
             </Card>
@@ -411,9 +147,9 @@ Email: ${formData.get('email')}
                 <div className="text-primary text-4xl mb-4">
                   <Icon name="HandHeart" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-xl font-semibold font-montserrat">{t.about.card3.title}</h3>
+                <h3 className="text-xl font-semibold font-montserrat">Полная поддержка</h3>
                 <p className="text-gray-600">
-                  {t.about.card3.description}
+                  Сопровождаем на всех этапах сделки от просмотра до заключения договора
                 </p>
               </CardContent>
             </Card>
@@ -425,7 +161,7 @@ Email: ${formData.get('email')}
       <section id="services" className="py-20 bg-gray-50 px-6" data-animate>
         <div className={`container mx-auto transition-all duration-1000 delay-400 ${isVisible.services ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
-            {t.services.title}
+            Наши услуги
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="p-8 text-center hover:shadow-lg transition-shadow">
@@ -433,9 +169,9 @@ Email: ${formData.get('email')}
                 <div className="text-primary text-5xl mb-4">
                   <Icon name="Key" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-2xl font-semibold font-montserrat">{t.services.rental.title}</h3>
+                <h3 className="text-2xl font-semibold font-montserrat">Аренда</h3>
                 <p className="text-gray-600">
-                  {t.services.rental.description}
+                  Поможем найти идеальную квартиру для долгосрочной или краткосрочной аренды
                 </p>
               </CardContent>
             </Card>
@@ -445,9 +181,9 @@ Email: ${formData.get('email')}
                 <div className="text-primary text-5xl mb-4">
                   <Icon name="Home" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-2xl font-semibold font-montserrat">{t.services.purchase.title}</h3>
+                <h3 className="text-2xl font-semibold font-montserrat">Купля-продажа</h3>
                 <p className="text-gray-600">
-                  {t.services.purchase.description}
+                  Полное сопровождение сделок купли-продажи недвижимости в Ереване
                 </p>
               </CardContent>
             </Card>
@@ -457,9 +193,9 @@ Email: ${formData.get('email')}
                 <div className="text-primary text-5xl mb-4">
                   <Icon name="FileText" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-2xl font-semibold font-montserrat">{t.services.consultation.title}</h3>
+                <h3 className="text-2xl font-semibold font-montserrat">Документы</h3>
                 <p className="text-gray-600">
-                  {t.services.consultation.description}
+                  Помощь в оформлении всех необходимых документов и юридическое сопровождение
                 </p>
               </CardContent>
             </Card>
@@ -471,90 +207,48 @@ Email: ${formData.get('email')}
       <section id="contact" className="py-20 px-6" data-animate>
         <div className={`container mx-auto max-w-4xl transition-all duration-1000 delay-500 ${isVisible.contact ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
-            {t.contact.title}
+            Оставить заявку
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Form */}
             <Card className="p-8">
               <CardContent className="space-y-6">
-                <form onSubmit={handleSubmit}>
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">{t.contact.form.name}</label>
-                      <Input 
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder={t.contact.form.namePlaceholder} 
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">{t.contact.phone}</label>
-                      <Input 
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder={t.contact.form.phonePlaceholder} 
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Email</label>
-                      <Input 
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder={t.contact.form.emailPlaceholder} 
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">{t.contact.form.serviceType}</label>
-                      <select 
-                        name="service"
-                        value={formData.service}
-                        onChange={handleInputChange}
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                      >
-                        <option>{t.contact.form.serviceOptions.rental}</option>
-                        <option>{t.contact.form.serviceOptions.purchase}</option>
-                        <option>{t.contact.form.serviceOptions.sale}</option>
-                        <option>{t.contact.form.serviceOptions.consultation}</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">{t.contact.form.message}</label>
-                      <Textarea 
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        placeholder={t.contact.form.messagePlaceholder} 
-                        required
-                      />
-                    </div>
-                    <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white py-3">
-                      {t.contact.form.submit}
-                    </Button>
-                  </div>
-                </form>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Имя</label>
+                  <Input placeholder="Ваше имя" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Телефон</label>
+                  <Input placeholder="+374 XX XXX XXX" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Email</label>
+                  <Input placeholder="your@email.com" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Тип услуги</label>
+                  <select className="w-full p-2 border border-gray-300 rounded-md">
+                    <option>Аренда</option>
+                    <option>Покупка</option>
+                    <option>Продажа</option>
+                    <option>Консультация</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Сообщение</label>
+                  <Textarea placeholder="Расскажите о ваших требованиях..." />
+                </div>
+                <Button className="w-full bg-primary hover:bg-primary/90 text-white py-3">
+                  Отправить заявку
+                </Button>
               </CardContent>
             </Card>
 
             {/* Contact Info */}
             <div className="space-y-8">
               <div>
-                <h3 className="text-2xl font-semibold font-montserrat mb-6">{t.contact.title}</h3>
+                <h3 className="text-2xl font-semibold font-montserrat mb-6">Контакты</h3>
                 <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <Icon name="Phone" size={24} className="text-primary" />
-                    <div>
-                      <div className="font-medium">{t.contact.phone}</div>
-                      <a href="tel:+37495129260" className="text-primary hover:underline">+374 95129260</a>
-                    </div>
-                  </div>
-                  
                   <div className="flex items-center space-x-3">
                     <Icon name="MessageCircle" size={24} className="text-primary" />
                     <div>
@@ -582,19 +276,19 @@ Email: ${formData.get('email')}
               </div>
 
               <div className="bg-gray-50 p-6 rounded-lg">
-                <h4 className="font-semibold mb-3">{t.contact.workHours}</h4>
+                <h4 className="font-semibold mb-3">Режим работы</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>{t.contact.monday}</span>
-                    <span>11:00 - 19:00</span>
+                    <span>Пн-Пт:</span>
+                    <span>09:00 - 19:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>{t.contact.saturday}</span>
+                    <span>Сб:</span>
                     <span>10:00 - 16:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>{t.contact.sunday}</span>
-                    <span>{t.contact.closed}</span>
+                    <span>Вс:</span>
+                    <span>Выходной</span>
                   </div>
                 </div>
               </div>
@@ -610,23 +304,23 @@ Email: ${formData.get('email')}
             <div>
               <h3 className="text-2xl font-bold font-montserrat mb-4 text-primary">WSE.AM</h3>
               <p className="text-gray-300">
-                {t.footer.description}
+                Ваш надёжный партнёр в мире недвижимости Еревана
               </p>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">{t.nav.services}</h4>
+              <h4 className="font-semibold mb-4">Услуги</h4>
               <ul className="space-y-2 text-gray-300">
-                <li>{t.services.rental.title}</li>
-                <li>{t.services.purchase.title}</li>
-                <li>{t.services.consultation.title}</li>
+                <li>Аренда недвижимости</li>
+                <li>Купля-продажа</li>
+                <li>Оформление документов</li>
+                <li>Консультации</li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">{t.contact.title}</h4>
+              <h4 className="font-semibold mb-4">Контакты</h4>
               <div className="space-y-2 text-gray-300">
-                <div>{t.contact.phone}: <a href="tel:+37495129260" className="text-primary hover:underline">+374 95129260</a></div>
                 <div>Telegram: <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">WSEManager</a></div>
                 <div>Instagram: <a href="https://www.instagram.com/w.s.e._am/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">w.s.e._am</a></div>
                 <div><a href="https://yandex.com/maps/org/white_safe_estate/194631976201/?ll=44.516867%2C40.165353&z=20.23" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Ереван ул. Хоренаци 47/7</a></div>
