@@ -265,19 +265,19 @@ Email: ${formData.get('email')}
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setLanguage('ru')}
-                className={`px-2 py-1 text-xl rounded ${
-                  language === 'ru' ? 'bg-primary bg-opacity-20' : 'hover:bg-gray-100'
+                className={`px-3 py-1 text-sm font-medium rounded ${
+                  language === 'ru' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
                 }`}
               >
-                🇷🇺
+                RU
               </button>
               <button
                 onClick={() => setLanguage('en')}
-                className={`px-2 py-1 text-xl rounded ${
-                  language === 'en' ? 'bg-primary bg-opacity-20' : 'hover:bg-gray-100'
+                className={`px-3 py-1 text-sm font-medium rounded ${
+                  language === 'en' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
                 }`}
               >
-                🇬🇧
+                EN
               </button>
             </div>
             <Button onClick={scrollToContact} className="bg-primary hover:bg-primary/90 text-white hidden sm:block">
@@ -301,19 +301,19 @@ Email: ${formData.get('email')}
               <div className="flex space-x-2 mt-2">
                 <button
                   onClick={() => setLanguage('ru')}
-                  className={`px-3 py-2 text-xl rounded ${
-                    language === 'ru' ? 'bg-primary bg-opacity-20' : 'bg-gray-200'
+                  className={`px-4 py-2 text-sm font-medium rounded ${
+                    language === 'ru' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
                   }`}
                 >
-                  🇷🇺
+                  RU
                 </button>
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`px-3 py-2 text-xl rounded ${
-                    language === 'en' ? 'bg-primary bg-opacity-20' : 'bg-gray-200'
+                  className={`px-4 py-2 text-sm font-medium rounded ${
+                    language === 'en' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
                   }`}
                 >
-                  🇬🇧
+                  EN
                 </button>
               </div>
               <Button onClick={scrollToContact} className="w-full bg-primary hover:bg-primary/90 text-white mt-4">
@@ -328,7 +328,7 @@ Email: ${formData.get('email')}
       <section 
         className="py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/32e30396-2620-4543-8610-38967af569e7.jpg)'
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/5c2f0638-16fa-49ea-be4a-94f4ec07846f.jpg)'
         }}
         data-animate 
         id="hero"
