@@ -188,45 +188,40 @@ export default function Index() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Создаем данные для отправки
+    const emailData = {
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      service: formData.service,
+      message: formData.message
+    };
+    
+    // Отправляем POST запрос на ваш сервер или сервис
     try {
-      const result = await emailjs.send(
-        'service_wse', // Service ID
-        'template_wse', // Template ID
-        {
-          to_email: '2023wse@gmail.com',
-          from_name: formData.name,
-          from_phone: formData.phone,
-          from_email: formData.email,
-          service_type: formData.service,
-          message: formData.message,
-          reply_to: formData.email,
+      const response = await fetch('https://formspree.io/f/2023wse@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        'user_wse_public_key' // Public Key
-      );
+        body: JSON.stringify(emailData)
+      });
       
-      if (result.status === 200) {
-        alert('Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.');
+      if (response.ok) {
+        alert(language === 'ru' ? 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.' : 'Request sent successfully! We will contact you soon.');
         setFormData({
           name: '',
           phone: '',
           email: '',
-          service: 'Аренда',
+          service: language === 'ru' ? 'Аренда' : 'Rental',
           message: ''
         });
+      } else {
+        throw new Error('Ошибка отправки');
       }
     } catch (error) {
       console.error('Ошибка отправки:', error);
-      // Fallback to mailto
-      const emailBody = `
-        Имя: ${formData.name}
-        Телефон: ${formData.phone}
-        Email: ${formData.email}
-        Тип услуги: ${formData.service}
-        Сообщение: ${formData.message}
-      `;
-      
-      const mailtoLink = `mailto:2023wse@gmail.com?subject=Заявка с сайта WSE.AM&body=${encodeURIComponent(emailBody)}`;
-      window.open(mailtoLink);
+      alert(language === 'ru' ? 'Произошла ошибка при отправке. Попробуйте еще раз.' : 'An error occurred while sending. Please try again.');
     }
   };
 
