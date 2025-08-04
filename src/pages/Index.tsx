@@ -4,10 +4,173 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
 import { useState, useEffect } from "react";
+import emailjs from 'emailjs-com';
+
+const translations = {
+  ru: {
+    nav: {
+      about: 'О нас',
+      services: 'Услуги',
+      contact: 'Контакты',
+      submitRequest: 'Оставить заявку'
+    },
+    hero: {
+      title: 'WSE.AM',
+      subtitle: 'Агентство недвижимости в Ереване, основанное в 2023 году релокантами из России.',
+      description: 'Наша миссия — помогать тем, кто уже живёт в Ереване или только собирается переехать, находить идеальное жильё для жизни и отдыха.',
+      findHousing: 'Найти жильё',
+      contactUs: 'Связаться с нами'
+    },
+    stats: {
+      happyClients: 'Довольных клиентов',
+      propertiesRented: 'Сданных объектов',
+      yearsExperience: 'Лет на рынке'
+    },
+    about: {
+      title: 'Почему выбирают нас',
+      card1: {
+        title: 'Опытные агенты',
+        description: 'Профессиональные и внимательные специалисты с глубоким знанием рынка Еревана'
+      },
+      card2: {
+        title: 'Проверенная база',
+        description: 'Все квартиры и собственники проходят тщательную проверку на надёжность'
+      },
+      card3: {
+        title: 'Полная поддержка',
+        description: 'Сопровождаем на всех этапах сделки от просмотра до заключения договора'
+      }
+    },
+    services: {
+      title: 'Наши услуги',
+      rental: {
+        title: 'Аренда квартир',
+        description: 'Широкий выбор квартир в разных районах Еревана'
+      },
+      purchase: {
+        title: 'Покупка недвижимости',
+        description: 'Помощь в покупке квартир и домов в Армении'
+      },
+      consultation: {
+        title: 'Консультации',
+        description: 'Экспертные советы по всем вопросам недвижимости'
+      }
+    },
+    contact: {
+      title: 'Свяжитесь с нами',
+      phone: 'Телефон',
+      workHours: 'Режим работы',
+      monday: 'Пн-Пт:',
+      saturday: 'Сб:',
+      sunday: 'Вс:',
+      closed: 'Выходной',
+      form: {
+        title: 'Оставить заявку',
+        name: 'Имя',
+        namePlaceholder: 'Ваше имя',
+        phonePlaceholder: '+374 XX XXX XXX',
+        emailPlaceholder: 'your@email.com',
+        serviceType: 'Тип услуги',
+        serviceOptions: {
+          rental: 'Аренда',
+          purchase: 'Покупка',
+          sale: 'Продажа',
+          consultation: 'Консультация'
+        },
+        message: 'Сообщение',
+        messagePlaceholder: 'Расскажите о ваших требованиях...',
+        submit: 'Отправить заявку'
+      }
+    },
+    footer: {
+      description: 'Ваш надёжный партнёр в мире недвижимости Еревана'
+    }
+  },
+  en: {
+    nav: {
+      about: 'About',
+      services: 'Services',
+      contact: 'Contact',
+      submitRequest: 'Submit Request'
+    },
+    hero: {
+      title: 'WSE.AM',
+      subtitle: 'Real estate agency in Yerevan, founded in 2023 by relocants from Russia.',
+      description: 'Our mission is to help those who already live in Yerevan or are just planning to move, find perfect housing for living and vacation.',
+      findHousing: 'Find Housing',
+      contactUs: 'Contact Us'
+    },
+    stats: {
+      happyClients: 'Happy Clients',
+      propertiesRented: 'Properties Rented',
+      yearsExperience: 'Years in Market'
+    },
+    about: {
+      title: 'Why Choose Us',
+      card1: {
+        title: 'Experienced Agents',
+        description: 'Professional and attentive specialists with deep knowledge of Yerevan market'
+      },
+      card2: {
+        title: 'Verified Database',
+        description: 'All apartments and property owners undergo thorough reliability verification'
+      },
+      card3: {
+        title: 'Full Support',
+        description: 'We accompany you at all stages from viewing to contract signing'
+      }
+    },
+    services: {
+      title: 'Our Services',
+      rental: {
+        title: 'Apartment Rental',
+        description: 'Wide selection of apartments in different districts of Yerevan'
+      },
+      purchase: {
+        title: 'Property Purchase',
+        description: 'Assistance in buying apartments and houses in Armenia'
+      },
+      consultation: {
+        title: 'Consultations',
+        description: 'Expert advice on all real estate matters'
+      }
+    },
+    contact: {
+      title: 'Contact Us',
+      phone: 'Phone',
+      workHours: 'Working Hours',
+      monday: 'Mon-Fri:',
+      saturday: 'Sat:',
+      sunday: 'Sun:',
+      closed: 'Closed',
+      form: {
+        title: 'Submit Request',
+        name: 'Name',
+        namePlaceholder: 'Your name',
+        phonePlaceholder: '+374 XX XXX XXX',
+        emailPlaceholder: 'your@email.com',
+        serviceType: 'Service Type',
+        serviceOptions: {
+          rental: 'Rental',
+          purchase: 'Purchase',
+          sale: 'Sale',
+          consultation: 'Consultation'
+        },
+        message: 'Message',
+        messagePlaceholder: 'Tell us about your requirements...',
+        submit: 'Submit Request'
+      }
+    },
+    footer: {
+      description: 'Your reliable partner in Yerevan real estate world'
+    }
+  }
+};
 
 export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState({});
+  const [language, setLanguage] = useState<'ru' | 'en'>('ru');
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -15,6 +178,8 @@ export default function Index() {
     service: 'Аренда',
     message: ''
   });
+  
+  const t = translations[language];
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -23,16 +188,46 @@ export default function Index() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const emailBody = `
-      Имя: ${formData.name}
-      Телефон: ${formData.phone}
-      Email: ${formData.email}
-      Тип услуги: ${formData.service}
-      Сообщение: ${formData.message}
-    `;
-    
-    const mailtoLink = `mailto:2023wse@gmail.com?subject=С сайта&body=${encodeURIComponent(emailBody)}`;
-    window.location.href = mailtoLink;
+    try {
+      const result = await emailjs.send(
+        'service_wse', // Service ID
+        'template_wse', // Template ID
+        {
+          to_email: '2023wse@gmail.com',
+          from_name: formData.name,
+          from_phone: formData.phone,
+          from_email: formData.email,
+          service_type: formData.service,
+          message: formData.message,
+          reply_to: formData.email,
+        },
+        'user_wse_public_key' // Public Key
+      );
+      
+      if (result.status === 200) {
+        alert('Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.');
+        setFormData({
+          name: '',
+          phone: '',
+          email: '',
+          service: 'Аренда',
+          message: ''
+        });
+      }
+    } catch (error) {
+      console.error('Ошибка отправки:', error);
+      // Fallback to mailto
+      const emailBody = `
+        Имя: ${formData.name}
+        Телефон: ${formData.phone}
+        Email: ${formData.email}
+        Тип услуги: ${formData.service}
+        Сообщение: ${formData.message}
+      `;
+      
+      const mailtoLink = `mailto:2023wse@gmail.com?subject=Заявка с сайта WSE.AM&body=${encodeURIComponent(emailBody)}`;
+      window.open(mailtoLink);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -66,13 +261,31 @@ export default function Index() {
             WSE.AM
           </div>
           <div className="hidden md:flex space-x-8">
-            <a href="#about" className="text-gray-700 hover:text-primary transition-colors">О нас</a>
-            <a href="#services" className="text-gray-700 hover:text-primary transition-colors">Услуги</a>
-            <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">Контакты</a>
+            <a href="#about" className="text-gray-700 hover:text-primary transition-colors">{t.nav.about}</a>
+            <a href="#services" className="text-gray-700 hover:text-primary transition-colors">{t.nav.services}</a>
+            <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">{t.nav.contact}</a>
           </div>
           <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setLanguage('ru')}
+                className={`px-2 py-1 text-sm rounded ${
+                  language === 'ru' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
+                }`}
+              >
+                RU
+              </button>
+              <button
+                onClick={() => setLanguage('en')}
+                className={`px-2 py-1 text-sm rounded ${
+                  language === 'en' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
+                }`}
+              >
+                EN
+              </button>
+            </div>
             <Button onClick={scrollToContact} className="bg-primary hover:bg-primary/90 text-white hidden sm:block">
-              Оставить заявку
+              {t.nav.submitRequest}
             </Button>
             <button 
               className="md:hidden"
@@ -86,11 +299,29 @@ export default function Index() {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t shadow-lg">
             <div className="container mx-auto px-6 py-4 space-y-4">
-              <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>О нас</a>
-              <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Услуги</a>
-              <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Контакты</a>
+              <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.about}</a>
+              <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.services}</a>
+              <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.contact}</a>
+              <div className="flex space-x-2 mt-2">
+                <button
+                  onClick={() => setLanguage('ru')}
+                  className={`px-3 py-1 text-sm rounded ${
+                    language === 'ru' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
+                  }`}
+                >
+                  RU
+                </button>
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={`px-3 py-1 text-sm rounded ${
+                    language === 'en' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
+                  }`}
+                >
+                  EN
+                </button>
+              </div>
               <Button onClick={scrollToContact} className="w-full bg-primary hover:bg-primary/90 text-white mt-4">
-                Оставить заявку
+                {t.nav.submitRequest}
               </Button>
             </div>
           </div>
@@ -98,24 +329,31 @@ export default function Index() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-6" data-animate id="hero">
-        <div className={`container mx-auto text-center transition-all duration-1000 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-5xl md:text-6xl font-bold font-montserrat mb-6">
-            🏡 <span className="text-primary">WSE.AM</span>
+      <section 
+        className="py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
+        style={{
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/32e30396-2620-4543-8610-38967af569e7.jpg)'
+        }}
+        data-animate 
+        id="hero"
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div className={`container mx-auto text-center transition-all duration-1000 relative z-10 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h1 className="text-5xl md:text-6xl font-bold font-montserrat mb-6 text-white">
+            🏡 <span className="text-primary">{t.hero.title}</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
-            Агентство недвижимости в Ереване, основанное в 2023 году релокантами из России.
+          <p className="text-xl md:text-2xl text-white mb-8 max-w-4xl mx-auto leading-relaxed">
+            {t.hero.subtitle}
           </p>
-          <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
-            Наша миссия — помогать тем, кто уже живёт в Ереване или только собирается переехать, 
-            находить идеальное жильё для жизни и отдыха.
+          <p className="text-lg text-gray-200 mb-12 max-w-3xl mx-auto">
+            {t.hero.description}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3" onClick={() => window.open('https://t.me/erevan_kvartira', '_blank')}>
-              Найти жильё
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3" onClick={() => window.open('https://t.me/Arenda_kvartir_yerevan', '_blank')}>
+              {t.hero.findHousing}
             </Button>
             <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white px-8 py-3" onClick={scrollToContact}>
-              Связаться с нами
+              {t.hero.contactUs}
             </Button>
           </div>
         </div>
