@@ -188,45 +188,41 @@ export default function Index() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Простая отправка через Web API
+    const formElement = e.target as HTMLFormElement;
+    const formData = new FormData(formElement);
+    
     try {
-      const result = await emailjs.send(
-        'service_wse', // Service ID
-        'template_wse', // Template ID
-        {
-          to_email: '2023wse@gmail.com',
-          from_name: formData.name,
-          from_phone: formData.phone,
-          from_email: formData.email,
-          service_type: formData.service,
-          message: formData.message,
-          reply_to: formData.email,
-        },
-        'user_wse_public_key' // Public Key
-      );
+      const response = await fetch('https://formsubmit.co/2023wse@gmail.com', {
+        method: 'POST',
+        body: formData
+      });
       
-      if (result.status === 200) {
-        alert('Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.');
+      if (response.ok) {
+        alert(language === 'ru' ? 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.' : 'Request sent successfully! We will contact you soon.');
         setFormData({
           name: '',
           phone: '',
           email: '',
-          service: 'Аренда',
+          service: language === 'ru' ? 'Аренда' : 'Rental',
           message: ''
         });
+      } else {
+        throw new Error('Ошибка отправки');
       }
     } catch (error) {
       console.error('Ошибка отправки:', error);
-      // Fallback to mailto
-      const emailBody = `
-        Имя: ${formData.name}
-        Телефон: ${formData.phone}
-        Email: ${formData.email}
-        Тип услуги: ${formData.service}
-        Сообщение: ${formData.message}
+      // Fallback - показываем данные пользователю для ручной отправки
+      const message = `
+Имя: ${formData.get('name')}
+Телефон: ${formData.get('phone')} 
+Email: ${formData.get('email')}
+Услуга: ${formData.get('service')}
+Сообщение: ${formData.get('message')}
+
+Скопируйте эти данные и отправьте на 2023wse@gmail.com
       `;
-      
-      const mailtoLink = `mailto:2023wse@gmail.com?subject=Заявка с сайта WSE.AM&body=${encodeURIComponent(emailBody)}`;
-      window.open(mailtoLink);
+      alert(language === 'ru' ? 'Ошибка отправки. ' + message : 'Sending error. ' + message);
     }
   };
 
@@ -269,7 +265,7 @@ export default function Index() {
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setLanguage('ru')}
-                className={`px-2 py-1 text-sm rounded ${
+                className={`px-3 py-1 text-sm font-medium rounded ${
                   language === 'ru' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
                 }`}
               >
@@ -277,7 +273,7 @@ export default function Index() {
               </button>
               <button
                 onClick={() => setLanguage('en')}
-                className={`px-2 py-1 text-sm rounded ${
+                className={`px-3 py-1 text-sm font-medium rounded ${
                   language === 'en' ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
                 }`}
               >
@@ -305,7 +301,7 @@ export default function Index() {
               <div className="flex space-x-2 mt-2">
                 <button
                   onClick={() => setLanguage('ru')}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`px-4 py-2 text-sm font-medium rounded ${
                     language === 'ru' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
                   }`}
                 >
@@ -313,7 +309,7 @@ export default function Index() {
                 </button>
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`px-4 py-2 text-sm font-medium rounded ${
                     language === 'en' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
                   }`}
                 >
@@ -332,7 +328,7 @@ export default function Index() {
       <section 
         className="py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/32e30396-2620-4543-8610-38967af569e7.jpg)'
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/5c2f0638-16fa-49ea-be4a-94f4ec07846f.jpg)'
         }}
         data-animate 
         id="hero"
@@ -365,15 +361,15 @@ export default function Index() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
               <div className="text-4xl font-bold text-primary mb-2">1000+</div>
-              <div className="text-gray-600">Довольных клиентов</div>
+              <div className="text-gray-600">{t.stats.happyClients}</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-primary mb-2">2023</div>
-              <div className="text-gray-600">Год основания</div>
+              <div className="text-4xl font-bold text-primary mb-2">500+</div>
+              <div className="text-gray-600">{t.stats.propertiesRented}</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-primary mb-2">100%</div>
-              <div className="text-gray-600">Проверенная база</div>
+              <div className="text-4xl font-bold text-primary mb-2">2+</div>
+              <div className="text-gray-600">{t.stats.yearsExperience}</div>
             </div>
           </div>
         </div>
@@ -383,7 +379,7 @@ export default function Index() {
       <section id="about" className="py-20 px-6" data-animate>
         <div className={`container mx-auto transition-all duration-1000 delay-300 ${isVisible.about ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
-            Почему выбирают нас
+            {t.about.title}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="p-6 hover:shadow-lg transition-shadow">
@@ -391,9 +387,9 @@ export default function Index() {
                 <div className="text-primary text-4xl mb-4">
                   <Icon name="Users" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-xl font-semibold font-montserrat">Опытные агенты</h3>
+                <h3 className="text-xl font-semibold font-montserrat">{t.about.card1.title}</h3>
                 <p className="text-gray-600">
-                  Профессиональные и внимательные специалисты с глубоким знанием рынка Еревана
+                  {t.about.card1.description}
                 </p>
               </CardContent>
             </Card>
@@ -403,9 +399,9 @@ export default function Index() {
                 <div className="text-primary text-4xl mb-4">
                   <Icon name="Shield" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-xl font-semibold font-montserrat">Проверенная база</h3>
+                <h3 className="text-xl font-semibold font-montserrat">{t.about.card2.title}</h3>
                 <p className="text-gray-600">
-                  Все квартиры и собственники проходят тщательную проверку на надёжность
+                  {t.about.card2.description}
                 </p>
               </CardContent>
             </Card>
@@ -415,9 +411,9 @@ export default function Index() {
                 <div className="text-primary text-4xl mb-4">
                   <Icon name="HandHeart" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-xl font-semibold font-montserrat">Полная поддержка</h3>
+                <h3 className="text-xl font-semibold font-montserrat">{t.about.card3.title}</h3>
                 <p className="text-gray-600">
-                  Сопровождаем на всех этапах сделки от просмотра до заключения договора
+                  {t.about.card3.description}
                 </p>
               </CardContent>
             </Card>
@@ -429,7 +425,7 @@ export default function Index() {
       <section id="services" className="py-20 bg-gray-50 px-6" data-animate>
         <div className={`container mx-auto transition-all duration-1000 delay-400 ${isVisible.services ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
-            Наши услуги
+            {t.services.title}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="p-8 text-center hover:shadow-lg transition-shadow">
@@ -437,9 +433,9 @@ export default function Index() {
                 <div className="text-primary text-5xl mb-4">
                   <Icon name="Key" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-2xl font-semibold font-montserrat">Аренда</h3>
+                <h3 className="text-2xl font-semibold font-montserrat">{t.services.rental.title}</h3>
                 <p className="text-gray-600">
-                  Поможем найти идеальную квартиру для долгосрочной или краткосрочной аренды
+                  {t.services.rental.description}
                 </p>
               </CardContent>
             </Card>
@@ -449,9 +445,9 @@ export default function Index() {
                 <div className="text-primary text-5xl mb-4">
                   <Icon name="Home" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-2xl font-semibold font-montserrat">Купля-продажа</h3>
+                <h3 className="text-2xl font-semibold font-montserrat">{t.services.purchase.title}</h3>
                 <p className="text-gray-600">
-                  Полное сопровождение сделок купли-продажи недвижимости в Ереване
+                  {t.services.purchase.description}
                 </p>
               </CardContent>
             </Card>
@@ -461,9 +457,9 @@ export default function Index() {
                 <div className="text-primary text-5xl mb-4">
                   <Icon name="FileText" size={48} className="mx-auto" />
                 </div>
-                <h3 className="text-2xl font-semibold font-montserrat">Документы</h3>
+                <h3 className="text-2xl font-semibold font-montserrat">{t.services.consultation.title}</h3>
                 <p className="text-gray-600">
-                  Помощь в оформлении всех необходимых документов и юридическое сопровождение
+                  {t.services.consultation.description}
                 </p>
               </CardContent>
             </Card>
@@ -475,7 +471,7 @@ export default function Index() {
       <section id="contact" className="py-20 px-6" data-animate>
         <div className={`container mx-auto max-w-4xl transition-all duration-1000 delay-500 ${isVisible.contact ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
-            Оставить заявку
+            {t.contact.title}
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Form */}
@@ -484,22 +480,22 @@ export default function Index() {
                 <form onSubmit={handleSubmit}>
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Имя</label>
+                      <label className="block text-sm font-medium mb-2">{t.contact.form.name}</label>
                       <Input 
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        placeholder="Ваше имя" 
+                        placeholder={t.contact.form.namePlaceholder} 
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Телефон</label>
+                      <label className="block text-sm font-medium mb-2">{t.contact.phone}</label>
                       <Input 
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        placeholder="+374 XX XXX XXX" 
+                        placeholder={t.contact.form.phonePlaceholder} 
                         required
                       />
                     </div>
@@ -510,36 +506,36 @@ export default function Index() {
                         type="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        placeholder="your@email.com" 
+                        placeholder={t.contact.form.emailPlaceholder} 
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Тип услуги</label>
+                      <label className="block text-sm font-medium mb-2">{t.contact.form.serviceType}</label>
                       <select 
                         name="service"
                         value={formData.service}
                         onChange={handleInputChange}
                         className="w-full p-2 border border-gray-300 rounded-md"
                       >
-                        <option>Аренда</option>
-                        <option>Покупка</option>
-                        <option>Продажа</option>
-                        <option>Консультация</option>
+                        <option>{t.contact.form.serviceOptions.rental}</option>
+                        <option>{t.contact.form.serviceOptions.purchase}</option>
+                        <option>{t.contact.form.serviceOptions.sale}</option>
+                        <option>{t.contact.form.serviceOptions.consultation}</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Сообщение</label>
+                      <label className="block text-sm font-medium mb-2">{t.contact.form.message}</label>
                       <Textarea 
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}
-                        placeholder="Расскажите о ваших требованиях..." 
+                        placeholder={t.contact.form.messagePlaceholder} 
                         required
                       />
                     </div>
                     <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white py-3">
-                      Отправить заявку
+                      {t.contact.form.submit}
                     </Button>
                   </div>
                 </form>
@@ -549,12 +545,12 @@ export default function Index() {
             {/* Contact Info */}
             <div className="space-y-8">
               <div>
-                <h3 className="text-2xl font-semibold font-montserrat mb-6">Контакты</h3>
+                <h3 className="text-2xl font-semibold font-montserrat mb-6">{t.contact.title}</h3>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <Icon name="Phone" size={24} className="text-primary" />
                     <div>
-                      <div className="font-medium">Телефон</div>
+                      <div className="font-medium">{t.contact.phone}</div>
                       <a href="tel:+37495129260" className="text-primary hover:underline">+374 95129260</a>
                     </div>
                   </div>
@@ -586,19 +582,19 @@ export default function Index() {
               </div>
 
               <div className="bg-gray-50 p-6 rounded-lg">
-                <h4 className="font-semibold mb-3">Режим работы</h4>
+                <h4 className="font-semibold mb-3">{t.contact.workHours}</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>Пн-Пт:</span>
+                    <span>{t.contact.monday}</span>
                     <span>11:00 - 19:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Сб:</span>
+                    <span>{t.contact.saturday}</span>
                     <span>10:00 - 16:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Вс:</span>
-                    <span>Выходной</span>
+                    <span>{t.contact.sunday}</span>
+                    <span>{t.contact.closed}</span>
                   </div>
                 </div>
               </div>
@@ -614,24 +610,23 @@ export default function Index() {
             <div>
               <h3 className="text-2xl font-bold font-montserrat mb-4 text-primary">WSE.AM</h3>
               <p className="text-gray-300">
-                Ваш надёжный партнёр в мире недвижимости Еревана
+                {t.footer.description}
               </p>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Услуги</h4>
+              <h4 className="font-semibold mb-4">{t.nav.services}</h4>
               <ul className="space-y-2 text-gray-300">
-                <li>Аренда недвижимости</li>
-                <li>Купля-продажа</li>
-                <li>Оформление документов</li>
-                <li>Консультации</li>
+                <li>{t.services.rental.title}</li>
+                <li>{t.services.purchase.title}</li>
+                <li>{t.services.consultation.title}</li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Контакты</h4>
+              <h4 className="font-semibold mb-4">{t.contact.title}</h4>
               <div className="space-y-2 text-gray-300">
-                <div>Телефон: <a href="tel:+37495129260" className="text-primary hover:underline">+374 95129260</a></div>
+                <div>{t.contact.phone}: <a href="tel:+37495129260" className="text-primary hover:underline">+374 95129260</a></div>
                 <div>Telegram: <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">WSEManager</a></div>
                 <div>Instagram: <a href="https://www.instagram.com/w.s.e._am/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">w.s.e._am</a></div>
                 <div><a href="https://yandex.com/maps/org/white_safe_estate/194631976201/?ll=44.516867%2C40.165353&z=20.23" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Ереван ул. Хоренаци 47/7</a></div>
