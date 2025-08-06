@@ -24,7 +24,7 @@ const translations = {
     stats: {
       happyClients: 'Довольных клиентов',
       propertiesRented: 'Сданных объектов',
-      yearsExperience: 'Лет на рынке'
+      yearsExperience: '100% проверенная база'
     },
     about: {
       title: 'Почему выбирают нас',
@@ -368,7 +368,7 @@ Email: ${formData.get('email')}
               <div className="text-gray-600">{t.stats.propertiesRented}</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-primary mb-2">2+</div>
+              <div className="text-4xl font-bold text-primary mb-2">100%</div>
               <div className="text-gray-600">{t.stats.yearsExperience}</div>
             </div>
           </div>
