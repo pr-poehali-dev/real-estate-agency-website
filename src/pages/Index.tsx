@@ -328,7 +328,7 @@ Email: ${formData.get('email')}
       <section 
         className="py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/5c2f0638-16fa-49ea-be4a-94f4ec07846f.jpg)'
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/d6af7502-6fd6-494d-b0ff-846b279690c0.jpg)'
         }}
         data-animate 
         id="hero"
