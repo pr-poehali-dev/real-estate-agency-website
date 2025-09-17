@@ -187,39 +187,58 @@ export default function Index() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Показываем данные пользователю для отправки через Telegram/WhatsApp
-    const message = `
-📋 Новая заявка WSE.AM:
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    
+    // Добавляем скрытые поля для FormSubmit
+    formData.append('_subject', 'Новая заявка с сайта WSE.AM');
+    formData.append('_captcha', 'false');
+    formData.append('_template', 'table');
+    
+    try {
+      const response = await fetch('https://formsubmit.co/2023wse@gmail.com', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (response.ok) {
+        alert(language === 'ru' 
+          ? 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.' 
+          : 'Request sent successfully! We will contact you soon.'
+        );
+        
+        // Очищаем форму
+        setFormData({
+          name: '',
+          phone: '',
+          email: '',
+          service: language === 'ru' ? 'Аренда' : 'Rental',
+          message: ''
+        });
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Ошибка отправки:', error);
+      
+      // Fallback - показываем данные для ручной отправки
+      const message = `
+Новая заявка WSE.AM:
 
-👤 Имя: ${formData.name}
-📞 Телефон: ${formData.phone}
-📧 Email: ${formData.email}
-🏠 Услуга: ${formData.service}
-💬 Сообщение: ${formData.message}
-    `.trim();
-    
-    // Создаем ссылки для отправки
-    const telegramUrl = `https://t.me/WSEManager?text=${encodeURIComponent(message)}`;
-    const whatsappUrl = `https://wa.me/37495129260?text=${encodeURIComponent(message)}`;
-    
-    // Показываем варианты отправки
-    if (confirm(language === 'ru' 
-      ? 'Выберите способ отправки заявки:\n\nОК - отправить через Telegram\nОтмена - отправить через WhatsApp' 
-      : 'Choose how to send your request:\n\nOK - send via Telegram\nCancel - send via WhatsApp'
-    )) {
-      window.open(telegramUrl, '_blank');
-    } else {
-      window.open(whatsappUrl, '_blank');
+Имя: ${formData.get('name')}
+Телефон: ${formData.get('phone')}
+Email: ${formData.get('email')}
+Услуга: ${formData.get('service')}
+Сообщение: ${formData.get('message')}
+
+Скопируйте эти данные и отправьте на 2023wse@gmail.com
+      `;
+      
+      alert(language === 'ru' 
+        ? 'Ошибка отправки формы. ' + message 
+        : 'Form submission error. ' + message
+      );
     }
-    
-    // Очищаем форму
-    setFormData({
-      name: '',
-      phone: '',
-      email: '',
-      service: language === 'ru' ? 'Аренда' : 'Rental',
-      message: ''
-    });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -474,6 +493,11 @@ export default function Index() {
             <Card className="p-8">
               <CardContent className="space-y-6">
                 <form onSubmit={handleSubmit}>
+                  {/* Скрытые поля для FormSubmit */}
+                  <input type="hidden" name="_subject" value="Новая заявка с сайта WSE.AM" />
+                  <input type="hidden" name="_captcha" value="false" />
+                  <input type="hidden" name="_template" value="table" />
+                  
                   <div className="space-y-6">
                     <div>
                       <label className="block text-sm font-medium mb-2">{t.contact.form.name}</label>
