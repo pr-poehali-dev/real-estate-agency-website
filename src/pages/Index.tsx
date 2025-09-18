@@ -313,6 +313,7 @@ Email: ${formData.get('email')}
             <div className="container mx-auto px-6 py-4 space-y-4">
               <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.about}</a>
               <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.services}</a>
+              <a href="/map" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Карта</a>
               <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.contact}</a>
               <div className="flex space-x-2 mt-2">
                 <button
@@ -433,6 +434,52 @@ Email: ${formData.get('email')}
                 </p>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Map Section */}
+      <section className="py-20 px-6" data-animate id="map-preview">
+        <div className={`container mx-auto transition-all duration-1000 delay-350 ${isVisible['map-preview'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold font-montserrat mb-4 text-black">
+              🗺️ Интерактивная карта недвижимости
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+              Найдите идеальную недвижимость на карте Еревана. Все объекты проверены и актуальны.
+            </p>
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 text-white px-8 py-3"
+              onClick={() => window.location.href = '/map'}
+            >
+              <Icon name="Map" size={20} className="mr-2" />
+              Открыть полную карту
+            </Button>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-xl font-semibold">Предварительный просмотр</h3>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Icon name="MapPin" size={16} />
+                  Кликните на маркер для деталей
+                </div>
+              </div>
+              <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div className="text-center">
+                  <Icon name="Map" size={48} className="text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 mb-4">Карта загружается...</p>
+                  <Button 
+                    variant="outline"
+                    onClick={() => window.location.href = '/map'}
+                  >
+                    Перейти к карте
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -636,11 +683,12 @@ Email: ${formData.get('email')}
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">{t.nav.services}</h4>
+              <h4 className="font-semibold mb-4">Навигация</h4>
               <ul className="space-y-2 text-gray-300">
-                <li>{t.services.rental.title}</li>
-                <li>{t.services.purchase.title}</li>
-                <li>{t.services.consultation.title}</li>
+                <li><a href="#services" className="hover:text-primary transition-colors">{t.services.rental.title}</a></li>
+                <li><a href="#services" className="hover:text-primary transition-colors">{t.services.purchase.title}</a></li>
+                <li><a href="/map" className="hover:text-primary transition-colors">Карта недвижимости</a></li>
+                <li><a href="/admin" className="hover:text-primary transition-colors text-xs opacity-60">Админ-панель</a></li>
               </ul>
             </div>
             
