@@ -1,0 +1,27 @@
+{
+  "tests": [
+    {
+      "name": "Test get all properties",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "properties": [],
+        "count": 0
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test get properties with district filter",
+      "method": "GET",
+      "path": "/?district=Центр",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "properties": []
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

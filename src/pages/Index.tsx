@@ -274,6 +274,7 @@ Email: ${formData.get('email')}
           <div className="hidden md:flex space-x-8">
             <a href="#about" className="text-gray-700 hover:text-primary transition-colors">{t.nav.about}</a>
             <a href="#services" className="text-gray-700 hover:text-primary transition-colors">{t.nav.services}</a>
+            <a href="/map" className="text-gray-700 hover:text-primary transition-colors">Карта</a>
             <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">{t.nav.contact}</a>
           </div>
           <div className="flex items-center space-x-4">
