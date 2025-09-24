@@ -19,11 +19,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<TelegramShop />} />
-          <Route path="/shop" element={<TelegramShop />} />
+          <Route path="/" element={<Index />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/admin" element={<AdminPanel />} />
-          <Route path="/index" element={<Index />} />
+          <Route path="/shop" element={<TelegramShop />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
