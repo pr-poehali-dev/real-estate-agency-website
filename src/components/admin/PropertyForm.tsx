@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -6,8 +6,10 @@ import { Textarea } from '../ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Icon from '../ui/icon';
+import MapPicker from './MapPicker';
 
 interface Property {
+  id?: number;
   title: string;
   description: string;
   property_type: string;
@@ -27,6 +29,9 @@ interface Property {
   longitude: number;
   features: string[];
   images: string[];
+  status?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface PropertyFormProps {
@@ -40,6 +45,8 @@ interface PropertyFormProps {
   error: string;
   success: string;
   onSubmit: (e: React.FormEvent) => Promise<void>;
+  isEditing?: boolean;
+  onCancel?: () => void;
 }
 
 const PropertyForm: React.FC<PropertyFormProps> = ({
@@ -52,19 +59,39 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
   loading,
   error,
   success,
-  onSubmit
+  onSubmit,
+  isEditing = false,
+  onCancel
 }) => {
+  const [isMapPickerOpen, setIsMapPickerOpen] = useState(false);
+  
   const districts = [
     'Центр (Кентрон)', 'Ачапняк', 'Аван', 'Арабкир', 'Давташен', 'Эребуни',
     'Канакер-Зейтун', 'Малатия-Себастия', 'Нор Норк', 'Нубарашен', 'Шенгавит', 'Норк-Мараш'
   ];
 
+  const handleLocationChange = (lat: number, lng: number, address?: string) => {
+    setPropertyForm({
+      ...propertyForm,
+      latitude: lat,
+      longitude: lng,
+      address: address || propertyForm.address
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Icon name="Plus" size={20} />
-          Добавить объект недвижимости
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Icon name={isEditing ? "Edit" : "Plus"} size={20} />
+            {isEditing ? "Редактировать объект недвижимости" : "Добавить объект недвижимости"}
+          </div>
+          {isEditing && onCancel && (
+            <Button variant="ghost" onClick={onCancel}>
+              <Icon name="X" size={16} />
+            </Button>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -264,26 +291,43 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="latitude">Широта</Label>
-                <Input
-                  id="latitude"
-                  type="number"
-                  step="0.000001"
-                  value={propertyForm.latitude}
-                  onChange={(e) => setPropertyForm({...propertyForm, latitude: Number(e.target.value)})}
-                />
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsMapPickerOpen(true)}
+                  className="flex items-center gap-2"
+                >
+                  <Icon name="MapPin" size={16} />
+                  Выбрать на карте
+                </Button>
+                <span className="text-sm text-gray-600">
+                  Координаты: {propertyForm.latitude.toFixed(6)}, {propertyForm.longitude.toFixed(6)}
+                </span>
               </div>
-              <div>
-                <Label htmlFor="longitude">Долгота</Label>
-                <Input
-                  id="longitude"
-                  type="number"
-                  step="0.000001"
-                  value={propertyForm.longitude}
-                  onChange={(e) => setPropertyForm({...propertyForm, longitude: Number(e.target.value)})}
-                />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="latitude">Широта</Label>
+                  <Input
+                    id="latitude"
+                    type="number"
+                    step="0.000001"
+                    value={propertyForm.latitude}
+                    onChange={(e) => setPropertyForm({...propertyForm, latitude: Number(e.target.value)})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="longitude">Долгота</Label>
+                  <Input
+                    id="longitude"
+                    type="number"
+                    step="0.000001"
+                    value={propertyForm.longitude}
+                    onChange={(e) => setPropertyForm({...propertyForm, longitude: Number(e.target.value)})}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -313,11 +357,26 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
             </div>
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Добавление...' : 'Добавить объект'}
-          </Button>
+          <div className="flex gap-2">
+            {isEditing && onCancel && (
+              <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
+                Отмена
+              </Button>
+            )}
+            <Button type="submit" className="flex-1" disabled={loading}>
+              {loading ? (isEditing ? 'Сохранение...' : 'Добавление...') : (isEditing ? 'Сохранить изменения' : 'Добавить объект')}
+            </Button>
+          </div>
         </form>
       </CardContent>
+      
+      <MapPicker
+        latitude={propertyForm.latitude}
+        longitude={propertyForm.longitude}
+        onLocationChange={handleLocationChange}
+        isOpen={isMapPickerOpen}
+        onClose={() => setIsMapPickerOpen(false)}
+      />
     </Card>
   );
 };

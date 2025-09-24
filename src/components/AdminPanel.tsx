@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LoginForm from './admin/LoginForm';
 import AdminHeader from './admin/AdminHeader';
 import PropertyForm from './admin/PropertyForm';
+import PropertyList from './admin/PropertyList';
 
 interface AdminUser {
   id: number;
@@ -12,6 +13,7 @@ interface AdminUser {
 }
 
 interface Property {
+  id?: number;
   title: string;
   description: string;
   property_type: string;
@@ -31,6 +33,9 @@ interface Property {
   longitude: number;
   features: string[];
   images: string[];
+  status?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const AdminPanel: React.FC = () => {
@@ -39,6 +44,8 @@ const AdminPanel: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   // Property form state
   const [propertyForm, setPropertyForm] = useState<Property>({
@@ -266,6 +273,75 @@ const AdminPanel: React.FC = () => {
     }
   };
 
+  const handleEditProperty = (property: Property) => {
+    setEditingProperty(property);
+    setIsEditing(true);
+    
+    // Заполняем форму данными редактируемого объекта
+    setPropertyForm({
+      ...property,
+      features: property.features || [],
+      images: property.images || []
+    });
+    
+    // Заполняем текстовые поля
+    setFeaturesText((property.features || []).join('\n'));
+    setImagesText((property.images || []).join('\n'));
+    
+    // Очищаем сообщения
+    setError('');
+    setSuccess('');
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProperty(null);
+    setIsEditing(false);
+    
+    // Сбрасываем форму к начальным значениям
+    setPropertyForm({
+      title: '',
+      description: '',
+      property_type: 'apartment',
+      transaction_type: 'rent',
+      price: 0,
+      currency: 'AMD',
+      area: 0,
+      rooms: 0,
+      bedrooms: 0,
+      bathrooms: 0,
+      floor: 0,
+      total_floors: 0,
+      year_built: new Date().getFullYear(),
+      district: 'Центр',
+      address: '',
+      latitude: 40.1792,
+      longitude: 44.4991,
+      features: [],
+      images: []
+    });
+    
+    setFeaturesText('');
+    setImagesText('');
+    setError('');
+    setSuccess('');
+  };
+
+  const handleDeleteProperty = async (propertyId: number) => {
+    if (!confirm('Вы уверены, что хотите удалить это объявление?')) {
+      return;
+    }
+
+    // В демо режиме просто показываем сообщение
+    const token = localStorage.getItem('admin_token');
+    if (token && token.startsWith('demo-token-')) {
+      setSuccess(`Объявление #${propertyId} удалено в демо режиме!`);
+      return;
+    }
+
+    // В реальном режиме здесь был бы API вызов
+    setSuccess(`Объявление #${propertyId} помечено для удаления`);
+  };
+
   if (!user) {
     return (
       <LoginForm
@@ -283,6 +359,11 @@ const AdminPanel: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <AdminHeader user={user} onLogout={handleLogout} />
         
+        <PropertyList
+          onEdit={handleEditProperty}
+          onDelete={handleDeleteProperty}
+        />
+        
         <PropertyForm
           propertyForm={propertyForm}
           setPropertyForm={setPropertyForm}
@@ -294,6 +375,8 @@ const AdminPanel: React.FC = () => {
           error={error}
           success={success}
           onSubmit={handleAddProperty}
+          isEditing={isEditing}
+          onCancel={handleCancelEdit}
         />
       </div>
     </div>
