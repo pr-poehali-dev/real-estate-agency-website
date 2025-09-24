@@ -43,11 +43,6 @@ const MapPage: React.FC = () => {
   const [selectedTransaction, setSelectedTransaction] = useState('all');
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
 
-  // Load properties on component mount and when filters change
-  useEffect(() => {
-    loadProperties();
-  }, [selectedDistrict, selectedType, selectedTransaction, priceRange]);
-
   // Mock data for demo
   const getMockProperties = (): Property[] => {
     const mockProps: Property[] = [
@@ -209,6 +204,11 @@ const MapPage: React.FC = () => {
   const getTransactionTypeLabel = (type: string) => {
     return type === 'sale' ? 'Продажа' : 'Аренда';
   };
+
+  // Load properties on component mount and when filters change
+  useEffect(() => {
+    loadProperties();
+  }, [loadProperties, selectedDistrict, selectedType, selectedTransaction, priceRange]);
 
   return (
     <div className="min-h-screen bg-gray-50">
