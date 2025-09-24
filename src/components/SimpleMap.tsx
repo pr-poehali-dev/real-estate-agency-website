@@ -33,14 +33,18 @@ const SimpleMap: React.FC<SimpleMapProps> = ({ properties, onPropertySelect }) =
   };
 
   return (
-    <div className="h-full w-full bg-gradient-to-br from-blue-100 to-green-100 relative overflow-hidden">
-      {/* Фон карты */}
+    <div className="h-full w-full relative overflow-hidden bg-gray-50">
+      {/* Карта Еревана как фон */}
       <div 
-        className="absolute inset-0 bg-cover bg-center opacity-20"
+        className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: 'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZjFmNWY5Ii8+CjxwYXRoIGQ9Ik01MCAyMDBMMTAwIDE1MEwxNTAgMTgwTDIwMCAxMzBMMjUwIDE2MEwzMDAgMTIwTDM1MCAyMDAiIHN0cm9rZT0iIzY2NjY2NiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+CjxjaXJjbGUgY3g9IjIwMCIgY3k9IjE1MCIgcj0iNTAiIGZpbGw9IiNkY2ZjZTciIG9wYWNpdHk9IjAuNSIvPgo8L3N2Zz4K)'
+          backgroundImage: 'url(/img/f685af16-3d13-4cb1-929d-c50053195461.jpg)',
+          filter: 'brightness(0.9) contrast(1.1)'
         }}
       />
+      
+      {/* Наложение для лучшей видимости маркеров */}
+      <div className="absolute inset-0 bg-blue-900 bg-opacity-10"></div>
       
       {/* Заголовок */}
       <div className="absolute top-4 left-4 bg-white rounded-lg shadow-md p-3 z-10">
@@ -51,19 +55,45 @@ const SimpleMap: React.FC<SimpleMapProps> = ({ properties, onPropertySelect }) =
         <p className="text-sm text-gray-600">Найдено объектов: {properties.length}</p>
       </div>
 
+      {/* Названия районов */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute" style={{ left: '48%', top: '48%' }}>
+          <span className="bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-gray-700 shadow-sm">Центр</span>
+        </div>
+        <div className="absolute" style={{ left: '35%', top: '21%' }}>
+          <span className="bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-gray-700 shadow-sm">Аван</span>
+        </div>
+        <div className="absolute" style={{ left: '25%', top: '41%' }}>
+          <span className="bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-gray-700 shadow-sm">Арабкир</span>
+        </div>
+        <div className="absolute" style={{ left: '62%', top: '26%' }}>
+          <span className="bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-gray-700 shadow-sm">Давташен</span>
+        </div>
+        <div className="absolute" style={{ left: '70%', top: '71%' }}>
+          <span className="bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-gray-700 shadow-sm">Эребуни</span>
+        </div>
+      </div>
+
       {/* Объекты на карте */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-full h-full">
           {properties.map((property, index) => {
-            // Распределяем объекты по карте (имитация координат)
-            const positions = [
-              { x: '25%', y: '40%' }, // Центр
-              { x: '60%', y: '30%' }, // Центр 2
-              { x: '20%', y: '70%' }, // Аван
-              { x: '70%', y: '60%' }, // Ачапняк
-              { x: '40%', y: '80%' }  // Арабкир
-            ];
-            const position = positions[index] || positions[0];
+            // Распределяем объекты по районам Еревана (приблизительные позиции)
+            const districtPositions: Record<string, {x: string, y: string}> = {
+              'Центр': { x: '48%', y: '52%' },
+              'Аван': { x: '35%', y: '25%' },
+              'Арабкир': { x: '25%', y: '45%' },
+              'Давташен': { x: '62%', y: '30%' },
+              'Эребуни': { x: '70%', y: '75%' },
+              'Канакер-Зейтун': { x: '58%', y: '40%' },
+              'Малатия-Себастия': { x: '32%', y: '65%' },
+              'Норк-Мараш': { x: '78%', y: '55%' },
+              'Нор Норк': { x: '85%', y: '45%' },
+              'Шенгавит': { x: '45%', y: '78%' }
+            };
+            
+            const position = districtPositions[property.district] || { x: '50%', y: '50%' };
+
 
             return (
               <div
@@ -74,12 +104,15 @@ const SimpleMap: React.FC<SimpleMapProps> = ({ properties, onPropertySelect }) =
               >
                 {/* Маркер */}
                 <div className="relative">
-                  <div className="w-8 h-8 bg-orange-600 rounded-full shadow-lg border-2 border-white flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Icon name="Home" size={16} className="text-white" />
+                  <div className="w-10 h-10 bg-red-600 rounded-full shadow-xl border-3 border-white flex items-center justify-center group-hover:scale-125 transition-all duration-200 hover:shadow-2xl">
+                    <Icon name="Home" size={18} className="text-white" />
                   </div>
                   
                   {/* Пульсация */}
-                  <div className="absolute inset-0 bg-orange-600 rounded-full animate-ping opacity-75"></div>
+                  <div className="absolute inset-0 bg-red-600 rounded-full animate-ping opacity-60"></div>
+                  
+                  {/* Дополнительная тень для контраста */}
+                  <div className="absolute inset-0 bg-black rounded-full opacity-20 blur-sm"></div>
                 </div>
 
                 {/* Попап при наведении */}
