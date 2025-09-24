@@ -180,7 +180,7 @@ export default function Index() {
     message: ''
   });
 
-  // Примеры объектов недвижимости для карты
+  // Примеры объектов недвижимости для карты (только аренда)
   const sampleProperties = [
     {
       id: 1,
@@ -196,24 +196,24 @@ export default function Index() {
     {
       id: 2,
       title: 'Элитная квартира на площади Республики',
-      price: 180000,
-      currency: 'USD',
+      price: 450000,
+      currency: 'AMD',
       latitude: 40.1776,
       longitude: 44.5126,
       district: 'Центр (Кентрон)',
       property_type: 'apartment',
-      transaction_type: 'sale'
+      transaction_type: 'rent'
     },
     {
       id: 3,
-      title: 'Дом в Авановском районе',
-      price: 250000,
-      currency: 'USD',
-      latitude: 40.2150,
-      longitude: 44.5200,
-      district: 'Аван',
-      property_type: 'house',
-      transaction_type: 'sale'
+      title: 'Современная квартира в Ачапняке',
+      price: 280000,
+      currency: 'AMD',
+      latitude: 40.1650,
+      longitude: 44.4900,
+      district: 'Ачапняк',
+      property_type: 'apartment',
+      transaction_type: 'rent'
     }
   ];
   

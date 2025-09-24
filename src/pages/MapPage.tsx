@@ -456,39 +456,54 @@ const MapPage: React.FC = () => {
                     </div>
                     
                     <div className="border-t pt-4">
-                      <h4 className="font-medium mb-3 text-sm text-gray-700">Все объекты (от новых к старым)</h4>
+                      <h4 className="font-medium mb-3 text-sm text-gray-700">
+                        {properties.length > 0 
+                          ? `Найденные объекты (${properties.length})` 
+                          : 'Объекты не найдены'}
+                      </h4>
                       <div className="space-y-2 max-h-64 overflow-y-auto">
-                        {properties
-                          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                          .map((property) => (
-                          <div
-                            key={property.id}
-                            className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
-                            onClick={() => setSelectedProperty(property)}
-                          >
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <h5 className="font-medium text-sm leading-tight mb-1">
-                                  {property.title}
-                                </h5>
-                                <p className="text-primary font-bold text-sm">
-                                  {formatPrice(property.price, property.currency)}
-                                </p>
-                                <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
-                                  <Icon name="MapPin" size={12} />
-                                  <span>{property.district}</span>
-                                </div>
-                                <div className="text-xs text-gray-400 mt-1">
-                                  {new Date(property.created_at).toLocaleDateString('ru-RU', { 
-                                    day: '2-digit', 
-                                    month: '2-digit', 
-                                    year: 'numeric' 
-                                  })}
+                        {properties.length > 0 ? (
+                          properties
+                            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                            .map((property) => (
+                            <div
+                              key={property.id}
+                              className={`p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
+                                selectedProperty?.id === property.id ? 'bg-blue-50 border-blue-300' : ''
+                              }`}
+                              onClick={() => setSelectedProperty(property)}
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <h5 className="font-medium text-sm leading-tight mb-1">
+                                    {property.title}
+                                  </h5>
+                                  <p className="text-primary font-bold text-sm">
+                                    {formatPrice(property.price, property.currency)}
+                                  </p>
+                                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                                    <Icon name="MapPin" size={12} />
+                                    <span>{property.district}</span>
+                                    <span>•</span>
+                                    <span>{getTransactionTypeLabel(property.transaction_type)}</span>
+                                  </div>
+                                  <div className="text-xs text-gray-400 mt-1">
+                                    {new Date(property.created_at).toLocaleDateString('ru-RU', { 
+                                      day: '2-digit', 
+                                      month: '2-digit', 
+                                      year: 'numeric' 
+                                    })}
+                                  </div>
                                 </div>
                               </div>
                             </div>
+                          ))
+                        ) : (
+                          <div className="text-center py-8 text-gray-400">
+                            <Icon name="Search" size={32} className="mx-auto mb-2 opacity-50" />
+                            <p className="text-sm">Попробуйте изменить параметры поиска</p>
                           </div>
-                        ))}
+                        )}
                       </div>
                     </div>
                   </div>
