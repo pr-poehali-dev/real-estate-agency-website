@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import SimpleMap from '@/components/SimpleMap';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import PropertyFilters from '@/components/PropertyFilters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+// Fix leaflet default markers
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+});
 
 interface Property {
   id: number;
@@ -43,12 +53,12 @@ const MapPage: React.FC = () => {
   const [selectedTransaction, setSelectedTransaction] = useState('all');
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
 
-  // Mock data for demo
+  // Mock data with updated districts
   const getMockProperties = (): Property[] => {
     const mockProps: Property[] = [
       {
         id: 1,
-        title: '3-комнатная квартира в центре Еревана',
+        title: '3-комнатная квартира в Центре',
         description: 'Прекрасная квартира в самом сердце Еревана. Рядом с главными достопримечательностями, ресторанами и магазинами.',
         property_type: 'apartment',
         transaction_type: 'rent',
@@ -61,7 +71,7 @@ const MapPage: React.FC = () => {
         floor: 4,
         total_floors: 9,
         year_built: 2015,
-        district: 'Центр',
+        district: 'Центр (Кентрон)',
         address: 'ул. Абовяна 23, Ереван',
         latitude: 40.1823,
         longitude: 44.5146,
@@ -86,7 +96,7 @@ const MapPage: React.FC = () => {
         floor: 7,
         total_floors: 12,
         year_built: 2018,
-        district: 'Центр',
+        district: 'Центр (Кентрон)',
         address: 'пр. Республики 15, Ереван',
         latitude: 40.1776,
         longitude: 44.5126,
@@ -95,6 +105,31 @@ const MapPage: React.FC = () => {
         status: 'active',
         created_at: '2024-01-20T15:30:00Z',
         updated_at: '2024-01-20T15:30:00Z'
+      },
+      {
+        id: 3,
+        title: 'Просторный дом в Авановском районе',
+        description: 'Частный дом с садом в тихом районе Ереван. Отличное место для семьи.',
+        property_type: 'house',
+        transaction_type: 'sale',
+        price: 250000,
+        currency: 'USD',
+        area: 180.0,
+        rooms: 5,
+        bedrooms: 4,
+        bathrooms: 2,
+        floor: 2,
+        total_floors: 2,
+        year_built: 2010,
+        district: 'Аван',
+        address: 'ул. Давташен 45, Ереван',
+        latitude: 40.2150,
+        longitude: 44.5200,
+        features: ['Сад', 'Гараж', 'Камин', 'Терраса'],
+        images: ['/img/703391dd-7309-4c1d-873e-51a4a1ee5059.jpg'],
+        status: 'active',
+        created_at: '2024-01-25T12:00:00Z',
+        updated_at: '2024-01-25T12:00:00Z'
       }
     ];
 
@@ -130,50 +165,8 @@ const MapPage: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 500));
       
       setProperties(mockData);
-      
-      // Попытка загрузить реальные данные (в фоне)
-      /*
-      const params = new URLSearchParams();
-      
-      if (selectedDistrict !== 'Все районы') {
-        params.append('district', selectedDistrict);
-      }
-      
-      if (selectedType !== 'all') {
-        params.append('type', selectedType);
-      }
-      
-      if (selectedTransaction !== 'all') {
-        params.append('transaction', selectedTransaction);
-      }
-      
-      if (priceRange.min) {
-        params.append('min_price', priceRange.min);
-      }
-      
-      if (priceRange.max) {
-        params.append('max_price', priceRange.max);
-      }
-
-      const url = `https://functions.poehali.dev/8571bb44-9242-4aac-8df9-754908175968${params.toString() ? '?' + params.toString() : ''}`;
-      
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          setProperties(data.properties);
-        }
-      }
-      */
     } catch (err) {
       console.error('Error loading properties:', err);
-      // В случае ошибки всё равно показываем демо данные
       const mockData = getMockProperties();
       setProperties(mockData);
     } finally {
@@ -195,8 +188,7 @@ const MapPage: React.FC = () => {
   const getPropertyTypeLabel = (type: string) => {
     const labels: { [key: string]: string } = {
       'apartment': 'Квартира',
-      'house': 'Дом',
-      'commercial': 'Коммерческая'
+      'house': 'Дом'
     };
     return labels[type] || type;
   };
@@ -208,7 +200,7 @@ const MapPage: React.FC = () => {
   // Load properties on component mount and when filters change
   useEffect(() => {
     loadProperties();
-  }, [loadProperties, selectedDistrict, selectedType, selectedTransaction, priceRange]);
+  }, [selectedDistrict, selectedType, selectedTransaction, priceRange]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -267,7 +259,7 @@ const MapPage: React.FC = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Map */}
+          {/* Interactive Map */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
@@ -277,11 +269,43 @@ const MapPage: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <SimpleMap
-                  properties={properties}
-                  selectedDistrict={selectedDistrict !== 'Все районы' ? selectedDistrict : undefined}
-                  onPropertySelect={setSelectedProperty}
-                />
+                <div className="h-96 w-full">
+                  <MapContainer
+                    center={[40.1776, 44.5126]}
+                    zoom={12}
+                    style={{ height: '100%', width: '100%' }}
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    {properties.map((property) => (
+                      <Marker
+                        key={property.id}
+                        position={[property.latitude, property.longitude]}
+                        eventHandlers={{
+                          click: () => setSelectedProperty(property),
+                        }}
+                      >
+                        <Popup>
+                          <div className="min-w-64">
+                            <h3 className="font-semibold mb-2">{property.title}</h3>
+                            <p className="text-orange-600 font-bold mb-2">
+                              {formatPrice(property.price, property.currency)}
+                            </p>
+                            <p className="text-sm text-gray-600 mb-2">
+                              {getPropertyTypeLabel(property.property_type)} • {getTransactionTypeLabel(property.transaction_type)}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              <Icon name="MapPin" size={12} className="inline mr-1" />
+                              {property.address}
+                            </p>
+                          </div>
+                        </Popup>
+                      </Marker>
+                    ))}
+                  </MapContainer>
+                </div>
               </CardContent>
             </Card>
           </div>

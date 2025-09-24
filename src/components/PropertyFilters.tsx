@@ -30,24 +30,24 @@ const PropertyFilters: React.FC<FilterProps> = ({
 }) => {
   const districts = [
     'Все районы',
-    'Центр',
-    'Аджапняк',
     'Аван',
+    'Ачапняк',
     'Арабкир',
     'Давташен',
-    'Эребуни',
     'Канакер-Зейтун',
+    'Центр (Кентрон)',
     'Малатия-Себастия',
     'Нор Норк',
     'Нубарашен',
     'Шенгавит',
+    'Эребуни',
+    'Норк-Мараш',
   ];
 
   const propertyTypes = [
     { value: 'all', label: 'Все типы' },
     { value: 'apartment', label: 'Квартира' },
     { value: 'house', label: 'Дом' },
-    { value: 'commercial', label: 'Коммерческая' },
   ];
 
   const transactionTypes = [
