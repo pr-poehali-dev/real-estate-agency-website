@@ -42,6 +42,7 @@ const MapPage: React.FC = () => {
   const [selectedType, setSelectedType] = useState('all');
   const [selectedTransaction, setSelectedTransaction] = useState('all');
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [streetSearch, setStreetSearch] = useState('');
 
   // Mock data with updated districts
   const getMockProperties = (): Property[] => {
@@ -68,7 +69,7 @@ const MapPage: React.FC = () => {
         features: ['Мебель', 'Кондиционер', 'Балкон', 'Интернет', 'Парковка'],
         images: ['/img/703391dd-7309-4c1d-873e-51a4a1ee5059.jpg'],
         status: 'active',
-        created_at: '2024-01-15T10:00:00Z',
+        created_at: '2024-11-20T10:00:00Z',
         updated_at: '2024-01-15T10:00:00Z'
       },
       {
@@ -76,9 +77,9 @@ const MapPage: React.FC = () => {
         title: 'Элитная 2-комнатная квартира на площади Республики',
         description: 'Роскошная квартира с видом на площадь Республики. Дизайнерский ремонт, премиальная мебель.',
         property_type: 'apartment',
-        transaction_type: 'sale',
-        price: 180000,
-        currency: 'USD',
+        transaction_type: 'rent',
+        price: 450000,
+        currency: 'AMD',
         area: 65.0,
         rooms: 2,
         bedrooms: 1,
@@ -93,7 +94,7 @@ const MapPage: React.FC = () => {
         features: ['Премиум класс', 'Вид на площадь', 'Консьерж', 'Лифт', 'Подземная парковка', 'Охрана'],
         images: ['/img/d6af7502-6fd6-494d-b0ff-846b279690c0.jpg'],
         status: 'active',
-        created_at: '2024-01-20T15:30:00Z',
+        created_at: '2024-11-18T15:30:00Z',
         updated_at: '2024-01-20T15:30:00Z'
       },
       {
@@ -101,9 +102,9 @@ const MapPage: React.FC = () => {
         title: 'Просторный дом в Авановском районе',
         description: 'Частный дом с садом в тихом районе Ереван. Отличное место для семьи.',
         property_type: 'house',
-        transaction_type: 'sale',
-        price: 250000,
-        currency: 'USD',
+        transaction_type: 'daily_rent',
+        price: 25000,
+        currency: 'AMD',
         area: 180.0,
         rooms: 5,
         bedrooms: 4,
@@ -112,13 +113,13 @@ const MapPage: React.FC = () => {
         total_floors: 2,
         year_built: 2010,
         district: 'Аван',
-        address: 'ул. Давташен 45, Ереван',
+        address: 'ул. Аванского шоссе 45, Ереван',
         latitude: 40.2150,
         longitude: 44.5200,
         features: ['Сад', 'Гараж', 'Камин', 'Терраса'],
         images: ['/img/703391dd-7309-4c1d-873e-51a4a1ee5059.jpg'],
         status: 'active',
-        created_at: '2024-01-25T12:00:00Z',
+        created_at: '2024-11-15T12:00:00Z',
         updated_at: '2024-01-25T12:00:00Z'
       },
       {
@@ -143,7 +144,7 @@ const MapPage: React.FC = () => {
         features: ['Новостройка', 'Европейский ремонт', 'Лифт'],
         images: ['/img/d6af7502-6fd6-494d-b0ff-846b279690c0.jpg'],
         status: 'active',
-        created_at: '2024-01-22T14:00:00Z',
+        created_at: '2024-11-17T14:00:00Z',
         updated_at: '2024-01-22T14:00:00Z'
       },
       {
@@ -151,9 +152,9 @@ const MapPage: React.FC = () => {
         title: 'Семейная квартира в Арабкире',
         description: 'Уютная 3-комнатная квартира в престижном районе с хорошей инфраструктурой.',
         property_type: 'apartment',
-        transaction_type: 'sale',
-        price: 145000,
-        currency: 'USD',
+        transaction_type: 'daily_rent',
+        price: 15000,
+        currency: 'AMD',
         area: 90.0,
         rooms: 3,
         bedrooms: 2,
@@ -168,7 +169,7 @@ const MapPage: React.FC = () => {
         features: ['Балкон', 'Кладовка', 'Интернет', 'Кабельное ТВ'],
         images: ['/img/703391dd-7309-4c1d-873e-51a4a1ee5059.jpg'],
         status: 'active',
-        created_at: '2024-01-18T11:30:00Z',
+        created_at: '2024-11-16T11:30:00Z',
         updated_at: '2024-01-18T11:30:00Z'
       }
     ];
@@ -178,6 +179,13 @@ const MapPage: React.FC = () => {
       if (selectedDistrict !== 'Все районы' && prop.district !== selectedDistrict) return false;
       if (selectedType !== 'all' && prop.property_type !== selectedType) return false;
       if (selectedTransaction !== 'all' && prop.transaction_type !== selectedTransaction) return false;
+      
+      // Поиск по улице
+      if (streetSearch.trim()) {
+        const searchLower = streetSearch.toLowerCase();
+        const addressMatch = prop.address.toLowerCase().includes(searchLower);
+        if (!addressMatch) return false;
+      }
       
       if (priceRange.min) {
         const minPrice = parseFloat(priceRange.min);
@@ -219,6 +227,7 @@ const MapPage: React.FC = () => {
     setSelectedType('all');
     setSelectedTransaction('all');
     setPriceRange({ min: '', max: '' });
+    setStreetSearch('');
   };
 
   const formatPrice = (price: number, currency: string) => {
@@ -234,13 +243,18 @@ const MapPage: React.FC = () => {
   };
 
   const getTransactionTypeLabel = (type: string) => {
-    return type === 'sale' ? 'Продажа' : 'Аренда';
+    const labels: { [key: string]: string } = {
+      'rent': 'Аренда',
+      'daily_rent': 'Посуточная аренда',
+      'sale': 'Продажа'
+    };
+    return labels[type] || type;
   };
 
   // Load properties on component mount and when filters change
   useEffect(() => {
     loadProperties();
-  }, [selectedDistrict, selectedType, selectedTransaction, priceRange]);
+  }, [selectedDistrict, selectedType, selectedTransaction, priceRange, streetSearch]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -262,10 +276,12 @@ const MapPage: React.FC = () => {
           selectedType={selectedType}
           selectedTransaction={selectedTransaction}
           priceRange={priceRange}
+          streetSearch={streetSearch}
           onDistrictChange={setSelectedDistrict}
           onTypeChange={setSelectedType}
           onTransactionChange={setSelectedTransaction}
           onPriceRangeChange={setPriceRange}
+          onStreetSearchChange={setStreetSearch}
           onReset={resetFilters}
         />
 
@@ -359,6 +375,10 @@ const MapPage: React.FC = () => {
                         <span>{getTransactionTypeLabel(selectedProperty.transaction_type)}</span>
                       </div>
                       <div className="flex justify-between">
+                        <span className="text-gray-600">Дата добавления:</span>
+                        <span>{new Date(selectedProperty.created_at).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
+                      </div>
+                      <div className="flex justify-between">
                         <span className="text-gray-600">Район:</span>
                         <span>{selectedProperty.district}</span>
                       </div>
@@ -429,9 +449,48 @@ const MapPage: React.FC = () => {
                     </Button>
                   </div>
                 ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Icon name="MousePointer" size={48} className="mx-auto mb-4 text-gray-300" />
-                    <p>Выберите объект из списка, чтобы увидеть подробную информацию о недвижимости.</p>
+                  <div className="space-y-4">
+                    <div className="text-center text-gray-500 mb-4">
+                      <Icon name="MousePointer" size={24} className="mx-auto mb-2 text-gray-300" />
+                      <p className="text-sm">Кликните на объект на карте или в списке ниже</p>
+                    </div>
+                    
+                    <div className="border-t pt-4">
+                      <h4 className="font-medium mb-3 text-sm text-gray-700">Все объекты (от новых к старым)</h4>
+                      <div className="space-y-2 max-h-64 overflow-y-auto">
+                        {properties
+                          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                          .map((property) => (
+                          <div
+                            key={property.id}
+                            className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => setSelectedProperty(property)}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <h5 className="font-medium text-sm leading-tight mb-1">
+                                  {property.title}
+                                </h5>
+                                <p className="text-primary font-bold text-sm">
+                                  {formatPrice(property.price, property.currency)}
+                                </p>
+                                <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                                  <Icon name="MapPin" size={12} />
+                                  <span>{property.district}</span>
+                                </div>
+                                <div className="text-xs text-gray-400 mt-1">
+                                  {new Date(property.created_at).toLocaleDateString('ru-RU', { 
+                                    day: '2-digit', 
+                                    month: '2-digit', 
+                                    year: 'numeric' 
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
               </CardContent>

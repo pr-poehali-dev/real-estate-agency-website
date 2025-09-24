@@ -10,10 +10,12 @@ interface FilterProps {
   selectedType: string;
   selectedTransaction: string;
   priceRange: { min: string; max: string };
+  streetSearch: string;
   onDistrictChange: (district: string) => void;
   onTypeChange: (type: string) => void;
   onTransactionChange: (transaction: string) => void;
   onPriceRangeChange: (range: { min: string; max: string }) => void;
+  onStreetSearchChange: (search: string) => void;
   onReset: () => void;
 }
 
@@ -22,10 +24,12 @@ const PropertyFilters: React.FC<FilterProps> = ({
   selectedType,
   selectedTransaction,
   priceRange,
+  streetSearch,
   onDistrictChange,
   onTypeChange,
   onTransactionChange,
   onPriceRangeChange,
+  onStreetSearchChange,
   onReset,
 }) => {
   const districts = [
@@ -52,8 +56,8 @@ const PropertyFilters: React.FC<FilterProps> = ({
 
   const transactionTypes = [
     { value: 'all', label: 'Все операции' },
-    { value: 'sale', label: 'Продажа' },
     { value: 'rent', label: 'Аренда' },
+    { value: 'daily_rent', label: 'Посуточная аренда' },
   ];
 
   return (
@@ -69,7 +73,7 @@ const PropertyFilters: React.FC<FilterProps> = ({
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         {/* Район */}
         <div className="space-y-2">
           <Label htmlFor="district">Район</Label>
@@ -121,9 +125,22 @@ const PropertyFilters: React.FC<FilterProps> = ({
           </Select>
         </div>
 
+        {/* Поиск по улице */}
+        <div className="space-y-2">
+          <Label htmlFor="street-search">Поиск по улице</Label>
+          <Input
+            id="street-search"
+            type="text"
+            placeholder="Название улицы..."
+            value={streetSearch}
+            onChange={(e) => onStreetSearchChange(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        
         {/* Цена от */}
         <div className="space-y-2">
-          <Label htmlFor="price-min">Цена от</Label>
+          <Label htmlFor="price-min">Цена от (AMD)</Label>
           <Input
             id="price-min"
             type="number"
@@ -137,7 +154,7 @@ const PropertyFilters: React.FC<FilterProps> = ({
 
         {/* Цена до */}
         <div className="space-y-2">
-          <Label htmlFor="price-max">Цена до</Label>
+          <Label htmlFor="price-max">Цена до (AMD)</Label>
           <Input
             id="price-max"
             type="number"
