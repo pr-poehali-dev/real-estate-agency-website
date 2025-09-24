@@ -6,34 +6,11 @@ import { Textarea } from '../ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Icon from '../ui/icon';
-import MapPicker from './MapPicker';
 import ImageUpload from './ImageUpload';
+import AddressSelector from './AddressSelector';
+import { Property, AddressComponents, LocationPoint } from '@/types/property';
 
-interface Property {
-  id?: number;
-  title: string;
-  description: string;
-  property_type: string;
-  transaction_type: string;
-  price: number;
-  currency: string;
-  area: number;
-  rooms: number;
-  bedrooms: number;
-  bathrooms: number;
-  floor: number;
-  total_floors: number;
-  year_built: number;
-  district: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  features: string[];
-  images: string[];
-  status?: string;
-  created_at?: string;
-  updated_at?: string;
-}
+// Property interface now imported from types
 
 interface PropertyFormProps {
   propertyForm: Property;
@@ -60,27 +37,48 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
   isEditing = false,
   onCancel
 }) => {
-  const [isMapPickerOpen, setIsMapPickerOpen] = useState(false);
-  
-  const districts = [
-    'Центр (Кентрон)', 'Ачапняк', 'Аван', 'Арабкир', 'Давташен', 'Эребуни',
-    'Канакер-Зейтун', 'Малатия-Себастия', 'Нор Норк', 'Нубарашен', 'Шенгавит', 'Норк-Мараш'
-  ];
-
-  const handleLocationChange = (lat: number, lng: number, address?: string) => {
-    setPropertyForm({
-      ...propertyForm,
-      latitude: lat,
-      longitude: lng,
-      address: address || propertyForm.address
-    });
-  };
 
   const handleImagesChange = (newImages: string[]) => {
     setPropertyForm({
       ...propertyForm,
       images: newImages
     });
+  };
+
+  // Новые обработчики для AddressSelector
+  const handleAddressChange = (address: AddressComponents) => {
+    setPropertyForm({
+      ...propertyForm,
+      street_name: address.street_name,
+      house_number: address.house_number,
+      apartment_number: address.apartment_number,
+      district: address.district,
+      address: address.formatted_address || propertyForm.address
+    });
+  };
+
+  const handleCoordinatesChange = (coordinates: LocationPoint) => {
+    setPropertyForm({
+      ...propertyForm,
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+      address: coordinates.address || propertyForm.address
+    });
+  };
+
+  // Формируем текущий адрес для AddressSelector
+  const currentAddress: AddressComponents = {
+    street_name: propertyForm.street_name || '',
+    house_number: propertyForm.house_number || '',
+    apartment_number: propertyForm.apartment_number || '',
+    district: propertyForm.district,
+    formatted_address: propertyForm.address
+  };
+
+  const currentCoordinates: LocationPoint = {
+    latitude: propertyForm.latitude,
+    longitude: propertyForm.longitude,
+    address: propertyForm.address
   };
 
   return (
@@ -266,74 +264,18 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="district">Район *</Label>
-                <Select value={propertyForm.district} onValueChange={(value) => setPropertyForm({...propertyForm, district: value})}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {districts.map(district => (
-                      <SelectItem key={district} value={district}>{district}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
             </div>
           </div>
 
-          {/* Location */}
+          {/* Address Selection */}
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="address">Адрес *</Label>
-              <Input
-                id="address"
-                value={propertyForm.address}
-                onChange={(e) => setPropertyForm({...propertyForm, address: e.target.value})}
-                placeholder="Полный адрес объекта"
-                required
-              />
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsMapPickerOpen(true)}
-                  className="flex items-center gap-2"
-                >
-                  <Icon name="MapPin" size={16} />
-                  Выбрать на карте
-                </Button>
-                <span className="text-sm text-gray-600">
-                  Координаты: {propertyForm.latitude.toFixed(6)}, {propertyForm.longitude.toFixed(6)}
-                </span>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="latitude">Широта</Label>
-                  <Input
-                    id="latitude"
-                    type="number"
-                    step="0.000001"
-                    value={propertyForm.latitude}
-                    onChange={(e) => setPropertyForm({...propertyForm, latitude: Number(e.target.value)})}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="longitude">Долгота</Label>
-                  <Input
-                    id="longitude"
-                    type="number"
-                    step="0.000001"
-                    value={propertyForm.longitude}
-                    onChange={(e) => setPropertyForm({...propertyForm, longitude: Number(e.target.value)})}
-                  />
-                </div>
-              </div>
-            </div>
+            <h3 className="text-lg font-semibold">Адрес объекта</h3>
+            <AddressSelector
+              address={currentAddress}
+              onAddressChange={handleAddressChange}
+              coordinates={currentCoordinates}
+              onCoordinatesChange={handleCoordinatesChange}
+            />
           </div>
 
           {/* Features and Images */}
@@ -368,14 +310,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
           </div>
         </form>
       </CardContent>
-      
-      <MapPicker
-        latitude={propertyForm.latitude}
-        longitude={propertyForm.longitude}
-        onLocationChange={handleLocationChange}
-        isOpen={isMapPickerOpen}
-        onClose={() => setIsMapPickerOpen(false)}
-      />
     </Card>
   );
 };

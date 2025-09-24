@@ -3,6 +3,7 @@ import LoginForm from './admin/LoginForm';
 import AdminHeader from './admin/AdminHeader';
 import PropertyForm from './admin/PropertyForm';
 import PropertyList from './admin/PropertyList';
+import { Property } from '@/types/property';
 
 interface AdminUser {
   id: number;
@@ -10,32 +11,6 @@ interface AdminUser {
   email: string;
   full_name: string;
   role: string;
-}
-
-interface Property {
-  id?: number;
-  title: string;
-  description: string;
-  property_type: string;
-  transaction_type: string;
-  price: number;
-  currency: string;
-  area: number;
-  rooms: number;
-  bedrooms: number;
-  bathrooms: number;
-  floor: number;
-  total_floors: number;
-  year_built: number;
-  district: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  features: string[];
-  images: string[];
-  status?: string;
-  created_at?: string;
-  updated_at?: string;
 }
 
 const AdminPanel: React.FC = () => {
@@ -64,6 +39,9 @@ const AdminPanel: React.FC = () => {
     year_built: new Date().getFullYear(),
     district: 'Центр',
     address: '',
+    street_name: '',
+    house_number: '',
+    apartment_number: '',
     latitude: 40.1792,
     longitude: 44.4991,
     features: [],
@@ -275,6 +253,9 @@ const AdminPanel: React.FC = () => {
     // Заполняем форму данными редактируемого объекта
     setPropertyForm({
       ...property,
+      street_name: property.street_name || '',
+      house_number: property.house_number || '',
+      apartment_number: property.apartment_number || '',
       features: property.features || [],
       images: property.images || []
     });
@@ -308,6 +289,9 @@ const AdminPanel: React.FC = () => {
       year_built: new Date().getFullYear(),
       district: 'Центр',
       address: '',
+      street_name: '',
+      house_number: '',
+      apartment_number: '',
       latitude: 40.1792,
       longitude: 44.4991,
       features: [],
