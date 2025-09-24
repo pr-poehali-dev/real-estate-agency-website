@@ -164,6 +164,11 @@ const YerevanMap2GIS: React.FC<YerevanMap2GISProps> = ({
     (window as any).selectProperty = (propertyId: number) => {
       const property = properties.find(p => p.id === propertyId);
       if (property) {
+        // Если это предпросмотр, открываем полную карту
+        if (isPreview) {
+          window.location.href = '/map';
+          return;
+        }
         onPropertySelect(property);
       }
     };

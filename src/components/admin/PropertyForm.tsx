@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Icon from '../ui/icon';
 import MapPicker from './MapPicker';
+import ImageUpload from './ImageUpload';
 
 interface Property {
   id?: number;
@@ -39,8 +40,6 @@ interface PropertyFormProps {
   setPropertyForm: React.Dispatch<React.SetStateAction<Property>>;
   featuresText: string;
   setFeaturesText: React.Dispatch<React.SetStateAction<string>>;
-  imagesText: string;
-  setImagesText: React.Dispatch<React.SetStateAction<string>>;
   loading: boolean;
   error: string;
   success: string;
@@ -54,8 +53,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
   setPropertyForm,
   featuresText,
   setFeaturesText,
-  imagesText,
-  setImagesText,
   loading,
   error,
   success,
@@ -76,6 +73,13 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
       latitude: lat,
       longitude: lng,
       address: address || propertyForm.address
+    });
+  };
+
+  const handleImagesChange = (newImages: string[]) => {
+    setPropertyForm({
+      ...propertyForm,
+      images: newImages
     });
   };
 
@@ -333,7 +337,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
           </div>
 
           {/* Features and Images */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-6">
             <div>
               <Label htmlFor="features">Особенности (каждая с новой строки)</Label>
               <Textarea
@@ -345,16 +349,11 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
               />
             </div>
 
-            <div>
-              <Label htmlFor="images">URL изображений (каждый с новой строки)</Label>
-              <Textarea
-                id="images"
-                value={imagesText}
-                onChange={(e) => setImagesText(e.target.value)}
-                placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg"
-                rows={4}
-              />
-            </div>
+            <ImageUpload
+              images={propertyForm.images}
+              onImagesChange={handleImagesChange}
+              maxImages={5}
+            />
           </div>
 
           <div className="flex gap-2">

@@ -71,7 +71,6 @@ const AdminPanel: React.FC = () => {
   });
 
   const [featuresText, setFeaturesText] = useState('');
-  const [imagesText, setImagesText] = useState('');
 
   // Check existing auth on component mount
   useEffect(() => {
@@ -210,20 +209,17 @@ const AdminPanel: React.FC = () => {
         images: []
       });
       setFeaturesText('');
-      setImagesText('');
       setLoading(false);
       return;
     }
 
     try {
-      // Parse features and images from text
+      // Parse features from text
       const features = featuresText.split('\n').filter(f => f.trim()).map(f => f.trim());
-      const images = imagesText.split('\n').filter(i => i.trim()).map(i => i.trim());
 
       const propertyData = {
         ...propertyForm,
-        features,
-        images
+        features
       };
 
       const response = await fetch('https://functions.poehali.dev/8571bb44-9242-4aac-8df9-754908175968', {
@@ -262,7 +258,6 @@ const AdminPanel: React.FC = () => {
           images: []
         });
         setFeaturesText('');
-        setImagesText('');
       } else {
         setError(data.error || 'Ошибка добавления объекта');
       }
@@ -286,7 +281,6 @@ const AdminPanel: React.FC = () => {
     
     // Заполняем текстовые поля
     setFeaturesText((property.features || []).join('\n'));
-    setImagesText((property.images || []).join('\n'));
     
     // Очищаем сообщения
     setError('');
@@ -321,7 +315,6 @@ const AdminPanel: React.FC = () => {
     });
     
     setFeaturesText('');
-    setImagesText('');
     setError('');
     setSuccess('');
   };
@@ -369,8 +362,6 @@ const AdminPanel: React.FC = () => {
           setPropertyForm={setPropertyForm}
           featuresText={featuresText}
           setFeaturesText={setFeaturesText}
-          imagesText={imagesText}
-          setImagesText={setImagesText}
           loading={loading}
           error={error}
           success={success}
