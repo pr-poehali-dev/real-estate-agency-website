@@ -42,7 +42,7 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete }) => {
 
   const getTransactionTypeLabel = (type: string) => {
     switch (type) {
-      case 'rent': return 'Аренда';
+      case 'rent': return 'Долгосрочная аренда';
       case 'daily_rent': return 'Посуточно';
       case 'sale': return 'Продажа';
       default: return type;

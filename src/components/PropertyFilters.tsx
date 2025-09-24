@@ -56,7 +56,7 @@ const PropertyFilters: React.FC<FilterProps> = ({
 
   const transactionTypes = [
     { value: 'all', label: 'Все операции' },
-    { value: 'rent', label: 'Аренда' },
+    { value: 'rent', label: 'Долгосрочная аренда' },
     { value: 'daily_rent', label: 'Посуточная аренда' },
   ];
 

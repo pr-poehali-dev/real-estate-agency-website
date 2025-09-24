@@ -116,7 +116,7 @@ const MapPage: React.FC = () => {
 
   const getTransactionTypeLabel = (type: string) => {
     const labels: { [key: string]: string } = {
-      'rent': 'Аренда',
+      'rent': 'Долгосрочная аренда',
       'daily_rent': 'Посуточная аренда',
       'sale': 'Продажа'
     };
@@ -132,14 +132,29 @@ const MapPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         {/* Page Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Карта недвижимости Еревана
-          </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Найдите идеальную недвижимость в Ереване с помощью интерактивной карты. 
-            Используйте фильтры для уточнения поиска по районам, типу и цене.
-          </p>
+        <div className="mb-8">
+          {/* Back button */}
+          <div className="mb-4">
+            <Button 
+              variant="outline" 
+              onClick={() => window.history.back()}
+              className="flex items-center gap-2"
+            >
+              <Icon name="ArrowLeft" size={16} />
+              Назад
+            </Button>
+          </div>
+          
+          {/* Centered title section */}
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              Карта недвижимости Еревана
+            </h1>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Найдите идеальную недвижимость в Ереване с помощью интерактивной карты. 
+              Используйте фильтры для уточнения поиска по районам, типу и цене.
+            </p>
+          </div>
         </div>
 
         {/* Filters */}
@@ -315,7 +330,10 @@ const MapPage: React.FC = () => {
                       </div>
                     )}
 
-                    <Button className="w-full mt-4">
+                    <Button 
+                      className="w-full mt-4"
+                      onClick={() => window.open('https://t.me/WSEManager', '_blank')}
+                    >
                       <Icon name="Phone" size={16} className="mr-2" />
                       Связаться с нами
                     </Button>

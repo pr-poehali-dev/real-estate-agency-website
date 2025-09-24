@@ -45,7 +45,7 @@ const YerevanMap2GIS: React.FC<YerevanMap2GISProps> = ({
   };
 
   const getTransactionTypeLabel = (type: string) => {
-    return type === 'sale' ? 'Продажа' : 'Аренда';
+    return type === 'sale' ? 'Продажа' : 'Долгосрочная аренда';
   };
 
   // Координаты районов Еревана (приблизительные центры)

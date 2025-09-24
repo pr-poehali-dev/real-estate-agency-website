@@ -18,6 +18,19 @@ interface AdminHeaderProps {
 const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+      {/* Back button */}
+      <div className="mb-4">
+        <Button 
+          variant="outline" 
+          onClick={() => window.history.back()}
+          className="flex items-center gap-2"
+        >
+          <Icon name="ArrowLeft" size={16} />
+          Назад
+        </Button>
+      </div>
+      
+      {/* Header content */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Админ-панель WSE.AM</h1>

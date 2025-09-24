@@ -156,7 +156,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="rent">Аренда</SelectItem>
+                    <SelectItem value="rent">Долгосрочная аренда</SelectItem>
                     <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
                   </SelectContent>
                 </Select>
