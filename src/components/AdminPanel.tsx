@@ -49,7 +49,7 @@ const AdminPanel: React.FC = () => {
     title: '',
     description: '',
     property_type: 'apartment',
-    transaction_type: 'sale',
+    transaction_type: 'rent',
     price: 0,
     currency: 'AMD',
     area: 0,
@@ -189,7 +189,7 @@ const AdminPanel: React.FC = () => {
         title: '',
         description: '',
         property_type: 'apartment',
-        transaction_type: 'sale',
+        transaction_type: 'rent',
         price: 0,
         currency: 'AMD',
         area: 0,
@@ -199,7 +199,7 @@ const AdminPanel: React.FC = () => {
         floor: 0,
         total_floors: 0,
         year_built: new Date().getFullYear(),
-        district: 'Центр',
+        district: 'Центр (Кентрон)',
         address: '',
         latitude: 40.1792,
         longitude: 44.4991,
@@ -241,7 +241,7 @@ const AdminPanel: React.FC = () => {
           title: '',
           description: '',
           property_type: 'apartment',
-          transaction_type: 'sale',
+          transaction_type: 'rent',
           price: 0,
           currency: 'AMD',
           area: 0,
@@ -251,7 +251,7 @@ const AdminPanel: React.FC = () => {
           floor: 0,
           total_floors: 0,
           year_built: new Date().getFullYear(),
-          district: 'Центр',
+          district: 'Центр (Кентрон)',
           address: '',
           latitude: 40.1792,
           longitude: 44.4991,
@@ -271,8 +271,8 @@ const AdminPanel: React.FC = () => {
   };
 
   const districts = [
-    'Центр', 'Аджапняк', 'Аван', 'Арабкир', 'Давташен', 'Эребуни',
-    'Канакер-Зейтун', 'Малатия-Себастия', 'Нор Норк', 'Нубарашен', 'Шенгавит'
+    'Центр (Кентрон)', 'Ачапняк', 'Аван', 'Арабкир', 'Давташен', 'Эребуни',
+    'Канакер-Зейтун', 'Малатия-Себастия', 'Нор Норк', 'Нубарашен', 'Шенгавит', 'Норк-Мараш'
   ];
 
   if (!user) {
@@ -419,8 +419,8 @@ const AdminPanel: React.FC = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="sale">Продажа</SelectItem>
                         <SelectItem value="rent">Аренда</SelectItem>
+                        <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -443,9 +443,9 @@ const AdminPanel: React.FC = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="AMD">Драм</SelectItem>
-                          <SelectItem value="USD">Доллар</SelectItem>
-                          <SelectItem value="EUR">Евро</SelectItem>
+                          <SelectItem value="AMD">AMD (драм)</SelectItem>
+                          <SelectItem value="USD">USD (доллар)</SelectItem>
+                          <SelectItem value="EUR">EUR (евро)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

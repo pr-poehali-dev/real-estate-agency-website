@@ -17,6 +17,7 @@ interface YerevanMap2GISProps {
   properties: Property[];
   onPropertySelect: (property: Property) => void;
   selectedDistrict?: string;
+  isPreview?: boolean;
 }
 
 declare global {
@@ -28,7 +29,8 @@ declare global {
 const YerevanMap2GIS: React.FC<YerevanMap2GISProps> = ({ 
   properties, 
   onPropertySelect, 
-  selectedDistrict 
+  selectedDistrict,
+  isPreview = false
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
@@ -191,18 +193,20 @@ const YerevanMap2GIS: React.FC<YerevanMap2GISProps> = ({
       <div ref={mapContainer} className="h-full w-full" />
       
       {/* Информационная панель */}
-      <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-10 max-w-sm">
-        <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-2">
-          <Icon name="MapPin" size={20} className="text-red-600" />
-          Карта недвижимости Еревана
-        </h3>
-        <p className="text-sm text-gray-600 mb-2">Найдено объектов: {properties.length}</p>
-        {selectedDistrict && (
-          <p className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
-            Район: {selectedDistrict}
-          </p>
-        )}
-      </div>
+      {!isPreview && (
+        <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-10 max-w-sm">
+          <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-2">
+            <Icon name="MapPin" size={20} className="text-red-600" />
+            Карта недвижимости Еревана
+          </h3>
+          <p className="text-sm text-gray-600 mb-2">Найдено объектов: {properties.length}</p>
+          {selectedDistrict && (
+            <p className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
+              Район: {selectedDistrict}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Легенда */}
       <div className="absolute bottom-4 right-4 bg-white rounded-lg shadow-lg p-3 z-10">

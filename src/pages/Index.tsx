@@ -422,33 +422,42 @@ Email: ${formData.get('email')}
             <h2 className="text-4xl font-bold font-montserrat mb-4 text-black">
               🗺️ Интерактивная карта недвижимости
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               Найдите идеальную недвижимость на карте Еревана. Все объекты проверены и актуальны.
             </p>
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-white px-8 py-3"
-              onClick={() => window.location.href = '/map'}
-            >
-              <Icon name="Map" size={20} className="mr-2" />
-              Открыть полную карту
-            </Button>
           </div>
           
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-xl shadow-lg p-6">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-xl font-semibold">Предварительный просмотр</h3>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Icon name="MapPin" size={16} />
-                  Кликните на маркер для деталей
+                <div className="flex items-center gap-4">
+                  <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
+                    Объектов: {sampleProperties.length}
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Icon name="MapPin" size={16} />
+                    Кликните на маркер
+                  </div>
                 </div>
               </div>
-              <div className="h-96 bg-gray-100 rounded-lg overflow-hidden">
+              <div className="h-96 bg-gray-100 rounded-lg overflow-hidden relative">
                 <YerevanMap2GIS
                   properties={sampleProperties}
                   onPropertySelect={setSelectedProperty}
+                  isPreview={true}
                 />
+              </div>
+              
+              <div className="mt-6 text-center">
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-primary/90 text-white px-8 py-3"
+                  onClick={() => window.location.href = '/map'}
+                >
+                  <Icon name="Map" size={20} className="mr-2" />
+                  Открыть полную карту
+                </Button>
               </div>
             </div>
           </div>
