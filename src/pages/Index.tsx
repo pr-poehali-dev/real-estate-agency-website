@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
+import SimpleMap from "@/components/SimpleMap";
 import { useState, useEffect } from "react";
 
 const translations = {
@@ -170,6 +171,7 @@ export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState({});
   const [language, setLanguage] = useState<'ru' | 'en'>('ru');
+  const [selectedProperty, setSelectedProperty] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -177,6 +179,43 @@ export default function Index() {
     service: 'Аренда',
     message: ''
   });
+
+  // Примеры объектов недвижимости для карты
+  const sampleProperties = [
+    {
+      id: 1,
+      title: '3-комнатная квартира в Центре',
+      price: 350000,
+      currency: 'AMD',
+      latitude: 40.1823,
+      longitude: 44.5146,
+      district: 'Центр (Кентрон)',
+      property_type: 'apartment',
+      transaction_type: 'rent'
+    },
+    {
+      id: 2,
+      title: 'Элитная квартира на площади Республики',
+      price: 180000,
+      currency: 'USD',
+      latitude: 40.1776,
+      longitude: 44.5126,
+      district: 'Центр (Кентрон)',
+      property_type: 'apartment',
+      transaction_type: 'sale'
+    },
+    {
+      id: 3,
+      title: 'Дом в Авановском районе',
+      price: 250000,
+      currency: 'USD',
+      latitude: 40.2150,
+      longitude: 44.5200,
+      district: 'Аван',
+      property_type: 'house',
+      transaction_type: 'sale'
+    }
+  ];
   
   const t = translations[language];
 
@@ -405,17 +444,11 @@ Email: ${formData.get('email')}
                   Кликните на маркер для деталей
                 </div>
               </div>
-              <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <Icon name="Map" size={48} className="text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 mb-4">Карта загружается...</p>
-                  <Button 
-                    variant="outline"
-                    onClick={() => window.location.href = '/map'}
-                  >
-                    Перейти к карте
-                  </Button>
-                </div>
+              <div className="h-96 bg-gray-100 rounded-lg overflow-hidden">
+                <SimpleMap
+                  properties={sampleProperties}
+                  onPropertySelect={setSelectedProperty}
+                />
               </div>
             </div>
           </div>

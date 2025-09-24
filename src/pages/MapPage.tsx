@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SimpleMap from '@/components/SimpleMap';
 import PropertyFilters from '@/components/PropertyFilters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -298,84 +299,22 @@ const MapPage: React.FC = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Properties List */}
+          {/* Interactive Map */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Icon name="Home" size={20} />
-                  Объекты недвижимости
+                  <Icon name="Map" size={20} />
+                  Интерактивная карта
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
-                  {properties.map((property) => (
-                    <div 
-                      key={property.id}
-                      className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                        selectedProperty?.id === property.id 
-                          ? 'border-orange-500 bg-orange-50' 
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => setSelectedProperty(property)}
-                    >
-                      {property.images.length > 0 && (
-                        <img
-                          src={property.images[0]}
-                          alt={property.title}
-                          className="w-full h-32 object-cover rounded-md mb-3"
-                        />
-                      )}
-                      
-                      <h3 className="font-semibold text-sm mb-2 line-clamp-2">
-                        {property.title}
-                      </h3>
-                      
-                      <div className="space-y-1">
-                        <p className="text-orange-600 font-bold text-lg">
-                          {formatPrice(property.price, property.currency)}
-                        </p>
-                        
-                        <div className="flex items-center gap-4 text-xs text-gray-600">
-                          <span className="flex items-center gap-1">
-                            <Icon name="Home" size={12} />
-                            {getPropertyTypeLabel(property.property_type)}
-                          </span>
-                          {property.area && (
-                            <span className="flex items-center gap-1">
-                              <Icon name="Square" size={12} />
-                              {property.area} м²
-                            </span>
-                          )}
-                          {property.rooms && (
-                            <span className="flex items-center gap-1">
-                              <Icon name="Bed" size={12} />
-                              {property.rooms} к.
-                            </span>
-                          )}
-                        </div>
-                        
-                        <p className="text-xs text-gray-500 flex items-center gap-1">
-                          <Icon name="MapPin" size={12} />
-                          {property.district}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {properties.length === 0 && !loading && (
-                    <div className="col-span-2 text-center py-8 text-gray-500">
-                      <Icon name="Home" size={48} className="mx-auto mb-4 text-gray-300" />
-                      <p>Объекты не найдены. Попробуйте изменить параметры фильтра.</p>
-                    </div>
-                  )}
-                  
-                  {loading && (
-                    <div className="col-span-2 text-center py-8">
-                      <div className="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full mx-auto"></div>
-                      <p className="mt-4 text-gray-600">Загружаем объекты...</p>
-                    </div>
-                  )}
+              <CardContent className="p-0">
+                <div className="h-96 w-full">
+                  <SimpleMap
+                    properties={properties}
+                    selectedDistrict={selectedDistrict !== 'Все районы' ? selectedDistrict : undefined}
+                    onPropertySelect={setSelectedProperty}
+                  />
                 </div>
               </CardContent>
             </Card>
