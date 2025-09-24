@@ -1,19 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import PropertyFilters from '@/components/PropertyFilters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-
-// Fix leaflet default markers
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-});
 
 interface Property {
   id: number;
@@ -130,6 +119,56 @@ const MapPage: React.FC = () => {
         status: 'active',
         created_at: '2024-01-25T12:00:00Z',
         updated_at: '2024-01-25T12:00:00Z'
+      },
+      {
+        id: 4,
+        title: 'Современная квартира в Ачапняке',
+        description: 'Новая квартира с европейским ремонтом в развивающемся районе.',
+        property_type: 'apartment',
+        transaction_type: 'rent',
+        price: 280000,
+        currency: 'AMD',
+        area: 70.0,
+        rooms: 2,
+        bedrooms: 1,
+        bathrooms: 1,
+        floor: 3,
+        total_floors: 8,
+        year_built: 2020,
+        district: 'Ачапняк',
+        address: 'ул. Мясникяна 12, Ереван',
+        latitude: 40.1650,
+        longitude: 44.4900,
+        features: ['Новостройка', 'Европейский ремонт', 'Лифт'],
+        images: ['/img/d6af7502-6fd6-494d-b0ff-846b279690c0.jpg'],
+        status: 'active',
+        created_at: '2024-01-22T14:00:00Z',
+        updated_at: '2024-01-22T14:00:00Z'
+      },
+      {
+        id: 5,
+        title: 'Семейная квартира в Арабкире',
+        description: 'Уютная 3-комнатная квартира в престижном районе с хорошей инфраструктурой.',
+        property_type: 'apartment',
+        transaction_type: 'sale',
+        price: 145000,
+        currency: 'USD',
+        area: 90.0,
+        rooms: 3,
+        bedrooms: 2,
+        bathrooms: 1,
+        floor: 5,
+        total_floors: 10,
+        year_built: 2012,
+        district: 'Арабкир',
+        address: 'ул. Комитаса 28, Ереван',
+        latitude: 40.2000,
+        longitude: 44.5100,
+        features: ['Балкон', 'Кладовка', 'Интернет', 'Кабельное ТВ'],
+        images: ['/img/703391dd-7309-4c1d-873e-51a4a1ee5059.jpg'],
+        status: 'active',
+        created_at: '2024-01-18T11:30:00Z',
+        updated_at: '2024-01-18T11:30:00Z'
       }
     ];
 
@@ -237,7 +276,7 @@ const MapPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <Icon name="MapPin" size={16} />
             <span className="text-sm text-gray-600">
-              Кликните на маркер для подробной информации
+              Кликните на объект для подробной информации
             </span>
           </div>
         </div>
@@ -259,52 +298,84 @@ const MapPage: React.FC = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Interactive Map */}
+          {/* Properties List */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Icon name="Map" size={20} />
-                  Интерактивная карта
+                  <Icon name="Home" size={20} />
+                  Объекты недвижимости
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-0">
-                <div className="h-96 w-full">
-                  <MapContainer
-                    center={[40.1776, 44.5126]}
-                    zoom={12}
-                    style={{ height: '100%', width: '100%' }}
-                  >
-                    <TileLayer
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    {properties.map((property) => (
-                      <Marker
-                        key={property.id}
-                        position={[property.latitude, property.longitude]}
-                        eventHandlers={{
-                          click: () => setSelectedProperty(property),
-                        }}
-                      >
-                        <Popup>
-                          <div className="min-w-64">
-                            <h3 className="font-semibold mb-2">{property.title}</h3>
-                            <p className="text-orange-600 font-bold mb-2">
-                              {formatPrice(property.price, property.currency)}
-                            </p>
-                            <p className="text-sm text-gray-600 mb-2">
-                              {getPropertyTypeLabel(property.property_type)} • {getTransactionTypeLabel(property.transaction_type)}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              <Icon name="MapPin" size={12} className="inline mr-1" />
-                              {property.address}
-                            </p>
-                          </div>
-                        </Popup>
-                      </Marker>
-                    ))}
-                  </MapContainer>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+                  {properties.map((property) => (
+                    <div 
+                      key={property.id}
+                      className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                        selectedProperty?.id === property.id 
+                          ? 'border-orange-500 bg-orange-50' 
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                      onClick={() => setSelectedProperty(property)}
+                    >
+                      {property.images.length > 0 && (
+                        <img
+                          src={property.images[0]}
+                          alt={property.title}
+                          className="w-full h-32 object-cover rounded-md mb-3"
+                        />
+                      )}
+                      
+                      <h3 className="font-semibold text-sm mb-2 line-clamp-2">
+                        {property.title}
+                      </h3>
+                      
+                      <div className="space-y-1">
+                        <p className="text-orange-600 font-bold text-lg">
+                          {formatPrice(property.price, property.currency)}
+                        </p>
+                        
+                        <div className="flex items-center gap-4 text-xs text-gray-600">
+                          <span className="flex items-center gap-1">
+                            <Icon name="Home" size={12} />
+                            {getPropertyTypeLabel(property.property_type)}
+                          </span>
+                          {property.area && (
+                            <span className="flex items-center gap-1">
+                              <Icon name="Square" size={12} />
+                              {property.area} м²
+                            </span>
+                          )}
+                          {property.rooms && (
+                            <span className="flex items-center gap-1">
+                              <Icon name="Bed" size={12} />
+                              {property.rooms} к.
+                            </span>
+                          )}
+                        </div>
+                        
+                        <p className="text-xs text-gray-500 flex items-center gap-1">
+                          <Icon name="MapPin" size={12} />
+                          {property.district}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {properties.length === 0 && !loading && (
+                    <div className="col-span-2 text-center py-8 text-gray-500">
+                      <Icon name="Home" size={48} className="mx-auto mb-4 text-gray-300" />
+                      <p>Объекты не найдены. Попробуйте изменить параметры фильтра.</p>
+                    </div>
+                  )}
+                  
+                  {loading && (
+                    <div className="col-span-2 text-center py-8">
+                      <div className="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full mx-auto"></div>
+                      <p className="mt-4 text-gray-600">Загружаем объекты...</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -316,7 +387,7 @@ const MapPage: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Icon name="Info" size={20} />
-                  {selectedProperty ? 'Информация об объекте' : 'Выберите объект на карте'}
+                  {selectedProperty ? 'Информация об объекте' : 'Выберите объект'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -421,7 +492,7 @@ const MapPage: React.FC = () => {
                 ) : (
                   <div className="text-center py-8 text-gray-500">
                     <Icon name="MousePointer" size={48} className="mx-auto mb-4 text-gray-300" />
-                    <p>Кликните на маркер на карте, чтобы увидеть подробную информацию об объекте недвижимости.</p>
+                    <p>Выберите объект из списка, чтобы увидеть подробную информацию о недвижимости.</p>
                   </div>
                 )}
               </CardContent>
