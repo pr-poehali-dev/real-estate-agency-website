@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
 import YerevanMap2GIS from "@/components/YerevanMap2GIS";
+import { sampleProperties } from "@/data/sampleProperties";
 import { useState, useEffect } from "react";
 
 const translations = {
@@ -180,42 +181,7 @@ export default function Index() {
     message: ''
   });
 
-  // Примеры объектов недвижимости для карты (только аренда)
-  const sampleProperties = [
-    {
-      id: 1,
-      title: '3-комнатная квартира в Центре',
-      price: 350000,
-      currency: 'AMD',
-      latitude: 40.1823,
-      longitude: 44.5146,
-      district: 'Центр (Кентрон)',
-      property_type: 'apartment',
-      transaction_type: 'rent'
-    },
-    {
-      id: 2,
-      title: 'Элитная квартира на площади Республики',
-      price: 450000,
-      currency: 'AMD',
-      latitude: 40.1776,
-      longitude: 44.5126,
-      district: 'Центр (Кентрон)',
-      property_type: 'apartment',
-      transaction_type: 'rent'
-    },
-    {
-      id: 3,
-      title: 'Современная квартира в Ачапняке',
-      price: 280000,
-      currency: 'AMD',
-      latitude: 40.1650,
-      longitude: 44.4900,
-      district: 'Ачапняк',
-      property_type: 'apartment',
-      transaction_type: 'rent'
-    }
-  ];
+  // Используем данные из централизованного файла
   
   const t = translations[language];
 
@@ -420,10 +386,10 @@ Email: ${formData.get('email')}
         <div className={`container mx-auto transition-all duration-1000 delay-350 ${isVisible['map-preview'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold font-montserrat mb-4 text-black">
-              🗺️ Интерактивная карта недвижимости
+              🗺️ Найдите жильё на карте
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Найдите идеальную недвижимость на карте Еревана. Все объекты проверены и актуальны.
+              Все объекты недвижимости Еревана на интерактивной карте. Проверенные предложения от надежных собственников.
             </p>
           </div>
           

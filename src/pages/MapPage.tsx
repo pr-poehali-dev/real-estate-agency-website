@@ -4,6 +4,7 @@ import PropertyFilters from '@/components/PropertyFilters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import { sampleProperties as allProperties } from '@/data/sampleProperties';
 
 interface Property {
   id: number;
@@ -44,138 +45,9 @@ const MapPage: React.FC = () => {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [streetSearch, setStreetSearch] = useState('');
 
-  // Mock data with updated districts
+  // Применяем фильтры к данным из централизованного источника
   const getMockProperties = (): Property[] => {
-    const mockProps: Property[] = [
-      {
-        id: 1,
-        title: '3-комнатная квартира в Центре',
-        description: 'Прекрасная квартира в самом сердце Еревана. Рядом с главными достопримечательностями, ресторанами и магазинами.',
-        property_type: 'apartment',
-        transaction_type: 'rent',
-        price: 350000,
-        currency: 'AMD',
-        area: 85.5,
-        rooms: 3,
-        bedrooms: 2,
-        bathrooms: 1,
-        floor: 4,
-        total_floors: 9,
-        year_built: 2015,
-        district: 'Центр (Кентрон)',
-        address: 'ул. Абовяна 23, Ереван',
-        latitude: 40.1823,
-        longitude: 44.5146,
-        features: ['Мебель', 'Кондиционер', 'Балкон', 'Интернет', 'Парковка'],
-        images: ['/img/703391dd-7309-4c1d-873e-51a4a1ee5059.jpg'],
-        status: 'active',
-        created_at: '2024-11-20T10:00:00Z',
-        updated_at: '2024-01-15T10:00:00Z'
-      },
-      {
-        id: 2,
-        title: 'Элитная 2-комнатная квартира на площади Республики',
-        description: 'Роскошная квартира с видом на площадь Республики. Дизайнерский ремонт, премиальная мебель.',
-        property_type: 'apartment',
-        transaction_type: 'rent',
-        price: 450000,
-        currency: 'AMD',
-        area: 65.0,
-        rooms: 2,
-        bedrooms: 1,
-        bathrooms: 1,
-        floor: 7,
-        total_floors: 12,
-        year_built: 2018,
-        district: 'Центр (Кентрон)',
-        address: 'пр. Республики 15, Ереван',
-        latitude: 40.1776,
-        longitude: 44.5126,
-        features: ['Премиум класс', 'Вид на площадь', 'Консьерж', 'Лифт', 'Подземная парковка', 'Охрана'],
-        images: ['/img/d6af7502-6fd6-494d-b0ff-846b279690c0.jpg'],
-        status: 'active',
-        created_at: '2024-11-18T15:30:00Z',
-        updated_at: '2024-01-20T15:30:00Z'
-      },
-      {
-        id: 3,
-        title: 'Просторный дом в Авановском районе',
-        description: 'Частный дом с садом в тихом районе Ереван. Отличное место для семьи.',
-        property_type: 'house',
-        transaction_type: 'daily_rent',
-        price: 25000,
-        currency: 'AMD',
-        area: 180.0,
-        rooms: 5,
-        bedrooms: 4,
-        bathrooms: 2,
-        floor: 2,
-        total_floors: 2,
-        year_built: 2010,
-        district: 'Аван',
-        address: 'ул. Аванского шоссе 45, Ереван',
-        latitude: 40.2150,
-        longitude: 44.5200,
-        features: ['Сад', 'Гараж', 'Камин', 'Терраса'],
-        images: ['/img/703391dd-7309-4c1d-873e-51a4a1ee5059.jpg'],
-        status: 'active',
-        created_at: '2024-11-15T12:00:00Z',
-        updated_at: '2024-01-25T12:00:00Z'
-      },
-      {
-        id: 4,
-        title: 'Современная квартира в Ачапняке',
-        description: 'Новая квартира с европейским ремонтом в развивающемся районе.',
-        property_type: 'apartment',
-        transaction_type: 'rent',
-        price: 280000,
-        currency: 'AMD',
-        area: 70.0,
-        rooms: 2,
-        bedrooms: 1,
-        bathrooms: 1,
-        floor: 3,
-        total_floors: 8,
-        year_built: 2020,
-        district: 'Ачапняк',
-        address: 'ул. Мясникяна 12, Ереван',
-        latitude: 40.1650,
-        longitude: 44.4900,
-        features: ['Новостройка', 'Европейский ремонт', 'Лифт'],
-        images: ['/img/d6af7502-6fd6-494d-b0ff-846b279690c0.jpg'],
-        status: 'active',
-        created_at: '2024-11-17T14:00:00Z',
-        updated_at: '2024-01-22T14:00:00Z'
-      },
-      {
-        id: 5,
-        title: 'Семейная квартира в Арабкире',
-        description: 'Уютная 3-комнатная квартира в престижном районе с хорошей инфраструктурой.',
-        property_type: 'apartment',
-        transaction_type: 'daily_rent',
-        price: 15000,
-        currency: 'AMD',
-        area: 90.0,
-        rooms: 3,
-        bedrooms: 2,
-        bathrooms: 1,
-        floor: 5,
-        total_floors: 10,
-        year_built: 2012,
-        district: 'Арабкир',
-        address: 'ул. Комитаса 28, Ереван',
-        latitude: 40.2000,
-        longitude: 44.5100,
-        features: ['Балкон', 'Кладовка', 'Интернет', 'Кабельное ТВ'],
-        images: ['/img/703391dd-7309-4c1d-873e-51a4a1ee5059.jpg'],
-        status: 'active',
-        created_at: '2024-11-16T11:30:00Z',
-        updated_at: '2024-01-18T11:30:00Z'
-      }
-    ];
-
-    // Применяем фильтры
-    return mockProps.filter(prop => {
+    return allProperties.filter(prop => {
       if (selectedDistrict !== 'Все районы' && prop.district !== selectedDistrict) return false;
       if (selectedType !== 'all' && prop.property_type !== selectedType) return false;
       if (selectedTransaction !== 'all' && prop.transaction_type !== selectedTransaction) return false;
