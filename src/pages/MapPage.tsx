@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SimpleMap from '@/components/SimpleMap';
+import YerevanMap2GIS from '@/components/YerevanMap2GIS';
 import PropertyFilters from '@/components/PropertyFilters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -310,7 +310,7 @@ const MapPage: React.FC = () => {
               </CardHeader>
               <CardContent className="p-0">
                 <div className="h-96 w-full">
-                  <SimpleMap
+                  <YerevanMap2GIS
                     properties={properties}
                     selectedDistrict={selectedDistrict !== 'Все районы' ? selectedDistrict : undefined}
                     onPropertySelect={setSelectedProperty}

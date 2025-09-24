@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
-import SimpleMap from "@/components/SimpleMap";
+import YerevanMap2GIS from "@/components/YerevanMap2GIS";
 import { useState, useEffect } from "react";
 
 const translations = {
@@ -445,7 +445,7 @@ Email: ${formData.get('email')}
                 </div>
               </div>
               <div className="h-96 bg-gray-100 rounded-lg overflow-hidden">
-                <SimpleMap
+                <YerevanMap2GIS
                   properties={sampleProperties}
                   onPropertySelect={setSelectedProperty}
                 />
