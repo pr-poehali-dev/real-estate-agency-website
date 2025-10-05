@@ -187,27 +187,29 @@ export default function Index() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-    
-    // Добавляем скрытые поля для FormSubmit
-    formData.append('_subject', 'Новая заявка с сайта WSE.AM');
-    formData.append('_captcha', 'false');
-    formData.append('_template', 'table');
-    
     try {
-      const response = await fetch('https://formsubmit.co/2023wse@gmail.com', {
+      const response = await fetch('https://functions.poehali.dev/29d6cc7c-7b94-44fe-863c-549637690ad9', {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          service: formData.service,
+          message: formData.message
+        })
       });
       
-      if (response.ok) {
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
         alert(language === 'ru' 
           ? 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.' 
           : 'Request sent successfully! We will contact you soon.'
         );
         
-        // Очищаем форму
         setFormData({
           name: '',
           phone: '',
@@ -216,28 +218,21 @@ export default function Index() {
           message: ''
         });
       } else {
-        throw new Error('Network response was not ok');
+        throw new Error(result.error || 'Failed to send');
       }
     } catch (error) {
       console.error('Ошибка отправки:', error);
       
-      // Fallback - показываем данные для ручной отправки
-      const message = `
-Новая заявка WSE.AM:
-
-Имя: ${formData.get('name')}
-Телефон: ${formData.get('phone')}
-Email: ${formData.get('email')}
-Услуга: ${formData.get('service')}
-Сообщение: ${formData.get('message')}
-
-Скопируйте эти данные и отправьте на 2023wse@gmail.com
-      `;
+      const telegramLink = `https://t.me/WSEManager?text=${encodeURIComponent(
+        `Новая заявка:\n\nИмя: ${formData.name}\nТелефон: ${formData.phone}\nEmail: ${formData.email}\nУслуга: ${formData.service}\nСообщение: ${formData.message}`
+      )}`;
       
-      alert(language === 'ru' 
-        ? 'Ошибка отправки формы. ' + message 
-        : 'Form submission error. ' + message
-      );
+      if (confirm(language === 'ru' 
+        ? 'Не удалось отправить форму. Открыть Telegram для связи?' 
+        : 'Failed to submit form. Open Telegram to contact?'
+      )) {
+        window.open(telegramLink, '_blank');
+      }
     }
   };
 
@@ -493,11 +488,6 @@ Email: ${formData.get('email')}
             <Card className="p-8">
               <CardContent className="space-y-6">
                 <form onSubmit={handleSubmit}>
-                  {/* Скрытые поля для FormSubmit */}
-                  <input type="hidden" name="_subject" value="Новая заявка с сайта WSE.AM" />
-                  <input type="hidden" name="_captcha" value="false" />
-                  <input type="hidden" name="_template" value="table" />
-                  
                   <div className="space-y-6">
                     <div>
                       <label className="block text-sm font-medium mb-2">{t.contact.form.name}</label>
