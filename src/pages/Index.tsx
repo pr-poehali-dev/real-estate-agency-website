@@ -526,8 +526,8 @@ export default function Index() {
                           formData.contactMethod === 'Email' 
                             ? 'your@email.com' 
                             : formData.contactMethod === 'Telegram' 
-                              ? '@username или +7...' 
-                              : '+7...'
+                              ? '@username или номер телефона' 
+                              : 'Номер телефона'
                         }
                         required
                       />
