@@ -365,25 +365,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-gray-50" data-animate id="stats">
-        <div className={`container mx-auto px-6 transition-all duration-1000 delay-200 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-primary mb-2">1000+</div>
-              <div className="text-gray-600">{t.stats.happyClients}</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-primary mb-2">500+</div>
-              <div className="text-gray-600">{t.stats.propertiesRented}</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-primary mb-2">100%</div>
-              <div className="text-gray-600">{t.stats.yearsExperience}</div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Features Section */}
       <section id="about" className="py-20 px-6" data-animate>
