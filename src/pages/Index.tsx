@@ -172,7 +172,8 @@ export default function Index() {
   const [language, setLanguage] = useState<'ru' | 'en'>('ru');
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
+    contactMethod: 'Telegram',
+    contact: '',
     email: '',
     service: 'Аренда',
     message: ''
@@ -195,7 +196,8 @@ export default function Index() {
         },
         body: JSON.stringify({
           name: formData.name,
-          phone: formData.phone,
+          contactMethod: formData.contactMethod,
+          contact: formData.contact,
           email: formData.email,
           service: formData.service,
           message: formData.message
@@ -212,7 +214,8 @@ export default function Index() {
         
         setFormData({
           name: '',
-          phone: '',
+          contactMethod: 'Telegram',
+          contact: '',
           email: '',
           service: language === 'ru' ? 'Аренда' : 'Rental',
           message: ''
@@ -224,7 +227,7 @@ export default function Index() {
       console.error('Ошибка отправки:', error);
       
       const telegramLink = `https://t.me/WSEManager?text=${encodeURIComponent(
-        `Новая заявка:\n\nИмя: ${formData.name}\nТелефон: ${formData.phone}\nEmail: ${formData.email}\nУслуга: ${formData.service}\nСообщение: ${formData.message}`
+        `Новая заявка:\n\nИмя: ${formData.name}\n${formData.contactMethod}: ${formData.contact}\nEmail: ${formData.email}\nУслуга: ${formData.service}\nСообщение: ${formData.message}`
       )}`;
       
       if (confirm(language === 'ru' 
@@ -500,12 +503,25 @@ export default function Index() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">{t.contact.phone}</label>
-                      <Input 
-                        name="phone"
-                        value={formData.phone}
+                      <label className="block text-sm font-medium mb-2">Способ связи</label>
+                      <select 
+                        name="contactMethod"
+                        value={formData.contactMethod}
                         onChange={handleInputChange}
-                        placeholder={t.contact.form.phonePlaceholder} 
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                      >
+                        <option>Telegram</option>
+                        <option>WhatsApp</option>
+                        <option>Viber</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Контакт ({formData.contactMethod})</label>
+                      <Input 
+                        name="contact"
+                        value={formData.contact}
+                        onChange={handleInputChange}
+                        placeholder={formData.contactMethod === 'Telegram' ? '@username или +7...' : '+7...'}
                         required
                       />
                     </div>
@@ -528,10 +544,10 @@ export default function Index() {
                         onChange={handleInputChange}
                         className="w-full p-2 border border-gray-300 rounded-md"
                       >
-                        <option>{t.contact.form.serviceOptions.rental}</option>
-                        <option>{t.contact.form.serviceOptions.purchase}</option>
-                        <option>{t.contact.form.serviceOptions.sale}</option>
-                        <option>{t.contact.form.serviceOptions.consultation}</option>
+                        <option>Аренда</option>
+                        <option>Покупка</option>
+                        <option>Продажа</option>
+                        <option>Консультация</option>
                       </select>
                     </div>
                     <div>

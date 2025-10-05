@@ -42,13 +42,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     body_data = json.loads(event.get('body', '{}'))
     
     name = body_data.get('name', '')
-    phone = body_data.get('phone', '')
+    contact_method = body_data.get('contactMethod', '')
+    contact = body_data.get('contact', '')
     email = body_data.get('email', '')
     service = body_data.get('service', '')
     message = body_data.get('message', '')
     
     # Валидация
-    if not name or not phone or not email:
+    if not name or not contact or not email:
         return {
             'statusCode': 400,
             'headers': {
@@ -81,11 +82,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     telegram_message = f'''🏠 <b>Новая заявка с сайта WSE.AM</b>
 
 👤 <b>Имя:</b> {name}
-📱 <b>Телефон:</b> {phone}
+📱 <b>Способ связи:</b> {contact_method}
+💬 <b>Контакт:</b> {contact}
 📧 <b>Email:</b> {email}
-🔑 <b>Услуга:</b> {service}
+🔑 <b>Тип услуги:</b> {service}
 
-💬 <b>Сообщение:</b>
+✉️ <b>Сообщение:</b>
 {message}'''
     
     # Отправляем в Telegram
