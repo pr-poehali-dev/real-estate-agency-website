@@ -338,7 +338,7 @@ export default function Index() {
       <section 
         className="py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/00c7daf3-d4c4-40b5-afbf-2963ff9cf7ac.jpg)'
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(https://cdn.poehali.dev/files/0e9fae6d-86d7-40be-b0ba-b7e09d909847.png)'
         }}
         data-animate 
         id="hero"
