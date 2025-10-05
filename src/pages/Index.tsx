@@ -336,9 +336,9 @@ export default function Index() {
 
       {/* Hero Section */}
       <section 
-        className="py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
+        className="min-h-screen py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/19674926-657c-4489-8a6e-fd8a9cbe2961.jpg)'
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(/img/7c9b215e-60e3-450d-8f10-e59b57e16515.jpg)'
         }}
         data-animate 
         id="hero"
