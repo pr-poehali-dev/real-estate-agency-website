@@ -44,12 +44,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     name = body_data.get('name', '')
     contact_method = body_data.get('contactMethod', '')
     contact = body_data.get('contact', '')
-    email = body_data.get('email', '')
     service = body_data.get('service', '')
     message = body_data.get('message', '')
     
     # Валидация
-    if not name or not contact or not email:
+    if not name or not contact:
         return {
             'statusCode': 400,
             'headers': {
@@ -84,7 +83,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 👤 <b>Имя:</b> {name}
 📱 <b>Способ связи:</b> {contact_method}
 💬 <b>Контакт:</b> {contact}
-📧 <b>Email:</b> {email}
 🔑 <b>Тип услуги:</b> {service}
 
 ✉️ <b>Сообщение:</b>

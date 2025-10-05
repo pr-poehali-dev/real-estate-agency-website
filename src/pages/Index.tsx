@@ -174,7 +174,6 @@ export default function Index() {
     name: '',
     contactMethod: 'Telegram',
     contact: '',
-    email: '',
     service: 'Аренда',
     message: ''
   });
@@ -198,7 +197,6 @@ export default function Index() {
           name: formData.name,
           contactMethod: formData.contactMethod,
           contact: formData.contact,
-          email: formData.email,
           service: formData.service,
           message: formData.message
         })
@@ -216,7 +214,6 @@ export default function Index() {
           name: '',
           contactMethod: 'Telegram',
           contact: '',
-          email: '',
           service: language === 'ru' ? 'Аренда' : 'Rental',
           message: ''
         });
@@ -227,7 +224,7 @@ export default function Index() {
       console.error('Ошибка отправки:', error);
       
       const telegramLink = `https://t.me/WSEManager?text=${encodeURIComponent(
-        `Новая заявка:\n\nИмя: ${formData.name}\n${formData.contactMethod}: ${formData.contact}\nEmail: ${formData.email}\nУслуга: ${formData.service}\nСообщение: ${formData.message}`
+        `Новая заявка:\n\nИмя: ${formData.name}\n${formData.contactMethod}: ${formData.contact}\nУслуга: ${formData.service}\nСообщение: ${formData.message}`
       )}`;
       
       if (confirm(language === 'ru' 
@@ -513,26 +510,25 @@ export default function Index() {
                         <option>Telegram</option>
                         <option>WhatsApp</option>
                         <option>Viber</option>
+                        <option>Email</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Контакт ({formData.contactMethod})</label>
+                      <label className="block text-sm font-medium mb-2">
+                        {formData.contactMethod === 'Email' ? 'Email' : `Контакт (${formData.contactMethod})`}
+                      </label>
                       <Input 
                         name="contact"
+                        type={formData.contactMethod === 'Email' ? 'email' : 'text'}
                         value={formData.contact}
                         onChange={handleInputChange}
-                        placeholder={formData.contactMethod === 'Telegram' ? '@username или +7...' : '+7...'}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Email</label>
-                      <Input 
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder={t.contact.form.emailPlaceholder} 
+                        placeholder={
+                          formData.contactMethod === 'Email' 
+                            ? 'your@email.com' 
+                            : formData.contactMethod === 'Telegram' 
+                              ? '@username или +7...' 
+                              : '+7...'
+                        }
                         required
                       />
                     </div>

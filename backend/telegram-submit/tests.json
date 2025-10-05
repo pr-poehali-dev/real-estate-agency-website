@@ -6,8 +6,8 @@
       "path": "/",
       "body": {
         "name": "Test User",
-        "phone": "+374 95 123 456",
-        "email": "test@example.com",
+        "contactMethod": "Telegram",
+        "contact": "@testuser",
         "service": "Аренда",
         "message": "Тестовое сообщение"
       },
