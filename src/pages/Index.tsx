@@ -188,7 +188,7 @@ export default function Index() {
     e.preventDefault();
     
     try {
-      const response = await fetch('https://functions.poehali.dev/29d6cc7c-7b94-44fe-863c-549637690ad9', {
+      const response = await fetch('https://functions.poehali.dev/09d9ff7b-b72a-40eb-ac66-289fa2f53b56', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
