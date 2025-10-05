@@ -336,31 +336,77 @@ export default function Index() {
 
       {/* Hero Section */}
       <section 
-        className="py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
+        className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat relative" 
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/img/d6af7502-6fd6-494d-b0ff-846b279690c0.jpg)'
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://cdn.poehali.dev/files/2c82aa26-7b5a-4336-8bc2-eda435311aaf.jpg)'
         }}
         data-animate 
         id="hero"
       >
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-        <div className={`container mx-auto text-center transition-all duration-1000 relative z-10 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-5xl md:text-6xl font-bold font-montserrat mb-6 text-white">
-            🏡 <span className="text-primary">{t.hero.title}</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-white mb-8 max-w-4xl mx-auto leading-relaxed">
-            {t.hero.subtitle}
-          </p>
-          <p className="text-lg text-gray-200 mb-12 max-w-3xl mx-auto">
-            {t.hero.description}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3" onClick={() => window.open('https://t.me/Arenda_kvartir_yerevan', '_blank')}>
+        <div className={`container mx-auto px-6 text-center transition-all duration-1000 relative z-10 ${isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="mb-8">
+            <h1 className="text-4xl md:text-7xl font-bold text-white mb-4 tracking-wider">
+              WSE.AM
+            </h1>
+            <p className="text-lg md:text-2xl text-white tracking-widest uppercase opacity-90">
+              WHITE SAFE ESTATE
+            </p>
+          </div>
+          <h2 className="text-3xl md:text-6xl font-bold text-white leading-tight max-w-4xl mx-auto">
+            НАДЕЖНАЯ<br/>НЕДВИЖИМОСТЬ<br/>В ЕРЕВАНЕ<br/>С WSE.AM
+          </h2>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
+            <Button size="lg" className="bg-white hover:bg-gray-100 text-black px-12 py-4 text-lg font-semibold" onClick={() => window.open('https://t.me/Arenda_kvartir_yerevan', '_blank')}>
               {t.hero.findHousing}
             </Button>
-            <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white px-8 py-3" onClick={scrollToContact}>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black px-12 py-4 text-lg font-semibold" onClick={scrollToContact}>
               {t.hero.contactUs}
             </Button>
+          </div>
+        </div>
+      </section>
+      
+      {/* Second Hero - City View */}
+      <section 
+        className="min-h-screen flex items-center justify-start bg-cover bg-center bg-no-repeat relative\" 
+        style={{
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://cdn.poehali.dev/files/be6af7ec-495a-439d-bc35-b6a1ef90ce78.jpg)'
+        }}
+        data-animate
+      >
+        <div className="container mx-auto px-6 md:px-12 lg:px-20">
+          <div className="max-w-3xl">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="w-16 h-16 border-4 border-white flex items-center justify-center">
+                <Icon name="Home" size={32} className="text-white" />
+              </div>
+              <div>
+                <h3 className="text-2xl md:text-3xl font-bold text-white tracking-wider\">WSE.AM</h3>
+                <p className="text-sm md:text-base text-white tracking-widest uppercase opacity-90\">WHITE SAFE ESTATE</p>
+              </div>
+            </div>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight\">
+              Надёжная<br/>недвижимость<br/>в Ереване<br/>с WSE.AM
+            </h2>
+          </div>
+        </div>
+      </section>
+      
+      {/* Third Hero - Happy Couple */}
+      <section 
+        className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat relative bg-blue-100\" 
+        style={{
+          backgroundImage: 'url(https://cdn.poehali.dev/files/736948b2-d4bd-45e7-ad68-5ec3bdf63069.jpg)',
+          backgroundSize: 'cover'
+        }}
+        data-animate
+      >
+        <div className="container mx-auto px-6 text-center">
+          <div className="mb-12">
+            <h3 className="text-3xl md:text-5xl font-bold text-blue-900 mb-4 tracking-wider\">WHITE SAFE ESTATE</h3>
+            <h2 className="text-2xl md:text-4xl font-bold text-blue-900\">
+              Найдём квартиру<br/>под ваш запрос
+            </h2>
           </div>
         </div>
       </section>
