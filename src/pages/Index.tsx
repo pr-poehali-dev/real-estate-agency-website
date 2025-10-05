@@ -3,8 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
-import YerevanMap2GIS from "@/components/YerevanMap2GIS";
-import { sampleProperties } from "@/data/sampleProperties";
 import { useState, useEffect } from "react";
 
 const translations = {
@@ -172,7 +170,6 @@ export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState({});
   const [language, setLanguage] = useState<'ru' | 'en'>('ru');
-  const [selectedProperty, setSelectedProperty] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -180,8 +177,6 @@ export default function Index() {
     service: 'Аренда',
     message: ''
   });
-
-  // Используем данные из централизованного файла
   
   const t = translations[language];
 
@@ -279,7 +274,6 @@ Email: ${formData.get('email')}
           <div className="hidden md:flex space-x-8">
             <a href="#about" className="text-gray-700 hover:text-primary transition-colors">{t.nav.about}</a>
             <a href="#services" className="text-gray-700 hover:text-primary transition-colors">{t.nav.services}</a>
-            <a href="/map" className="text-gray-700 hover:text-primary transition-colors">Карта</a>
             <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">{t.nav.contact}</a>
           </div>
           <div className="flex items-center space-x-4">
@@ -318,7 +312,6 @@ Email: ${formData.get('email')}
             <div className="container mx-auto px-6 py-4 space-y-4">
               <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.about}</a>
               <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.services}</a>
-              <a href="/map" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Карта</a>
               <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.contact}</a>
               <div className="flex space-x-2 mt-2">
                 <button
@@ -377,60 +370,117 @@ Email: ${formData.get('email')}
         </div>
       </section>
 
-
-
-
-
-      {/* Map Section */}
-      <section className="py-20 px-6" data-animate id="map-preview">
-        <div className={`container mx-auto transition-all duration-1000 delay-350 ${isVisible['map-preview'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold font-montserrat mb-4 text-black">
-              🗺️ Найдите жильё на карте
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Все объекты недвижимости Еревана на интерактивной карте. Проверенные предложения от надежных собственников.
-            </p>
-          </div>
-          
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-xl font-semibold">Предварительный просмотр</h3>
-                <div className="flex items-center gap-4">
-                  <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
-                    Объектов: {sampleProperties.length}
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Icon name="MapPin" size={16} />
-                    Кликните на маркер
-                  </div>
-                </div>
-              </div>
-              <div className="h-96 bg-gray-100 rounded-lg overflow-hidden relative">
-                <YerevanMap2GIS
-                  properties={sampleProperties}
-                  onPropertySelect={setSelectedProperty}
-                  isPreview={true}
-                />
-              </div>
-              
-              <div className="mt-6 text-center">
-                <Button 
-                  size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-white px-8 py-3"
-                  onClick={() => window.location.href = '/map'}
-                >
-                  <Icon name="Map" size={20} className="mr-2" />
-                  Открыть полную карту
-                </Button>
-              </div>
+      {/* Stats Section */}
+      <section className="py-16 bg-gray-50" data-animate id="stats">
+        <div className={`container mx-auto px-6 transition-all duration-1000 delay-200 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+              <div className="text-4xl font-bold text-primary mb-2">1000+</div>
+              <div className="text-gray-600">{t.stats.happyClients}</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-primary mb-2">500+</div>
+              <div className="text-gray-600">{t.stats.propertiesRented}</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-primary mb-2">100%</div>
+              <div className="text-gray-600">{t.stats.yearsExperience}</div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Features Section */}
+      <section id="about" className="py-20 px-6" data-animate>
+        <div className={`container mx-auto transition-all duration-1000 delay-300 ${isVisible.about ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
+            {t.about.title}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="p-6 hover:shadow-lg transition-shadow">
+              <CardContent className="text-center space-y-4">
+                <div className="text-primary text-4xl mb-4">
+                  <Icon name="Users" size={48} className="mx-auto" />
+                </div>
+                <h3 className="text-xl font-semibold font-montserrat">{t.about.card1.title}</h3>
+                <p className="text-gray-600">
+                  {t.about.card1.description}
+                </p>
+              </CardContent>
+            </Card>
 
+            <Card className="p-6 hover:shadow-lg transition-shadow">
+              <CardContent className="text-center space-y-4">
+                <div className="text-primary text-4xl mb-4">
+                  <Icon name="Shield" size={48} className="mx-auto" />
+                </div>
+                <h3 className="text-xl font-semibold font-montserrat">{t.about.card2.title}</h3>
+                <p className="text-gray-600">
+                  {t.about.card2.description}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="p-6 hover:shadow-lg transition-shadow">
+              <CardContent className="text-center space-y-4">
+                <div className="text-primary text-4xl mb-4">
+                  <Icon name="HandHeart" size={48} className="mx-auto" />
+                </div>
+                <h3 className="text-xl font-semibold font-montserrat">{t.about.card3.title}</h3>
+                <p className="text-gray-600">
+                  {t.about.card3.description}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-20 bg-gray-50 px-6" data-animate>
+        <div className={`container mx-auto transition-all duration-1000 delay-400 ${isVisible.services ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className="text-4xl font-bold font-montserrat text-center mb-16 text-black">
+            {t.services.title}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="p-8 text-center hover:shadow-lg transition-shadow">
+              <CardContent className="space-y-4">
+                <div className="text-primary text-5xl mb-4">
+                  <Icon name="Key" size={48} className="mx-auto" />
+                </div>
+                <h3 className="text-2xl font-semibold font-montserrat">{t.services.rental.title}</h3>
+                <p className="text-gray-600">
+                  {t.services.rental.description}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="p-8 text-center hover:shadow-lg transition-shadow">
+              <CardContent className="space-y-4">
+                <div className="text-primary text-5xl mb-4">
+                  <Icon name="Home" size={48} className="mx-auto" />
+                </div>
+                <h3 className="text-2xl font-semibold font-montserrat">{t.services.purchase.title}</h3>
+                <p className="text-gray-600">
+                  {t.services.purchase.description}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="p-8 text-center hover:shadow-lg transition-shadow">
+              <CardContent className="space-y-4">
+                <div className="text-primary text-5xl mb-4">
+                  <Icon name="FileText" size={48} className="mx-auto" />
+                </div>
+                <h3 className="text-2xl font-semibold font-montserrat">{t.services.consultation.title}</h3>
+                <p className="text-gray-600">
+                  {t.services.consultation.description}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
 
       {/* Contact Form Section */}
       <section id="contact" className="py-20 px-6" data-animate>
@@ -585,12 +635,11 @@ Email: ${formData.get('email')}
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Навигация</h4>
+              <h4 className="font-semibold mb-4">{t.nav.services}</h4>
               <ul className="space-y-2 text-gray-300">
-                <li><a href="#services" className="hover:text-primary transition-colors">{t.services.rental.title}</a></li>
-                <li><a href="#services" className="hover:text-primary transition-colors">{t.services.purchase.title}</a></li>
-                <li><a href="/map" className="hover:text-primary transition-colors">Карта недвижимости</a></li>
-                <li><a href="/admin" className="hover:text-primary transition-colors text-xs opacity-60">Админ-панель</a></li>
+                <li>{t.services.rental.title}</li>
+                <li>{t.services.purchase.title}</li>
+                <li>{t.services.consultation.title}</li>
               </ul>
             </div>
             
