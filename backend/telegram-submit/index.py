@@ -63,6 +63,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     bot_token = os.environ.get('TELEGRAM_BOT_TOKEN', '')
     chat_id = os.environ.get('TELEGRAM_CHAT_ID', '')
     
+    print(f'Bot token exists: {bool(bot_token)}')
+    print(f'Chat ID: {chat_id}')
+    
     if not bot_token or not chat_id:
         return {
             'statusCode': 500,
@@ -98,6 +101,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         req = urllib.request.Request(url, data=data, method='POST')
         with urllib.request.urlopen(req) as response:
             result = json.loads(response.read().decode('utf-8'))
+            print(f'Telegram API response: {result}')
             
             if result.get('ok'):
                 return {
@@ -110,8 +114,22 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             else:
+                print(f'Telegram API error: {result}')
                 raise Exception(f"Telegram API error: {result}")
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode('utf-8')
+        print(f'HTTP Error: {e.code}, Body: {error_body}')
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({'error': f'Telegram API error: {error_body}'}),
+            'isBase64Encoded': False
+        }
     except Exception as e:
+        print(f'Exception: {str(e)}')
         return {
             'statusCode': 500,
             'headers': {
