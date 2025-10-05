@@ -336,7 +336,7 @@ export default function Index() {
 
       {/* Hero Section */}
       <section 
-        className="py-20 px-6 bg-cover bg-center bg-no-repeat relative" 
+        className="min-h-screen px-6 bg-cover bg-center bg-no-repeat relative flex items-center" 
         style={{
           backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(https://cdn.poehali.dev/files/0e9fae6d-86d7-40be-b0ba-b7e09d909847.png)'
         }}
