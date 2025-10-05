@@ -368,7 +368,7 @@ export default function Index() {
       
       {/* Second Hero - City View */}
       <section 
-        className="min-h-screen flex items-center justify-start bg-cover bg-center bg-no-repeat relative\" 
+        className="min-h-screen flex items-center justify-start bg-cover bg-center bg-no-repeat relative" 
         style={{
           backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://cdn.poehali.dev/files/be6af7ec-495a-439d-bc35-b6a1ef90ce78.jpg)'
         }}
@@ -381,11 +381,11 @@ export default function Index() {
                 <Icon name="Home" size={32} className="text-white" />
               </div>
               <div>
-                <h3 className="text-2xl md:text-3xl font-bold text-white tracking-wider\">WSE.AM</h3>
-                <p className="text-sm md:text-base text-white tracking-widest uppercase opacity-90\">WHITE SAFE ESTATE</p>
+                <h3 className="text-2xl md:text-3xl font-bold text-white tracking-wider">WSE.AM</h3>
+                <p className="text-sm md:text-base text-white tracking-widest uppercase opacity-90">WHITE SAFE ESTATE</p>
               </div>
             </div>
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight\">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
               Надёжная<br/>недвижимость<br/>в Ереване<br/>с WSE.AM
             </h2>
           </div>
@@ -394,7 +394,7 @@ export default function Index() {
       
       {/* Third Hero - Happy Couple */}
       <section 
-        className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat relative bg-blue-100\" 
+        className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat relative bg-blue-100" 
         style={{
           backgroundImage: 'url(https://cdn.poehali.dev/files/736948b2-d4bd-45e7-ad68-5ec3bdf63069.jpg)',
           backgroundSize: 'cover'
@@ -403,8 +403,8 @@ export default function Index() {
       >
         <div className="container mx-auto px-6 text-center">
           <div className="mb-12">
-            <h3 className="text-3xl md:text-5xl font-bold text-blue-900 mb-4 tracking-wider\">WHITE SAFE ESTATE</h3>
-            <h2 className="text-2xl md:text-4xl font-bold text-blue-900\">
+            <h3 className="text-3xl md:text-5xl font-bold text-blue-900 mb-4 tracking-wider">WHITE SAFE ESTATE</h3>
+            <h2 className="text-2xl md:text-4xl font-bold text-blue-900">
               Найдём квартиру<br/>под ваш запрос
             </h2>
           </div>
