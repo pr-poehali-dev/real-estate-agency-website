@@ -127,7 +127,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       const marker = L.marker([lat, lng], { icon: customIcon });
 
       const popupContent = `
-        <div style="min-width: 250px; font-family: system-ui;">
+        <div style="min-width: 250px; font-family: system-ui; cursor: pointer;" class="property-popup" data-property-id="${property.id}">
           <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; line-height: 1.3;">
             ${property.title}
           </h4>
@@ -143,7 +143,19 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         </div>
       `;
 
-      marker.bindPopup(popupContent);
+      const popup = L.popup().setContent(popupContent);
+      marker.bindPopup(popup);
+      
+      marker.on('popupopen', () => {
+        const popupElement = document.querySelector('.property-popup');
+        if (popupElement) {
+          popupElement.addEventListener('click', () => {
+            if (onPropertySelect) {
+              onPropertySelect(property);
+            }
+          });
+        }
+      });
       
       marker.on('mouseover', () => {
         marker.openPopup();
@@ -220,6 +232,15 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         }
         .leaflet-popup-tip {
           background: white;
+        }
+        .property-popup {
+          transition: background-color 0.2s ease;
+          border-radius: 8px;
+          padding: 4px;
+          margin: -4px;
+        }
+        .property-popup:hover {
+          background-color: rgba(255, 122, 0, 0.05);
         }
         @keyframes popupFadeIn {
           from {
