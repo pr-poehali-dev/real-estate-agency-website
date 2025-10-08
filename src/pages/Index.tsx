@@ -42,7 +42,7 @@ export default function Index() {
     if (token && token.startsWith('demo-token-')) {
       const demoData = localStorage.getItem('demo_properties');
       const demoProps = demoData ? JSON.parse(demoData) : [];
-      setProperties(demoProps.slice(0, 3));
+      setProperties(demoProps.slice(0, 6));
       setLoading(false);
       return;
     }
@@ -50,7 +50,7 @@ export default function Index() {
     try {
       const response = await Properties.list();
       const props = (response.properties || []) as Property[];
-      setProperties(props.slice(0, 3));
+      setProperties(props.slice(0, 6));
     } catch (err) {
       console.error('Error loading properties:', err);
     } finally {
@@ -187,8 +187,8 @@ export default function Index() {
       </section>
 
       {/* Recently Added */}
-      <section className="px-6 py-8 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8 animate-in fade-in slide-in-from-left duration-700">Недавно добавленные</h2>
+      <section className="py-8 max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8 px-6 animate-in fade-in slide-in-from-left duration-700">Недавно добавленные</h2>
         
         {loading ? (
           <div className="text-center py-12 text-gray-500">Загрузка...</div>
@@ -200,9 +200,10 @@ export default function Index() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="overflow-x-auto pb-4 px-6 scrollbar-hide">
+            <div className="flex gap-6">
             {properties.map((property) => (
-              <Link key={property.id} to={`/property/${property.id}`} className="block h-full">
+              <Link key={property.id} to={`/property/${property.id}`} className="block flex-shrink-0" style={{ width: '350px' }}>
                 <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col">
                   {property.images && property.images.length > 0 ? (
                     <img
@@ -235,6 +236,7 @@ export default function Index() {
                 </div>
               </Link>
             ))}
+            </div>
           </div>
         )}
       </section>
