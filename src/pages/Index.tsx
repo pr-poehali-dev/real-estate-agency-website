@@ -130,19 +130,19 @@ export default function Index() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-[#F5F5F5] overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 pt-16 pb-12">
-          <div className="relative z-10 max-w-2xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-3 leading-tight">
+      <section className="relative bg-[#FAFAFA] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 pt-12 pb-8">
+          <div className="relative z-10 max-w-xl">
+            <h1 className="text-4xl font-bold mb-2 leading-tight">
               Поиск недвижимости<br />в Ереване
             </h1>
-            <p className="text-base text-gray-600 mb-8">Найдите идеальный вариант</p>
+            <p className="text-sm text-gray-600 mb-6">Найдите идеальный вариант</p>
 
             {/* Search Form */}
-            <div className="bg-white rounded-xl shadow-md p-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="bg-white rounded-lg shadow-sm p-3">
+              <div className="flex gap-2 mb-2">
                 <Select value={transactionType} onValueChange={setTransactionType}>
-                  <SelectTrigger className="h-11 rounded-lg border-gray-200">
+                  <SelectTrigger className="h-10 rounded-md border-gray-200 text-sm flex-1">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -152,7 +152,7 @@ export default function Index() {
                 </Select>
 
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="h-11 rounded-lg border-gray-200">
+                  <SelectTrigger className="h-10 rounded-md border-gray-200 text-sm flex-1">
                     <SelectValue placeholder="Тип недвижимости" />
                   </SelectTrigger>
                   <SelectContent>
@@ -168,13 +168,32 @@ export default function Index() {
                   placeholder="Цена до, $"
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
-                  className="h-11 rounded-lg border-gray-200"
+                  className="h-10 rounded-md border-gray-200 text-sm flex-1"
                 />
               </div>
               
-              <Link to="/map" className="block mt-3">
-                <Button className="w-full h-11 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg text-sm font-medium">
+              <Link to="/map">
+                <Button className="w-full h-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md text-sm font-medium">
                   Найти
+                </Button>
+              </Link>
+            </div>
+            
+            {/* Category Buttons */}
+            <div className="flex gap-2 mt-4">
+              <Link to="/map?type=apartment">
+                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium">
+                  КВАРТИРЫ
+                </Button>
+              </Link>
+              <Link to="/map?type=house">
+                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium">
+                  ДОМА
+                </Button>
+              </Link>
+              <Link to="/map?type=commercial">
+                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium">
+                  КОММЕРЧЕСКАЯ
                 </Button>
               </Link>
             </div>
@@ -183,16 +202,16 @@ export default function Index() {
 
         {/* Mountain Illustration */}
         <div className="absolute right-0 top-0 w-1/2 h-full pointer-events-none">
-          <svg viewBox="0 0 600 300" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
-            <path d="M 150 180 L 300 60 L 450 180 L 600 100 L 600 300 L 0 300 Z" fill="#FF7A00" opacity="0.9"/>
-            <path d="M 0 220 L 200 140 L 350 200 L 600 150 L 600 300 L 0 300 Z" fill="#FF9933" opacity="0.7"/>
+          <svg viewBox="0 0 700 250" className="w-full h-full" preserveAspectRatio="xMaxYMax slice">
+            <path d="M 100 150 Q 200 80 280 120 L 380 80 L 480 130 L 600 70 L 700 100 L 700 250 L 0 250 Z" fill="#FF7A00" opacity="0.95"/>
+            <path d="M 0 180 L 150 130 Q 250 100 350 140 L 500 110 L 700 140 L 700 250 L 0 250 Z" fill="#FF9933" opacity="0.8"/>
           </svg>
         </div>
       </section>
 
       {/* Recently Added */}
-      <section className="px-6 py-8 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8">Недавно добавленные</h2>
+      <section className="px-6 py-8 max-w-7xl mx-auto bg-white">
+        <h2 className="text-2xl font-bold mb-6">Недавно добавленные</h2>
         
         {loading ? (
           <div className="text-center py-12 text-gray-500">Загрузка...</div>
@@ -204,32 +223,32 @@ export default function Index() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {properties.map((property) => (
-              <div key={property.id} className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+              <div key={property.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
                 {property.images && property.images.length > 0 ? (
                   <img
                     src={property.images[0]}
                     alt={property.title}
-                    className="w-full h-56 object-cover"
+                    className="w-full h-48 object-cover"
                   />
                 ) : (
-                  <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400">Нет фото</span>
+                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-sm">Нет фото</span>
                   </div>
                 )}
                 
-                <div className="p-6">
-                  <p className="text-2xl font-bold text-gray-900 mb-2">
+                <div className="p-4">
+                  <p className="text-xl font-bold text-gray-900 mb-1">
                     {formatPrice(property.price, property.currency)}
-                    {property.transaction_type === 'rent' && <span className="text-base font-normal"> в месяц</span>}
+                    {property.transaction_type === 'rent' && <span className="text-sm font-normal"> в месяц</span>}
                   </p>
                   
-                  <p className="text-gray-700 font-medium mb-3">
+                  <p className="text-gray-600 text-sm mb-2">
                     {property.street_name || property.address}
                   </p>
                   
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-3 text-xs text-gray-500">
                     {property.rooms && <span>{property.rooms} комнат</span>}
                     {property.area && <span>• {property.area} м²</span>}
                     {property.floor && <span>• {property.floor} этаж</span>}
