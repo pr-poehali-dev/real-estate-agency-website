@@ -43,7 +43,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
       ...prev,
       images: newImages
     }));
-  }, []);
+  }, [setPropertyForm]);
 
   // Новые обработчики для AddressSelector
   const handleAddressChange = useCallback((address: AddressComponents) => {
@@ -55,7 +55,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
       district: address.district,
       address: address.formatted_address || prev.address
     }));
-  }, []);
+  }, [setPropertyForm]);
 
   const handleCoordinatesChange = useCallback((coordinates: LocationPoint) => {
     setPropertyForm(prev => ({
@@ -64,7 +64,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
       longitude: coordinates.longitude,
       address: coordinates.address || prev.address
     }));
-  }, []);
+  }, [setPropertyForm]);
 
   // Формируем текущий адрес для AddressSelector
   const currentAddress: AddressComponents = useMemo(() => ({
