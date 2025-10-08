@@ -18,32 +18,76 @@ const AdminPanel: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
-  const [propertyForm, setPropertyForm] = useState<Property>({
-    title: '',
-    description: '',
-    property_type: 'apartment',
-    transaction_type: 'rent',
-    price: 0,
-    currency: 'AMD',
-    area: 0,
-    rooms: 0,
-    bedrooms: 0,
-    bathrooms: 0,
-    floor: 0,
-    total_floors: 0,
-    year_built: new Date().getFullYear(),
-    district: 'Центр (Кентрон)',
-    address: '',
-    street_name: '',
-    house_number: '',
-    apartment_number: '',
-    latitude: 40.1792,
-    longitude: 44.4991,
-    features: [],
-    images: []
+  const [propertyForm, setPropertyForm] = useState<Property>(() => {
+    const saved = localStorage.getItem('admin_form_draft');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return {
+          title: '',
+          description: '',
+          property_type: 'apartment',
+          transaction_type: 'rent',
+          price: 0,
+          currency: 'AMD',
+          area: 0,
+          rooms: 0,
+          bedrooms: 0,
+          bathrooms: 0,
+          floor: 0,
+          total_floors: 0,
+          year_built: new Date().getFullYear(),
+          district: 'Центр (Кентрон)',
+          address: '',
+          street_name: '',
+          house_number: '',
+          apartment_number: '',
+          latitude: 40.1792,
+          longitude: 44.4991,
+          features: [],
+          images: []
+        };
+      }
+    }
+    return {
+      title: '',
+      description: '',
+      property_type: 'apartment',
+      transaction_type: 'rent',
+      price: 0,
+      currency: 'AMD',
+      area: 0,
+      rooms: 0,
+      bedrooms: 0,
+      bathrooms: 0,
+      floor: 0,
+      total_floors: 0,
+      year_built: new Date().getFullYear(),
+      district: 'Центр (Кентрон)',
+      address: '',
+      street_name: '',
+      house_number: '',
+      apartment_number: '',
+      latitude: 40.1792,
+      longitude: 44.4991,
+      features: [],
+      images: []
+    };
   });
 
-  const [featuresText, setFeaturesText] = useState('');
+  const [featuresText, setFeaturesText] = useState(() => {
+    return localStorage.getItem('admin_features_draft') || '';
+  });
+
+  // Автосохранение формы
+  useEffect(() => {
+    localStorage.setItem('admin_form_draft', JSON.stringify(propertyForm));
+  }, [propertyForm]);
+
+  useEffect(() => {
+    localStorage.setItem('admin_features_draft', featuresText);
+  }, [featuresText]);
 
   useEffect(() => {
     checkAuthStatus();
@@ -114,7 +158,7 @@ const AdminPanel: React.FC = () => {
   };
 
   const resetForm = useCallback(() => {
-    setPropertyForm({
+    const emptyForm = {
       title: '',
       description: '',
       property_type: 'apartment',
@@ -137,10 +181,13 @@ const AdminPanel: React.FC = () => {
       longitude: 44.4991,
       features: [],
       images: []
-    });
+    };
+    setPropertyForm(emptyForm);
     setFeaturesText('');
     setIsEditing(false);
     setEditingProperty(null);
+    localStorage.removeItem('admin_form_draft');
+    localStorage.removeItem('admin_features_draft');
   }, []);
 
   const handleAddOrUpdateProperty = async (e: React.FormEvent) => {
