@@ -360,18 +360,18 @@ export default function PropertyPage() {
               />
             </div>
           ) : (
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="p-6 flex flex-col h-full">
               <h3 className="font-bold text-xl mb-4">Другие объекты ({filteredProperties.length})</h3>
               
               {filteredProperties.length === 0 ? (
                 <p className="text-gray-500 text-center py-12">Нет объектов с такими параметрами</p>
               ) : (
-                <div className="space-y-4">
+                <div className="overflow-y-auto pr-2 space-y-4" style={{ maxHeight: 'calc(9 * 196px)' }}>
                   {filteredProperties.map((prop) => (
                     <Link 
                       key={prop.id} 
                       to={`/property/${prop.id}`}
-                      className="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow h-[180px]"
+                      className="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow h-[180px] flex-shrink-0"
                     >
                       <div className="flex gap-4 p-4 h-full">
                         <img 
