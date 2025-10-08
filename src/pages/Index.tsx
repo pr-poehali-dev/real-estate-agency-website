@@ -123,7 +123,7 @@ export default function Index() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative px-6 pt-12 pb-24 max-w-7xl mx-auto">
+      <section className="relative px-6 pt-12 pb-8 max-w-7xl mx-auto">
         <div className="relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
             Поиск недвижимости<br />в Ереване
