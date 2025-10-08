@@ -145,6 +145,14 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
 
       marker.bindPopup(popupContent);
       
+      marker.on('mouseover', () => {
+        marker.openPopup();
+      });
+      
+      marker.on('mouseout', () => {
+        marker.closePopup();
+      });
+      
       marker.on('click', () => {
         if (isPreview) {
           window.location.href = '/map';
@@ -198,13 +206,30 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         .custom-marker {
           background: none;
           border: none;
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        }
+        .custom-marker:hover {
+          transform: scale(1.1);
         }
         .leaflet-popup-content-wrapper {
-          border-radius: 8px;
+          border-radius: 12px;
           padding: 12px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          animation: popupFadeIn 0.2s ease-out;
         }
         .leaflet-popup-tip {
           background: white;
+        }
+        @keyframes popupFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
     </div>
