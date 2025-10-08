@@ -187,8 +187,10 @@ export default function Index() {
       </section>
 
       {/* Recently Added */}
-      <section className="py-8 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8 px-6 animate-in fade-in slide-in-from-left duration-700">Недавно добавленные</h2>
+      <section className="py-8">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-3xl font-bold mb-8 animate-in fade-in slide-in-from-left duration-700">Недавно добавленные</h2>
+        </div>
         
         {loading ? (
           <div className="text-center py-12 text-gray-500">Загрузка...</div>
@@ -200,8 +202,8 @@ export default function Index() {
             </Link>
           </div>
         ) : (
-          <div className="overflow-x-auto pb-4 px-6 scrollbar-hide">
-            <div className="flex gap-6">
+          <div className="overflow-x-auto pb-4 scrollbar-hide">
+            <div className="flex gap-6 px-6">
             {properties.map((property) => (
               <Link key={property.id} to={`/property/${property.id}`} className="block flex-shrink-0" style={{ width: '350px' }}>
                 <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col">
