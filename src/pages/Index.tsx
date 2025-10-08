@@ -123,10 +123,10 @@ export default function Index() {
       {/* Hero Section */}
       <section className="relative px-6 pt-12 pb-8 max-w-7xl mx-auto">
         <div className="relative z-10">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-black mb-4 leading-tight">
             Поиск недвижимости<br />в Ереване
           </h1>
-          <p className="text-xl text-gray-600 mb-12">Найдите идеальный вариант</p>
+          <p className="text-xl font-medium text-gray-600 mb-12">Найдите идеальный вариант</p>
 
           {/* Search Form */}
           <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-4xl">
