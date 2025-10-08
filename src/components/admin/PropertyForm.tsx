@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -7,10 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Icon from '../ui/icon';
 import ImageUpload from './ImageUpload';
-import AddressSelector from './AddressSelector';
-import { Property, AddressComponents, LocationPoint } from '@/types/property';
-
-// Property interface now imported from types
+import { Property } from '@/types/property';
 
 interface PropertyFormProps {
   propertyForm: Property;
@@ -37,49 +34,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
   isEditing = false,
   onCancel
 }) => {
-
-  const handleImagesChange = useCallback((newImages: string[]) => {
-    setPropertyForm(prev => ({
-      ...prev,
-      images: newImages
-    }));
-  }, [setPropertyForm]);
-
-  // Новые обработчики для AddressSelector
-  const handleAddressChange = useCallback((address: AddressComponents) => {
-    setPropertyForm(prev => ({
-      ...prev,
-      street_name: address.street_name,
-      house_number: address.house_number,
-      apartment_number: address.apartment_number,
-      district: address.district,
-      address: address.formatted_address || prev.address
-    }));
-  }, [setPropertyForm]);
-
-  const handleCoordinatesChange = useCallback((coordinates: LocationPoint) => {
-    setPropertyForm(prev => ({
-      ...prev,
-      latitude: coordinates.latitude,
-      longitude: coordinates.longitude,
-      address: coordinates.address || prev.address
-    }));
-  }, [setPropertyForm]);
-
-  // Формируем текущий адрес для AddressSelector
-  const currentAddress: AddressComponents = useMemo(() => ({
-    street_name: propertyForm.street_name || '',
-    house_number: propertyForm.house_number || '',
-    apartment_number: propertyForm.apartment_number || '',
-    district: propertyForm.district,
-    formatted_address: propertyForm.address
-  }), [propertyForm.street_name, propertyForm.house_number, propertyForm.apartment_number, propertyForm.district, propertyForm.address]);
-
-  const currentCoordinates: LocationPoint = useMemo(() => ({
-    latitude: propertyForm.latitude,
-    longitude: propertyForm.longitude,
-    address: propertyForm.address
-  }), [propertyForm.latitude, propertyForm.longitude, propertyForm.address]);
 
   return (
     <Card>
@@ -118,7 +72,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 <Input
                   id="title"
                   value={propertyForm.title}
-                  onChange={(e) => setPropertyForm({...propertyForm, title: e.target.value})}
+                  onChange={(e) => setPropertyForm(prev => ({...prev, title: e.target.value}))}
                   placeholder="Например: 3-комнатная квартира в центре"
                   required
                 />
@@ -129,7 +83,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 <Textarea
                   id="description"
                   value={propertyForm.description}
-                  onChange={(e) => setPropertyForm({...propertyForm, description: e.target.value})}
+                  onChange={(e) => setPropertyForm(prev => ({...prev, description: e.target.value}))}
                   placeholder="Подробное описание объекта"
                   rows={3}
                 />
@@ -137,7 +91,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
 
               <div>
                 <Label htmlFor="property_type">Тип недвижимости *</Label>
-                <Select value={propertyForm.property_type} onValueChange={(value) => setPropertyForm({...propertyForm, property_type: value})}>
+                <Select value={propertyForm.property_type} onValueChange={(value) => setPropertyForm(prev => ({...prev, property_type: value}))}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -151,7 +105,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
 
               <div>
                 <Label htmlFor="transaction_type">Тип операции *</Label>
-                <Select value={propertyForm.transaction_type} onValueChange={(value) => setPropertyForm({...propertyForm, transaction_type: value})}>
+                <Select value={propertyForm.transaction_type} onValueChange={(value) => setPropertyForm(prev => ({...prev, transaction_type: value}))}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -169,13 +123,13 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     id="price"
                     type="number"
                     value={propertyForm.price || ''}
-                    onChange={(e) => setPropertyForm({...propertyForm, price: e.target.value ? Number(e.target.value) : 0})}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, price: e.target.value ? Number(e.target.value) : 0}))}
                     required
                   />
                 </div>
                 <div>
                   <Label htmlFor="currency">Валюта</Label>
-                  <Select value={propertyForm.currency} onValueChange={(value) => setPropertyForm({...propertyForm, currency: value})}>
+                  <Select value={propertyForm.currency} onValueChange={(value) => setPropertyForm(prev => ({...prev, currency: value}))}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -199,7 +153,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     type="number"
                     step="0.1"
                     value={propertyForm.area || ''}
-                    onChange={(e) => setPropertyForm({...propertyForm, area: e.target.value ? Number(e.target.value) : 0})}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, area: e.target.value ? Number(e.target.value) : 0}))}
                   />
                 </div>
                 <div>
@@ -208,7 +162,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     id="rooms"
                     type="number"
                     value={propertyForm.rooms || ''}
-                    onChange={(e) => setPropertyForm({...propertyForm, rooms: e.target.value ? Number(e.target.value) : 0})}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, rooms: e.target.value ? Number(e.target.value) : 0}))}
                   />
                 </div>
               </div>
@@ -220,7 +174,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     id="bedrooms"
                     type="number"
                     value={propertyForm.bedrooms || ''}
-                    onChange={(e) => setPropertyForm({...propertyForm, bedrooms: e.target.value ? Number(e.target.value) : 0})}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, bedrooms: e.target.value ? Number(e.target.value) : 0}))}
                   />
                 </div>
                 <div>
@@ -229,7 +183,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     id="bathrooms"
                     type="number"
                     value={propertyForm.bathrooms || ''}
-                    onChange={(e) => setPropertyForm({...propertyForm, bathrooms: e.target.value ? Number(e.target.value) : 0})}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, bathrooms: e.target.value ? Number(e.target.value) : 0}))}
                   />
                 </div>
                 <div>
@@ -238,7 +192,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     id="year_built"
                     type="number"
                     value={propertyForm.year_built || ''}
-                    onChange={(e) => setPropertyForm({...propertyForm, year_built: e.target.value ? Number(e.target.value) : 0})}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, year_built: e.target.value ? Number(e.target.value) : 0}))}
                   />
                 </div>
               </div>
@@ -250,7 +204,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     id="floor"
                     type="number"
                     value={propertyForm.floor || ''}
-                    onChange={(e) => setPropertyForm({...propertyForm, floor: e.target.value ? Number(e.target.value) : 0})}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, floor: e.target.value ? Number(e.target.value) : 0}))}
                   />
                 </div>
                 <div>
@@ -259,23 +213,37 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     id="total_floors"
                     type="number"
                     value={propertyForm.total_floors || ''}
-                    onChange={(e) => setPropertyForm({...propertyForm, total_floors: e.target.value ? Number(e.target.value) : 0})}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, total_floors: e.target.value ? Number(e.target.value) : 0}))}
                   />
                 </div>
               </div>
-
             </div>
           </div>
 
-          {/* Address Selection */}
+          {/* Address */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Адрес объекта</h3>
-            <AddressSelector
-              address={currentAddress}
-              onAddressChange={handleAddressChange}
-              coordinates={currentCoordinates}
-              onCoordinatesChange={handleCoordinatesChange}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="street_name">Улица и дом *</Label>
+                <Input
+                  id="street_name"
+                  value={propertyForm.street_name || ''}
+                  onChange={(e) => setPropertyForm(prev => ({...prev, street_name: e.target.value}))}
+                  placeholder="ул. Абовяна 15"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="district">Район</Label>
+                <Input
+                  id="district"
+                  value={propertyForm.district || ''}
+                  onChange={(e) => setPropertyForm(prev => ({...prev, district: e.target.value}))}
+                  placeholder="Центр"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Features and Images */}
@@ -292,8 +260,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
             </div>
 
             <ImageUpload
-              images={propertyForm.images}
-              onImagesChange={handleImagesChange}
+              images={propertyForm.images || []}
+              onImagesChange={(newImages) => setPropertyForm(prev => ({...prev, images: newImages}))}
               maxImages={5}
             />
           </div>
