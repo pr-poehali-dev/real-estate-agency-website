@@ -172,7 +172,7 @@ export default function Index() {
           </div>
 
           {/* Transaction Type Buttons */}
-          <div className="flex flex-wrap gap-4 mb-4">
+          <div className="flex flex-wrap gap-4">
             <Link to="/map?transaction=rent">
               <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
                 АРЕНДА
@@ -184,32 +184,13 @@ export default function Index() {
               </Button>
             </Link>
           </div>
-
-          {/* Category Buttons */}
-          <div className="flex flex-wrap gap-4">
-            <Link to="/map?type=apartment">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
-                КВАРТИРЫ
-              </Button>
-            </Link>
-            <Link to="/map?type=house">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
-                ДОМА
-              </Button>
-            </Link>
-            <Link to="/map?type=commercial">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
-                КОММЕРЧЕСКАЯ
-              </Button>
-            </Link>
-          </div>
         </div>
 
 
       </section>
 
       {/* Recently Added */}
-      <section className="px-6 py-16 max-w-7xl mx-auto">
+      <section className="px-6 py-8 max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold mb-8">Недавно добавленные</h2>
         
         {loading ? (
