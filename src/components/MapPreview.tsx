@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
-import { sampleProperties } from '@/data/sampleProperties';
+import { Properties } from '@/lib/api';
 
 interface MapPreviewProps {
   t: any;
@@ -11,9 +12,31 @@ interface MapPreviewProps {
 
 export default function MapPreview({ t, isVisible }: MapPreviewProps) {
   const navigate = useNavigate();
+  const [previewProperties, setPreviewProperties] = useState<any[]>([]);
   
-  // Берём первые 10 объектов для превью
-  const previewProperties = sampleProperties.slice(0, 10);
+  useEffect(() => {
+    const loadPreviewData = async () => {
+      const token = localStorage.getItem('admin_token');
+      
+      if (token && token.startsWith('demo-token-')) {
+        const demoData = localStorage.getItem('demo_properties');
+        const demoProps = demoData ? JSON.parse(demoData) : [];
+        setPreviewProperties(demoProps.slice(0, 10));
+        return;
+      }
+
+      try {
+        const response = await Properties.list();
+        const props = (response.properties || []).slice(0, 10);
+        setPreviewProperties(props);
+      } catch (err) {
+        console.error('Error loading preview properties:', err);
+        setPreviewProperties([]);
+      }
+    };
+
+    loadPreviewData();
+  }, []);
 
   return (
     <section 
