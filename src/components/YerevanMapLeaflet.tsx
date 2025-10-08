@@ -13,6 +13,7 @@ interface Property {
   district: string;
   property_type: string;
   transaction_type: string;
+  images?: string[];
 }
 
 interface YerevanMapLeafletProps {
@@ -126,8 +127,14 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
 
       const marker = L.marker([lat, lng], { icon: customIcon });
 
+      const imageUrl = property.images && property.images.length > 0 ? property.images[0] : '';
       const popupContent = `
-        <div style="min-width: 250px; font-family: system-ui; cursor: pointer;" class="property-popup" data-property-id="${property.id}">
+        <div style="min-width: 280px; font-family: system-ui; cursor: pointer;" class="property-popup" data-property-id="${property.id}">
+          ${imageUrl ? `
+            <div style="width: 100%; height: 160px; overflow: hidden; border-radius: 8px; margin-bottom: 12px;">
+              <img src="${imageUrl}" alt="${property.title}" style="width: 100%; height: 100%; object-fit: cover;" />
+            </div>
+          ` : ''}
           <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; line-height: 1.3;">
             ${property.title}
           </h4>
