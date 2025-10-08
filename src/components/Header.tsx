@@ -24,6 +24,9 @@ export default function Header({ t, language, setLanguage, isMenuOpen, setIsMenu
             {t.nav.map}
           </Link>
           <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">{t.nav.contact}</a>
+          <Link to="/admin" className="text-gray-600 hover:text-primary transition-colors flex items-center gap-1" title="Админ-панель">
+            <Icon name="Shield" size={18} />
+          </Link>
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">

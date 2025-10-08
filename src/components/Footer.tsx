@@ -28,7 +28,9 @@ export default function Footer({ t }: FooterProps) {
         </div>
         
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2023 <Link to="/admin" className="hover:text-primary transition-colors">WSE.AM</Link>. Все права защищены.</p>
+          <p>&copy; 2025 <Link to="/admin" className="hover:text-primary transition-colors inline-flex items-center gap-1">
+            WSE.AM 🔐
+          </Link>. Все права защищены.</p>
         </div>
       </div>
     </footer>
