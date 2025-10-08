@@ -90,16 +90,37 @@ export default function PropertyPage() {
   return (
     <div className="min-h-screen bg-[#F5F3EE]">
       {/* Header */}
-      <header className="bg-white px-6 py-6">
+      <header className="bg-white px-6 py-6 shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" className="text-2xl font-bold">WSE.AM</Link>
-          <Button 
-            onClick={() => navigate(-1)}
-            className="bg-gray-200 hover:bg-gray-300 text-gray-800"
-          >
-            <Icon name="ArrowLeft" size={20} className="mr-2" />
-            Назад
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              onClick={() => navigate(-1)}
+              variant="outline"
+              className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            >
+              <Icon name="ArrowLeft" size={20} className="mr-2" />
+              Назад
+            </Button>
+            <Link to="/?filters=open">
+              <Button 
+                variant="outline"
+                className="border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                <Icon name="SlidersHorizontal" size={20} className="mr-2" />
+                Фильтры
+              </Button>
+            </Link>
+            <Link to="/?view=map">
+              <Button 
+                variant="outline"
+                className="border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                <Icon name="Map" size={20} className="mr-2" />
+                Карта
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
