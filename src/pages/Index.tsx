@@ -204,31 +204,31 @@ export default function Index() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {properties.map((property) => (
-              <Link key={property.id} to={`/property/${property.id}`} className="block">
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
+              <Link key={property.id} to={`/property/${property.id}`} className="block h-full">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col">
                   {property.images && property.images.length > 0 ? (
                     <img
                       src={property.images[0]}
                       alt={property.title}
-                      className="w-full h-56 object-cover"
+                      className="w-full h-56 object-cover flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
+                    <div className="w-full h-56 bg-gray-200 flex items-center justify-center flex-shrink-0">
                       <span className="text-gray-400">Нет фото</span>
                     </div>
                   )}
                   
-                  <div className="p-6">
+                  <div className="p-6 flex flex-col flex-1">
                     <p className="text-2xl font-bold text-gray-900 mb-2">
                       {formatPrice(property.price, property.currency)}
                       {property.transaction_type === 'rent' && <span className="text-base font-normal"> в месяц</span>}
                     </p>
                     
-                    <p className="text-gray-700 font-medium mb-3">
+                    <p className="text-gray-700 font-medium mb-3 line-clamp-2">
                       {property.street_name || property.address}
                     </p>
                     
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mt-auto">
                       {property.rooms && <span>{property.rooms} комнат</span>}
                       {property.area && <span>• {property.area} м²</span>}
                       {property.floor && <span>• {property.floor} этаж</span>}
