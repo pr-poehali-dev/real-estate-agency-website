@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Icon from '../ui/icon';
 import ImageUpload from './ImageUpload';
+import MapPicker from './MapPicker';
 import { Property } from '@/types/property';
 
 interface PropertyFormProps {
@@ -34,6 +35,15 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
   isEditing = false,
   onCancel
 }) => {
+  const [isMapOpen, setIsMapOpen] = useState(false);
+
+  const handleLocationChange = (lat: number, lng: number) => {
+    setPropertyForm(prev => ({
+      ...prev,
+      latitude: lat,
+      longitude: lng
+    }));
+  };
 
   return (
     <Card>
@@ -244,6 +254,20 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 />
               </div>
             </div>
+
+            <div className="border rounded-lg p-4 bg-gray-50">
+              <div className="flex items-center justify-between mb-2">
+                <Label>Местоположение на карте</Label>
+                <Button type="button" variant="outline" size="sm" onClick={() => setIsMapOpen(true)}>
+                  <Icon name="MapPin" size={16} className="mr-1" />
+                  Выбрать на карте
+                </Button>
+              </div>
+              <div className="text-sm text-gray-600">
+                <p>Широта: {propertyForm.latitude?.toFixed(6) || 'не указано'}</p>
+                <p>Долгота: {propertyForm.longitude?.toFixed(6) || 'не указано'}</p>
+              </div>
+            </div>
           </div>
 
           {/* Features and Images */}
@@ -277,6 +301,14 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
             </Button>
           </div>
         </form>
+
+        <MapPicker
+          latitude={propertyForm.latitude || 40.1792}
+          longitude={propertyForm.longitude || 44.4991}
+          onLocationChange={handleLocationChange}
+          isOpen={isMapOpen}
+          onClose={() => setIsMapOpen(false)}
+        />
       </CardContent>
     </Card>
   );
