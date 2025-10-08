@@ -110,97 +110,82 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F3EE]">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
-        <Link to="/" className="text-2xl font-bold">WSE.AM</Link>
-        <nav className="hidden md:flex items-center gap-8">
-          <a href="#services" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Услуги</a>
-          <Link to="/map" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Карта</Link>
-          <a href="#contact" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Контакты</a>
-          <Link to="/admin" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Вход</Link>
-          <Button 
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl px-6"
-          >
-            Связаться
-          </Button>
-        </nav>
+      <header className="bg-white border-b border-gray-100">
+        <div className="px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
+          <Link to="/" className="text-xl font-bold">WSE.AM</Link>
+          <nav className="hidden md:flex items-center gap-8">
+            <Link to="/map" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">Аренда</Link>
+            <Link to="/map?transaction=sale" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">Продажа</Link>
+            <a href="#contact" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">О компании</a>
+            <Button 
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg px-6 h-9 text-sm"
+            >
+              Связаться
+            </Button>
+          </nav>
+        </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative px-6 pt-12 pb-24 max-w-7xl mx-auto">
-        <div className="relative z-10">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
-            Поиск недвижимости<br />в Ереване
-          </h1>
-          <p className="text-xl text-gray-600 mb-12">Найдите идеальный вариант</p>
+      <section className="relative bg-[#F5F5F5] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 pt-16 pb-12">
+          <div className="relative z-10 max-w-2xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 leading-tight">
+              Поиск недвижимости<br />в Ереване
+            </h1>
+            <p className="text-base text-gray-600 mb-8">Найдите идеальный вариант</p>
 
-          {/* Search Form */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-4xl">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Select value={transactionType} onValueChange={setTransactionType}>
-                <SelectTrigger className="h-12 rounded-xl">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="rent">Аренда</SelectItem>
-                  <SelectItem value="sale">Продажа</SelectItem>
-                </SelectContent>
-              </Select>
+            {/* Search Form */}
+            <div className="bg-white rounded-xl shadow-md p-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <Select value={transactionType} onValueChange={setTransactionType}>
+                  <SelectTrigger className="h-11 rounded-lg border-gray-200">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rent">Аренда</SelectItem>
+                    <SelectItem value="sale">Продажа</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="h-12 rounded-xl">
-                  <SelectValue placeholder="Тип недвижимости" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Все типы</SelectItem>
-                  <SelectItem value="apartment">Квартира</SelectItem>
-                  <SelectItem value="house">Дом</SelectItem>
-                  <SelectItem value="commercial">Коммерческая</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select value={propertyType} onValueChange={setPropertyType}>
+                  <SelectTrigger className="h-11 rounded-lg border-gray-200">
+                    <SelectValue placeholder="Тип недвижимости" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Все типы</SelectItem>
+                    <SelectItem value="apartment">Квартира</SelectItem>
+                    <SelectItem value="house">Дом</SelectItem>
+                    <SelectItem value="commercial">Коммерческая</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select value={district} onValueChange={setDistrict}>
-                <SelectTrigger className="h-12 rounded-xl">
-                  <SelectValue placeholder="Район" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Все районы</SelectItem>
-                  {districts.map(d => (
-                    <SelectItem key={d} value={d}>{d}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Link to="/map">
-                <Button className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl text-base font-medium">
+                <Input
+                  type="number"
+                  placeholder="Цена до, $"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                  className="h-11 rounded-lg border-gray-200"
+                />
+              </div>
+              
+              <Link to="/map" className="block mt-3">
+                <Button className="w-full h-11 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg text-sm font-medium">
                   Найти
                 </Button>
               </Link>
             </div>
           </div>
-
-          {/* Category Buttons */}
-          <div className="flex flex-wrap gap-4">
-            <Link to="/map?transaction=rent">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
-                АРЕНДА
-              </Button>
-            </Link>
-            <Link to="/map?transaction=sale">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
-                ПОКУПКА
-              </Button>
-            </Link>
-          </div>
         </div>
 
         {/* Mountain Illustration */}
-        <div className="absolute right-0 top-0 w-1/2 h-full pointer-events-none overflow-hidden">
-          <svg viewBox="0 0 800 400" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
-            <path d="M 0 250 Q 200 100 350 200 T 650 150 L 800 400 L 0 400 Z" fill="#FF7A00" opacity="0.9"/>
-            <path d="M 100 300 Q 300 150 500 250 T 800 200 L 800 400 L 100 400 Z" fill="#FF7A00" opacity="0.7"/>
+        <div className="absolute right-0 top-0 w-1/2 h-full pointer-events-none">
+          <svg viewBox="0 0 600 300" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
+            <path d="M 150 180 L 300 60 L 450 180 L 600 100 L 600 300 L 0 300 Z" fill="#FF7A00" opacity="0.9"/>
+            <path d="M 0 220 L 200 140 L 350 200 L 600 150 L 600 300 L 0 300 Z" fill="#FF9933" opacity="0.7"/>
           </svg>
         </div>
       </section>
