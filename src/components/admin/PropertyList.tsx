@@ -152,7 +152,6 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
                         </div>
                       )}
                       <div className="flex items-center gap-1">
-                        <Icon name="DollarSign" size={14} />
                         <span className="font-bold">{formatPrice(property.price, property.currency)}</span>
                       </div>
                       {property.rooms && (
