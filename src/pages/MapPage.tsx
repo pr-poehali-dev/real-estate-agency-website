@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import { Properties } from '@/lib/api';
 import type { Property as ApiProperty } from '@/lib/api';
@@ -19,10 +20,14 @@ const MapPage: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   
-  const [selectedType, setSelectedType] = useState('all');
-  const [selectedTransaction, setSelectedTransaction] = useState('all');
+  const [selectedType, setSelectedType] = useState<string>('');
+  const [selectedTransaction, setSelectedTransaction] = useState<string>('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [rooms, setRooms] = useState<string>('');
+  const [amenities, setAmenities] = useState<string[]>([]);
+  const [petsAllowed, setPetsAllowed] = useState<string>('');
+  const [childrenAllowed, setChildrenAllowed] = useState<string>('');
   const [streetSearch, setStreetSearch] = useState('');
 
   const loadProperties = async () => {
@@ -53,8 +58,8 @@ const MapPage: React.FC = () => {
 
   const filteredProperties = useMemo(() => {
     return allProperties.filter((prop) => {
-      if (selectedType !== 'all' && prop.property_type !== selectedType) return false;
-      if (selectedTransaction !== 'all' && prop.transaction_type !== selectedTransaction) return false;
+      if (selectedType && prop.property_type !== selectedType) return false;
+      if (selectedTransaction && prop.transaction_type !== selectedTransaction) return false;
       
       if (streetSearch.trim()) {
         const searchLower = streetSearch.toLowerCase();
@@ -67,15 +72,30 @@ const MapPage: React.FC = () => {
       if (minPrice && price < Number(minPrice)) return false;
       if (maxPrice && price > Number(maxPrice)) return false;
       
+      if (rooms && prop.rooms !== Number(rooms)) return false;
+      
+      if (amenities.length > 0) {
+        const propAmenities = prop.amenities || [];
+        const hasAllAmenities = amenities.every(a => propAmenities.includes(a));
+        if (!hasAllAmenities) return false;
+      }
+      
+      if (petsAllowed && prop.pets_allowed !== petsAllowed) return false;
+      if (childrenAllowed && prop.children_allowed !== childrenAllowed) return false;
+      
       return true;
     });
-  }, [allProperties, selectedType, selectedTransaction, minPrice, maxPrice, streetSearch]);
+  }, [allProperties, selectedType, selectedTransaction, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   const resetFilters = () => {
-    setSelectedType('all');
-    setSelectedTransaction('all');
+    setSelectedType('');
+    setSelectedTransaction('');
     setMinPrice('');
     setMaxPrice('');
+    setRooms('');
+    setAmenities([]);
+    setPetsAllowed('');
+    setChildrenAllowed('');
     setStreetSearch('');
   };
 
@@ -119,16 +139,6 @@ const MapPage: React.FC = () => {
       <div className="px-6 py-4 border-b bg-gray-50">
         <div className="flex flex-wrap items-center gap-2">
           <button
-            onClick={() => setSelectedTransaction('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedTransaction === 'all'
-                ? 'bg-[#FF7A00] text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-[#FF7A00]'
-            }`}
-          >
-            Все
-          </button>
-          <button
             onClick={() => setSelectedTransaction('rent')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               selectedTransaction === 'rent'
@@ -152,16 +162,6 @@ const MapPage: React.FC = () => {
           <div className="h-6 w-px bg-gray-300 mx-2"></div>
 
           <button
-            onClick={() => setSelectedType('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedType === 'all'
-                ? 'bg-[#FF7A00] text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-[#FF7A00]'
-            }`}
-          >
-            Все типы
-          </button>
-          <button
             onClick={() => setSelectedType('apartment')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               selectedType === 'apartment'
@@ -169,17 +169,7 @@ const MapPage: React.FC = () => {
                 : 'bg-white text-gray-700 border border-gray-300 hover:border-[#FF7A00]'
             }`}
           >
-            Квартиры
-          </button>
-          <button
-            onClick={() => setSelectedType('house')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedType === 'house'
-                ? 'bg-[#FF7A00] text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-[#FF7A00]'
-            }`}
-          >
-            Дома
+            Квартира
           </button>
 
           <div className="h-6 w-px bg-gray-300 mx-2"></div>
@@ -198,15 +188,63 @@ const MapPage: React.FC = () => {
             onChange={(e) => setMaxPrice(e.target.value)}
             className="w-32 rounded-full border-gray-300"
           />
-          <Input
-            type="text"
-            placeholder="Улица..."
-            value={streetSearch}
-            onChange={(e) => setStreetSearch(e.target.value)}
-            className="w-48 rounded-full border-gray-300"
-          />
 
-          {(selectedType !== 'all' || selectedTransaction !== 'all' || minPrice || maxPrice || streetSearch) && (
+          <div className="h-6 w-px bg-gray-300 mx-2"></div>
+
+          <Select value={rooms} onValueChange={setRooms}>
+            <SelectTrigger className="w-44 rounded-full">
+              <SelectValue placeholder="Количество комнат" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Не важно</SelectItem>
+              <SelectItem value="1">1 комната</SelectItem>
+              <SelectItem value="2">2 комнаты</SelectItem>
+              <SelectItem value="3">3 комнаты</SelectItem>
+              <SelectItem value="4">4 комнаты</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={amenities.join(',')} onValueChange={(val) => setAmenities(val ? [val] : [])}>
+            <SelectTrigger className="w-40 rounded-full">
+              <SelectValue placeholder="Удобства" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Все</SelectItem>
+              <SelectItem value="tv">Телевизор</SelectItem>
+              <SelectItem value="ac">Кондиционер</SelectItem>
+              <SelectItem value="internet">Интернет</SelectItem>
+              <SelectItem value="fridge">Холодильник</SelectItem>
+              <SelectItem value="stove">Плита</SelectItem>
+              <SelectItem value="washing_machine">Стиральная машина</SelectItem>
+              <SelectItem value="water_heater">Водонагреватель</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
+            <SelectTrigger className="w-48 rounded-full">
+              <SelectValue placeholder="Можно с детьми" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Не важно</SelectItem>
+              <SelectItem value="yes">Да</SelectItem>
+              <SelectItem value="no">Нет</SelectItem>
+              <SelectItem value="negotiable">По договоренности</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={petsAllowed} onValueChange={setPetsAllowed}>
+            <SelectTrigger className="w-52 rounded-full">
+              <SelectValue placeholder="Можно с животными" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Не важно</SelectItem>
+              <SelectItem value="yes">Да</SelectItem>
+              <SelectItem value="no">Нет</SelectItem>
+              <SelectItem value="negotiable">По договоренности</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {(selectedType || selectedTransaction || minPrice || maxPrice || rooms || amenities.length > 0 || petsAllowed || childrenAllowed || streetSearch) && (
             <button
               onClick={resetFilters}
               className="px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
