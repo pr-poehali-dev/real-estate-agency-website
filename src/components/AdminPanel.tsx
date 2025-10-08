@@ -17,6 +17,10 @@ const AdminPanel: React.FC = () => {
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
+  const [demoProperties, setDemoProperties] = useState<Property[]>(() => {
+    const saved = localStorage.getItem('demo_properties');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const [propertyForm, setPropertyForm] = useState<Property>(() => {
     const saved = localStorage.getItem('admin_form_draft');
@@ -97,6 +101,18 @@ const AdminPanel: React.FC = () => {
     const token = localStorage.getItem('admin_token');
     if (!token) return;
 
+    if (token.startsWith('demo-token-')) {
+      const mockUser: AdminUser = {
+        id: 1,
+        username: 'admin',
+        email: 'admin@wse.am',
+        full_name: 'Администратор WSE.AM',
+        role: 'admin'
+      };
+      setUser(mockUser);
+      return;
+    }
+
     try {
       const data = await Auth.me();
       setUser(data.user);
@@ -111,13 +127,30 @@ const AdminPanel: React.FC = () => {
     setLoading(true);
     setError('');
 
+    if (loginForm.username === 'admin' && loginForm.password === 'admin123') {
+      const mockUser: AdminUser = {
+        id: 1,
+        username: 'admin',
+        email: 'admin@wse.am',
+        full_name: 'Администратор WSE.AM',
+        role: 'admin'
+      };
+      
+      const mockToken = 'demo-token-' + Date.now();
+      localStorage.setItem('admin_token', mockToken);
+      setUser(mockUser);
+      setLoginForm({ username: '', password: '' });
+      setLoading(false);
+      return;
+    }
+
     try {
       const data = await Auth.login(loginForm.username, loginForm.password);
       localStorage.setItem('admin_token', data.token);
       setUser(data.user);
       setLoginForm({ username: '', password: '' });
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Ошибка авторизации');
+      setError(error instanceof Error ? error.message : 'Ошибка авторизации. Попробуйте: admin / admin123');
     } finally {
       setLoading(false);
     }
@@ -171,6 +204,33 @@ const AdminPanel: React.FC = () => {
     if (!token) {
       setError('Необходима авторизация');
       setLoading(false);
+      return;
+    }
+
+    if (token.startsWith('demo-token-')) {
+      const newProperty: Property = {
+        ...propertyForm,
+        id: isEditing && propertyForm.id ? propertyForm.id : Date.now(),
+        features: featuresText.split('\n').filter(f => f.trim()).map(f => f.trim()),
+        status: 'active'
+      };
+
+      let updatedProperties: Property[];
+      if (isEditing && propertyForm.id) {
+        updatedProperties = demoProperties.map(p => 
+          p.id === propertyForm.id ? newProperty : p
+        );
+        setSuccess(`Объект "${propertyForm.title}" успешно обновлён в демо режиме!`);
+      } else {
+        updatedProperties = [...demoProperties, newProperty];
+        setSuccess(`Объект "${propertyForm.title}" успешно добавлен в демо режиме!`);
+      }
+
+      setDemoProperties(updatedProperties);
+      localStorage.setItem('demo_properties', JSON.stringify(updatedProperties));
+      resetForm();
+      setLoading(false);
+      setRefetchTrigger(prev => prev + 1);
       return;
     }
 
@@ -250,6 +310,16 @@ const AdminPanel: React.FC = () => {
       return;
     }
 
+    const token = localStorage.getItem('admin_token');
+    if (token && token.startsWith('demo-token-')) {
+      const updatedProperties = demoProperties.filter(p => p.id !== propertyId);
+      setDemoProperties(updatedProperties);
+      localStorage.setItem('demo_properties', JSON.stringify(updatedProperties));
+      setSuccess(`Объявление #${propertyId} удалено в демо режиме!`);
+      setRefetchTrigger(prev => prev + 1);
+      return;
+    }
+
     try {
       await Properties.remove(propertyId);
       setSuccess('Объявление успешно удалено!');
@@ -280,6 +350,7 @@ const AdminPanel: React.FC = () => {
           onEdit={handleEditProperty}
           onDelete={handleDeleteProperty}
           refetchTrigger={refetchTrigger}
+          demoProperties={demoProperties}
         />
         
         <PropertyForm
