@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Properties } from "@/lib/api";
 import type { Property as ApiProperty } from "@/lib/api";
 import Icon from "@/components/ui/icon";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 interface Property extends ApiProperty {
   id: number;
@@ -15,8 +17,16 @@ export default function PropertyPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [property, setProperty] = useState<Property | null>(null);
+  const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showMap, setShowMap] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  
+  // Filters
+  const [transactionType, setTransactionType] = useState('all');
+  const [propertyType, setPropertyType] = useState('all');
+  const [maxPrice, setMaxPrice] = useState('');
 
   useEffect(() => {
     loadProperty();
@@ -31,6 +41,7 @@ export default function PropertyPage() {
       const demoProps = demoData ? JSON.parse(demoData) : [];
       const found = demoProps.find((p: Property) => p.id === Number(id));
       setProperty(found || null);
+      setAllProperties(demoProps.filter((p: Property) => p.id !== Number(id)));
       setLoading(false);
       return;
     }
@@ -40,6 +51,7 @@ export default function PropertyPage() {
       const props = (response.properties || []) as Property[];
       const found = props.find(p => p.id === Number(id));
       setProperty(found || null);
+      setAllProperties(props.filter(p => p.id !== Number(id)));
     } catch (err) {
       console.error('Error loading property:', err);
       setProperty(null);
@@ -63,6 +75,13 @@ export default function PropertyPage() {
       setCurrentImageIndex((prev) => (prev - 1 + property.images.length) % property.images.length);
     }
   };
+
+  const filteredProperties = allProperties.filter(prop => {
+    if (transactionType !== 'all' && prop.transaction_type !== transactionType) return false;
+    if (propertyType !== 'all' && prop.property_type !== propertyType) return false;
+    if (maxPrice && prop.price > Number(maxPrice)) return false;
+    return true;
+  });
 
   if (loading) {
     return (
@@ -88,10 +107,10 @@ export default function PropertyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F3EE]">
+    <div className="min-h-screen bg-[#F5F3EE] flex flex-col">
       {/* Header */}
-      <header className="bg-white px-6 py-6 shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <header className="bg-white px-6 py-4 shadow-sm">
+        <div className="max-w-[1800px] mx-auto flex items-center justify-between">
           <Link to="/" className="text-2xl font-bold">WSE.AM</Link>
           <div className="flex gap-3">
             <Button 
@@ -102,99 +121,98 @@ export default function PropertyPage() {
               <Icon name="ArrowLeft" size={20} className="mr-2" />
               Назад
             </Button>
-            <Link to="/?filters=open">
-              <Button 
-                variant="outline"
-                className="border-gray-300 text-gray-700 hover:bg-gray-50"
-              >
-                <Icon name="SlidersHorizontal" size={20} className="mr-2" />
-                Фильтры
-              </Button>
-            </Link>
-            <Link to="/?view=map">
-              <Button 
-                variant="outline"
-                className="border-gray-300 text-gray-700 hover:bg-gray-50"
-              >
-                <Icon name="Map" size={20} className="mr-2" />
-                Карта
-              </Button>
-            </Link>
+            <Button 
+              onClick={() => setShowFilters(!showFilters)}
+              variant="outline"
+              className={`border-gray-300 text-gray-700 hover:bg-gray-50 ${showFilters ? 'bg-gray-100' : ''}`}
+            >
+              <Icon name="SlidersHorizontal" size={20} className="mr-2" />
+              Фильтры
+            </Button>
+            <Button 
+              onClick={() => setShowMap(!showMap)}
+              variant="outline"
+              className={`border-gray-300 text-gray-700 hover:bg-gray-50 ${showMap ? 'bg-gray-100' : ''}`}
+            >
+              <Icon name="Map" size={20} className="mr-2" />
+              Карта
+            </Button>
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Images */}
-          <div>
-            {property.images && property.images.length > 0 ? (
-              <div className="relative">
-                <img
-                  src={property.images[currentImageIndex]}
-                  alt={property.title}
-                  className="w-full h-[500px] object-cover rounded-2xl"
-                />
-                
-                {property.images.length > 1 && (
-                  <>
-                    <button
-                      onClick={prevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg"
-                    >
-                      <Icon name="ChevronLeft" size={24} />
-                    </button>
-                    <button
-                      onClick={nextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg"
-                    >
-                      <Icon name="ChevronRight" size={24} />
-                    </button>
-                    
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                      {currentImageIndex + 1} / {property.images.length}
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className="w-full h-[500px] bg-gray-200 rounded-2xl flex items-center justify-center">
-                <span className="text-gray-400 text-xl">Нет фото</span>
-              </div>
-            )}
-            
-            {property.images && property.images.length > 1 && (
-              <div className="flex gap-2 mt-4 overflow-x-auto">
-                {property.images.map((img, idx) => (
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left side - Property details */}
+        <div className="w-1/2 overflow-y-auto">
+          <div className="p-8">
+            {/* Images */}
+            <div className="mb-6">
+              {property.images && property.images.length > 0 ? (
+                <div className="relative">
                   <img
-                    key={idx}
-                    src={img}
-                    alt={`${property.title} - ${idx + 1}`}
-                    className={`w-24 h-24 object-cover rounded-lg cursor-pointer ${
-                      idx === currentImageIndex ? 'ring-4 ring-[#FF7A00]' : 'opacity-60 hover:opacity-100'
-                    }`}
-                    onClick={() => setCurrentImageIndex(idx)}
+                    src={property.images[currentImageIndex]}
+                    alt={property.title}
+                    className="w-full h-[400px] object-cover rounded-2xl"
                   />
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Details */}
-          <div>
-            <h1 className="text-4xl font-bold mb-4">{property.title}</h1>
-            
-            <div className="flex items-center gap-4 mb-6">
-              <span className="text-5xl font-bold text-[#FF7A00]">
-                {formatPrice(property.price, property.currency)}
-              </span>
-              {property.transaction_type === 'rent' && (
-                <span className="text-xl text-gray-600">в месяц</span>
+                  
+                  {property.images.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg"
+                      >
+                        <Icon name="ChevronLeft" size={24} />
+                      </button>
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg"
+                      >
+                        <Icon name="ChevronRight" size={24} />
+                      </button>
+                      
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                        {currentImageIndex + 1} / {property.images.length}
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="w-full h-[400px] bg-gray-200 rounded-2xl flex items-center justify-center">
+                  <span className="text-gray-400 text-xl">Нет фото</span>
+                </div>
+              )}
+              
+              {property.images && property.images.length > 1 && (
+                <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                  {property.images.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      alt={`${property.title} - ${idx + 1}`}
+                      className={`w-20 h-20 object-cover rounded-lg cursor-pointer flex-shrink-0 ${
+                        idx === currentImageIndex ? 'ring-4 ring-[#FF7A00]' : 'opacity-60 hover:opacity-100'
+                      }`}
+                      onClick={() => setCurrentImageIndex(idx)}
+                    />
+                  ))}
+                </div>
               )}
             </div>
 
-            <div className="bg-white rounded-2xl p-6 mb-6">
+            {/* Details */}
+            <h1 className="text-3xl font-bold mb-3">{property.title}</h1>
+            
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-4xl font-bold text-[#FF7A00]">
+                {formatPrice(property.price, property.currency)}
+              </span>
+              {property.transaction_type === 'rent' && (
+                <span className="text-lg text-gray-600">в месяц</span>
+              )}
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 mb-4">
               <h2 className="text-xl font-bold mb-4">Основная информация</h2>
               <div className="grid grid-cols-2 gap-4">
                 {property.rooms && (
@@ -240,7 +258,7 @@ export default function PropertyPage() {
             </div>
 
             {property.address && (
-              <div className="bg-white rounded-2xl p-6 mb-6">
+              <div className="bg-white rounded-2xl p-6 mb-4">
                 <h2 className="text-xl font-bold mb-3">Адрес</h2>
                 <div className="flex items-start gap-3">
                   <Icon name="MapPin" size={24} className="text-[#FF7A00] mt-1" />
@@ -255,13 +273,13 @@ export default function PropertyPage() {
             )}
 
             {property.description && (
-              <div className="bg-white rounded-2xl p-6 mb-6">
+              <div className="bg-white rounded-2xl p-6 mb-4">
                 <h2 className="text-xl font-bold mb-3">Описание</h2>
                 <p className="text-gray-700 whitespace-pre-wrap">{property.description}</p>
               </div>
             )}
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 sticky bottom-0 bg-[#F5F3EE] py-4">
               <a href="tel:+37495129260">
                 <Button className="w-full h-14 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl text-lg font-medium">
                   <Icon name="Phone" size={20} className="mr-2" />
@@ -277,20 +295,116 @@ export default function PropertyPage() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-6 mt-16">
-        <div className="max-w-7xl mx-auto text-center">
-          <h3 className="text-2xl font-bold text-[#FF7A00] mb-4">WSE.AM</h3>
-          <p className="text-gray-400 mb-4">Ваш надёжный партнёр в мире недвижимости Еревана</p>
-          <div className="border-t border-gray-800 pt-6 text-gray-400 text-sm">
-            <Link to="/admin" className="hover:text-[#FF7A00] transition-colors">
-              © 2023 WSE.AM. Все права защищены.
-            </Link>
-          </div>
+        {/* Right side - List & Map */}
+        <div className="w-1/2 border-l border-gray-200 bg-white flex flex-col">
+          {/* Filters */}
+          {showFilters && (
+            <div className="border-b border-gray-200 p-6 bg-gray-50">
+              <h3 className="font-bold text-lg mb-4">Фильтры</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Тип сделки</label>
+                  <Select value={transactionType} onValueChange={setTransactionType}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Все</SelectItem>
+                      <SelectItem value="rent">Аренда</SelectItem>
+                      <SelectItem value="sale">Продажа</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Тип недвижимости</label>
+                  <Select value={propertyType} onValueChange={setPropertyType}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Все</SelectItem>
+                      <SelectItem value="apartment">Квартира</SelectItem>
+                      <SelectItem value="house">Дом</SelectItem>
+                      <SelectItem value="commercial">Коммерческая</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Макс. цена</label>
+                  <Input 
+                    type="number" 
+                    placeholder="Любая"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Map or List */}
+          {showMap ? (
+            <div className="flex-1 relative">
+              <iframe
+                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48624.58415456418!2d44.47379!3d40.18111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x406abd39496ad82b%3A0x2e2579e7e2d4621b!2sYerevan%2C%20Armenia!5e0!3m2!1sen!2s!4v1234567890`}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="absolute inset-0"
+              />
+            </div>
+          ) : (
+            <div className="flex-1 overflow-y-auto p-6">
+              <h3 className="font-bold text-xl mb-4">Другие объекты ({filteredProperties.length})</h3>
+              
+              {filteredProperties.length === 0 ? (
+                <p className="text-gray-500 text-center py-12">Нет объектов с такими параметрами</p>
+              ) : (
+                <div className="space-y-4">
+                  {filteredProperties.map((prop) => (
+                    <Link 
+                      key={prop.id} 
+                      to={`/property/${prop.id}`}
+                      className="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
+                    >
+                      <div className="flex gap-4 p-4">
+                        <img 
+                          src={prop.images?.[0] || '/placeholder.jpg'} 
+                          alt={prop.title}
+                          className="w-32 h-32 object-cover rounded-lg flex-shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-lg mb-2 truncate">{prop.title}</h4>
+                          <p className="text-2xl font-bold text-[#FF7A00] mb-2">
+                            {formatPrice(prop.price, prop.currency)}
+                          </p>
+                          <div className="flex gap-4 text-sm text-gray-600">
+                            {prop.rooms && <span>{prop.rooms} комн.</span>}
+                            {prop.area && <span>{prop.area} м²</span>}
+                            {prop.floor && <span>{prop.floor} этаж</span>}
+                          </div>
+                          {prop.address && (
+                            <p className="text-sm text-gray-500 mt-2 truncate">
+                              <Icon name="MapPin" size={14} className="inline mr-1" />
+                              {prop.address}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      </footer>
+      </div>
     </div>
   );
 }
