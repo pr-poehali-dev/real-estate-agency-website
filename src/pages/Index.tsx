@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Properties } from "@/lib/api";
 import type { Property as ApiProperty } from "@/lib/api";
@@ -19,23 +18,8 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const [transactionType, setTransactionType] = useState('rent');
   const [propertyType, setPropertyType] = useState('all');
-  const [district, setDistrict] = useState('all');
   const [maxPrice, setMaxPrice] = useState('');
-  
-  const districts = [
-    'Аван', 'Аджапняк', 'Арабкир', 'Давташен', 'Канакер-Зейтун',
-    'Малатия-Себастия', 'Нор Норк', 'Нубарашен', 'Центр', 'Шенгавит', 'Эребуни'
-  ];
-  
-  const [contactForm, setContactForm] = useState({
-    name: '',
-    contact_method: 'telegram',
-    contact_value: '',
-    service_type: 'rent',
-    message: ''
-  });
-  const [formLoading, setFormLoading] = useState(false);
-  const [formSuccess, setFormSuccess] = useState(false);
+  const [activeTab, setActiveTab] = useState('apartment');
 
   useEffect(() => {
     loadProperties();
@@ -64,194 +48,187 @@ export default function Index() {
     }
   };
 
-  const handleContactSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormLoading(true);
-    setFormSuccess(false);
-
-    const message = `🏠 *Новая заявка с сайта WSE.AM*\n\n` +
-      `👤 *Имя:* ${contactForm.name}\n` +
-      `📞 *Способ связи:* ${contactForm.contact_method === 'telegram' ? 'Telegram' : contactForm.contact_method === 'phone' ? 'Телефон' : 'WhatsApp'}\n` +
-      `📱 *Контакт:* ${contactForm.contact_value}\n` +
-      `🏡 *Тип услуги:* ${contactForm.service_type === 'rent' ? 'Аренда квартир' : contactForm.service_type === 'sale' ? 'Покупка недвижимости' : 'Консультация'}\n` +
-      `💬 *Сообщение:* ${contactForm.message || 'Не указано'}`;
-
-    try {
-      const TELEGRAM_BOT_TOKEN = '7777777777:AAHexampleTokenHere';
-      const TELEGRAM_CHAT_ID = '-1001234567890';
-      
-      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: message,
-          parse_mode: 'Markdown'
-        })
-      });
-
-      setFormSuccess(true);
-      setContactForm({
-        name: '',
-        contact_method: 'telegram',
-        contact_value: '',
-        service_type: 'rent',
-        message: ''
-      });
-    } catch (error) {
-      console.error('Error sending message:', error);
-    } finally {
-      setFormLoading(false);
-    }
-  };
-
   const formatPrice = (price: number, currency: string) => {
     return `${price.toLocaleString()} ${currency}`;
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white font-sans">
       {/* Header */}
-      <header className="bg-white">
-        <div className="px-8 py-4 flex items-center justify-between max-w-7xl mx-auto">
-          <Link to="/" className="text-xl font-bold">WSE.AM</Link>
+      <header className="bg-white border-b border-gray-100 shadow-sm">
+        <div className="max-w-[1200px] mx-auto px-6 py-4 flex items-center justify-between">
+          <Link to="/" className="text-[20px] font-bold text-[#0B0B0B]">WSE.AM</Link>
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/map" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">Аренда</Link>
-            <Link to="/map?transaction=sale" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">Продажа</Link>
-            <a href="#contact" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">О компании</a>
+            <Link to="/map" className="text-[#6B7280] hover:text-[#0B0B0B] transition-colors text-[14px]">Аренда</Link>
+            <Link to="/map?transaction=sale" className="text-[#6B7280] hover:text-[#0B0B0B] transition-colors text-[14px]">Продажа</Link>
+            <a href="#contact" className="text-[#6B7280] hover:text-[#0B0B0B] transition-colors text-[14px]">О компании</a>
+            <a href="#reviews" className="text-[#6B7280] hover:text-[#0B0B0B] transition-colors text-[14px]">Отзывы</a>
             <Button 
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium"
+              className="bg-[#F97316] hover:bg-[#EA6A0C] active:translate-y-[1px] text-white rounded-[12px] px-5 h-[40px] text-[14px] font-semibold shadow-none transition-all duration-200"
             >
-              СТА
+              CTA
             </Button>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-[#F8F8F8] overflow-hidden">
-        <div className="max-w-7xl mx-auto px-8 pt-12 pb-8">
-          <div className="relative z-10 max-w-xl">
-            <h1 className="text-4xl font-bold mb-2 leading-tight">
+      <section className="relative bg-white overflow-hidden">
+        <div className="max-w-[1200px] mx-auto px-6 pt-16 pb-12">
+          <div className="relative z-10 max-w-[600px]">
+            <h1 className="text-[36px] font-bold mb-2 leading-[120%] text-[#0B0B0B]">
               Поиск недвижимости<br />в Ереване
             </h1>
-            <p className="text-sm text-gray-600 mb-6">Найдите идеальный вариант</p>
+            <p className="text-[14px] text-[#6B7280] mb-8">Найдите идеальный вариант</p>
 
             {/* Search Form */}
-            <div className="bg-white rounded-lg shadow-sm p-3 mb-4">
-              <div className="flex gap-2.5">
+            <div className="bg-white rounded-[14px] shadow-[0_8px_24px_rgba(0,0,0,0.06)] p-3 mb-4">
+              <div className="grid grid-cols-4 gap-3">
                 <Select value={transactionType} onValueChange={setTransactionType}>
-                  <SelectTrigger className="h-11 rounded border-gray-300 text-sm flex-1">
+                  <SelectTrigger className="h-12 rounded-[12px] border-[#E5E7EB] text-[14px] focus:border-[#F97316] focus:ring-[#F97316] focus:ring-opacity-25">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="rent">Аренда</SelectItem>
-                    <SelectItem value="sale">Продажа</SelectItem>
+                  <SelectContent className="rounded-[12px] shadow-[0_12px_32px_rgba(0,0,0,0.12)]">
+                    <SelectItem value="rent" className="focus:bg-[#FFF7ED] focus:text-[#F97316]">Аренда</SelectItem>
+                    <SelectItem value="sale" className="focus:bg-[#FFF7ED] focus:text-[#F97316]">Продажа</SelectItem>
                   </SelectContent>
                 </Select>
 
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="h-11 rounded border-gray-300 text-sm flex-1">
+                  <SelectTrigger className="h-12 rounded-[12px] border-[#E5E7EB] text-[14px] focus:border-[#F97316] focus:ring-[#F97316] focus:ring-opacity-25">
                     <SelectValue placeholder="Тип недвижимости" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Все типы</SelectItem>
-                    <SelectItem value="apartment">Квартира</SelectItem>
-                    <SelectItem value="house">Дом</SelectItem>
-                    <SelectItem value="commercial">Коммерческая</SelectItem>
+                  <SelectContent className="rounded-[12px] shadow-[0_12px_32px_rgba(0,0,0,0.12)]">
+                    <SelectItem value="all" className="focus:bg-[#FFF7ED] focus:text-[#F97316]">Все типы</SelectItem>
+                    <SelectItem value="apartment" className="focus:bg-[#FFF7ED] focus:text-[#F97316]">Квартира</SelectItem>
+                    <SelectItem value="house" className="focus:bg-[#FFF7ED] focus:text-[#F97316]">Дом</SelectItem>
+                    <SelectItem value="commercial" className="focus:bg-[#FFF7ED] focus:text-[#F97316]">Коммерческая</SelectItem>
                   </SelectContent>
                 </Select>
 
                 <Input
                   type="number"
-                  placeholder="Цена до, $"
+                  placeholder="Цена до, ֏"
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
-                  className="h-11 rounded border-gray-300 text-sm flex-1"
+                  className="h-12 rounded-[12px] border-[#E5E7EB] text-[14px] focus:border-[#F97316] focus:ring-[#F97316] focus:ring-opacity-25"
                 />
                 
-                <Link to="/map">
-                  <Button className="h-11 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded text-sm font-medium px-8">
+                <Link to="/map" className="w-full">
+                  <Button className="w-full h-12 bg-[#F97316] hover:bg-[#EA6A0C] active:translate-y-[1px] text-white rounded-[12px] text-[14px] font-semibold transition-all duration-200">
                     Найти
                   </Button>
                 </Link>
               </div>
             </div>
             
-            {/* Category Buttons */}
-            <div className="flex gap-2.5">
-              <Link to="/map?type=apartment">
-                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded px-6 h-9 text-sm font-medium">
-                  КВАРТИРЫ
-                </Button>
-              </Link>
-              <Link to="/map?type=house">
-                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded px-6 h-9 text-sm font-medium">
-                  ДОМА
-                </Button>
-              </Link>
-              <Link to="/map?type=commercial">
-                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded px-6 h-9 text-sm font-medium">
-                  КОММЕРЧЕСКАЯ
-                </Button>
-              </Link>
+            {/* Category Tabs */}
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setActiveTab('apartment')}
+                className={`h-[40px] px-5 rounded-full text-[14px] font-semibold transition-all duration-200 ${
+                  activeTab === 'apartment' 
+                    ? 'bg-[#F97316] text-white' 
+                    : 'bg-white border border-[#F97316] text-[#F97316] hover:bg-[#FFF7ED]'
+                }`}
+              >
+                КВАРТИРЫ
+              </button>
+              <button 
+                onClick={() => setActiveTab('house')}
+                className={`h-[40px] px-5 rounded-full text-[14px] font-semibold transition-all duration-200 ${
+                  activeTab === 'house' 
+                    ? 'bg-[#F97316] text-white' 
+                    : 'bg-white border border-[#F97316] text-[#F97316] hover:bg-[#FFF7ED]'
+                }`}
+              >
+                ДОМА
+              </button>
+              <button 
+                onClick={() => setActiveTab('commercial')}
+                className={`h-[40px] px-5 rounded-full text-[14px] font-semibold transition-all duration-200 ${
+                  activeTab === 'commercial' 
+                    ? 'bg-[#F97316] text-white' 
+                    : 'bg-white border border-[#F97316] text-[#F97316] hover:bg-[#FFF7ED]'
+                }`}
+              >
+                КОММЕРЧЕСКАЯ
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Mountain Illustration */}
-        <div className="absolute right-0 top-0 w-1/2 h-full pointer-events-none">
-          <svg viewBox="0 0 800 200" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
-            <path d="M 200 120 L 350 50 L 500 100 L 650 60 L 800 90 L 800 200 L 0 200 Z" fill="#FF7A00"/>
-            <path d="M 0 150 L 200 110 L 400 140 L 600 100 L 800 130 L 800 200 L 0 200 Z" fill="#FF9944" opacity="0.85"/>
+        {/* Ararat Mountain Illustration */}
+        <div className="absolute right-0 top-8 w-[50%] h-[280px] pointer-events-none flex items-center justify-center">
+          <svg viewBox="0 0 600 200" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+            <path d="M 50 140 L 180 60 L 300 120 L 420 70 L 550 120 L 600 140 L 600 200 L 0 200 Z" fill="#F97316" opacity="1"/>
           </svg>
         </div>
       </section>
 
       {/* Recently Added */}
-      <section className="px-8 py-8 max-w-7xl mx-auto bg-white">
-        <h2 className="text-2xl font-bold mb-5">Недавно добавленные</h2>
+      <section className="px-6 py-16 max-w-[1200px] mx-auto bg-white">
+        <h2 className="text-[22px] font-semibold mb-8 text-[#0B0B0B]">Недавно добавленные</h2>
         
         {loading ? (
-          <div className="text-center py-12 text-gray-500">Загрузка...</div>
+          <div className="text-center py-12 text-[#6B7280]">Загрузка...</div>
         ) : properties.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-[#6B7280]">
             <p>Нет добавленных объектов</p>
-            <Link to="/admin" className="text-[#FF7A00] hover:underline mt-2 inline-block">
+            <Link to="/admin" className="text-[#F97316] hover:underline mt-2 inline-block">
               Добавить первый объект
             </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {properties.map((property) => (
-              <div key={property.id} className="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow">
+              <div 
+                key={property.id} 
+                className="bg-white rounded-[16px] overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-200 cursor-pointer group"
+              >
                 {property.images && property.images.length > 0 ? (
                   <img
                     src={property.images[0]}
                     alt={property.title}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-[180px] object-cover group-hover:scale-[1.01] transition-transform duration-200"
+                    loading="lazy"
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400 text-sm">Нет фото</span>
+                  <div className="w-full h-[180px] bg-gray-200 flex items-center justify-center">
+                    <span className="text-[#6B7280] text-[14px]">Нет фото</span>
                   </div>
                 )}
                 
                 <div className="p-4">
-                  <p className="text-lg font-bold text-gray-900 mb-1">
+                  <p className="text-[16px] font-bold text-[#0B0B0B] mb-1">
                     {formatPrice(property.price, property.currency)}
-                    {property.transaction_type === 'rent' && <span className="text-sm font-normal"> в месяц</span>}
+                    {property.transaction_type === 'rent' && <span className="text-[14px] font-normal"> в месяц</span>}
                   </p>
                   
-                  <p className="text-gray-600 text-sm mb-2">
+                  <p className="text-[#6B7280] text-[14px] mb-3">
                     {property.street_name || property.address}
                   </p>
                   
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
-                    {property.rooms && <span>{property.rooms} комнат</span>}
-                    {property.area && <span>• {property.area} м²</span>}
-                    {property.floor && <span>• {property.floor} этаж</span>}
+                  <div className="flex items-center gap-3 text-[12px] text-[#6B7280]">
+                    {property.rooms && (
+                      <div className="flex items-center gap-1">
+                        <Icon name="Home" size={16} className="text-[#6B7280]" />
+                        <span>{property.rooms} комнат</span>
+                      </div>
+                    )}
+                    {property.area && (
+                      <div className="flex items-center gap-1">
+                        <span>•</span>
+                        <span>{property.area} м²</span>
+                      </div>
+                    )}
+                    {property.floor && (
+                      <div className="flex items-center gap-1">
+                        <span>•</span>
+                        <span>{property.floor} этаж</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -260,201 +237,13 @@ export default function Index() {
         )}
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="px-6 py-16 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center">Свяжитесь с нами</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div className="bg-[#F5F3EE] rounded-2xl p-8">
-              <form onSubmit={handleContactSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Имя</label>
-                  <Input
-                    value={contactForm.name}
-                    onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
-                    placeholder="Ваше имя"
-                    required
-                    className="rounded-xl"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Способ связи</label>
-                  <Select value={contactForm.contact_method} onValueChange={(value) => setContactForm({...contactForm, contact_method: value})}>
-                    <SelectTrigger className="rounded-xl">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="telegram">Telegram</SelectItem>
-                      <SelectItem value="phone">Телефон</SelectItem>
-                      <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Контакт (Telegram)</label>
-                  <Input
-                    value={contactForm.contact_value}
-                    onChange={(e) => setContactForm({...contactForm, contact_value: e.target.value})}
-                    placeholder="@username или +7..."
-                    required
-                    className="rounded-xl"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Тип услуги</label>
-                  <Select value={contactForm.service_type} onValueChange={(value) => setContactForm({...contactForm, service_type: value})}>
-                    <SelectTrigger className="rounded-xl">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="rent">Аренда</SelectItem>
-                      <SelectItem value="sale">Покупка</SelectItem>
-                      <SelectItem value="consultation">Консультация</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Сообщение</label>
-                  <Textarea
-                    value={contactForm.message}
-                    onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
-                    placeholder="Расскажите о ваших требованиях..."
-                    rows={4}
-                    className="rounded-xl"
-                  />
-                </div>
-
-                {formSuccess && (
-                  <div className="bg-green-50 text-green-600 p-3 rounded-xl text-sm">
-                    Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.
-                  </div>
-                )}
-
-                <Button 
-                  type="submit" 
-                  disabled={formLoading}
-                  className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl text-base font-medium"
-                >
-                  {formLoading ? 'Отправка...' : 'Отправить заявку'}
-                </Button>
-              </form>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-8">
-              <h3 className="text-2xl font-bold mb-6">Свяжитесь с нами</h3>
-              
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Icon name="Phone" size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="font-medium mb-1">Телефон</p>
-                    <a href="tel:+37495129260" className="text-[#FF7A00] text-lg font-semibold hover:underline">
-                      +374 95129260
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Icon name="Send" size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="font-medium mb-1">Telegram</p>
-                    <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-lg font-semibold hover:underline">
-                      WSEManager
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Icon name="Instagram" size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="font-medium mb-1">Instagram</p>
-                    <a href="https://instagram.com/w.s.e._am" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-lg font-semibold hover:underline">
-                      w.s.e._am
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Icon name="MapPin" size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="font-medium mb-1">Адрес</p>
-                    <p className="text-[#FF7A00] text-lg font-semibold">
-                      Ереван ул. Хоренаци 47/7
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-[#F5F3EE] rounded-2xl p-6 mt-8">
-                <h4 className="font-bold mb-4">Режим работы</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>Пн-Пт:</span>
-                    <span className="font-medium">11:00 - 19:00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Сб:</span>
-                    <span className="font-medium">10:00 - 16:00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Вс:</span>
-                    <span className="font-medium">Выходной</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
-      <footer id="services" className="bg-gray-900 text-white py-12 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8">
-            <div>
-              <h3 className="text-2xl font-bold text-[#FF7A00] mb-4">WSE.AM</h3>
-              <p className="text-gray-400">
-                Ваш надёжный партнёр в мире недвижимости Еревана
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="font-bold mb-4">Услуги</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Аренда квартир</li>
-                <li>Покупка недвижимости</li>
-                <li>Консультации</li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-bold mb-4">Свяжитесь с нами</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Телефон: <a href="tel:+37495129260" className="text-[#FF7A00] hover:underline">+374 95129260</a></li>
-                <li>Telegram: <a href="https://t.me/WSEManager" className="text-[#FF7A00] hover:underline">WSEManager</a></li>
-                <li>Instagram: <a href="https://instagram.com/w.s.e._am" className="text-[#FF7A00] hover:underline">w.s.e._am</a></li>
-                <li className="text-[#FF7A00]">Ереван ул. Хоренаци 47/7</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
-            © 2023 WSE.AM. Все права защищены.
+      <footer className="bg-white border-t border-[#E5E7EB] py-6">
+        <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-[13px] text-[#6B7280]">
+          <p>© 2023 WSE.AM. Все права защищены.</p>
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <a href="#privacy" className="hover:text-[#0B0B0B] transition-colors">Политика конфиденциальности</a>
+            <a href="#contact" className="hover:text-[#0B0B0B] transition-colors">Контакты</a>
           </div>
         </div>
       </footer>
