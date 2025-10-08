@@ -29,6 +29,16 @@ const MapPage: React.FC = () => {
     setLoading(true);
     setError('');
 
+    const token = localStorage.getItem('admin_token');
+    
+    if (token && token.startsWith('demo-token-')) {
+      const demoData = localStorage.getItem('demo_properties');
+      const demoProps = demoData ? JSON.parse(demoData) : [];
+      setAllProperties(demoProps);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await Properties.list();
       const props = (response.properties || []) as Property[];
