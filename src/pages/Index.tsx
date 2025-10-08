@@ -107,7 +107,7 @@ export default function Index() {
     <div className="min-h-screen bg-[#F5F3EE]">
       {/* Header */}
       <header className="px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
-        <Link to="/" className="text-2xl font-bold">WSE.AM</Link>
+        <Link to="/admin" className="text-2xl font-bold cursor-pointer">WSE.AM</Link>
         <nav className="hidden md:flex items-center gap-8">
           <a href="#services" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Услуги</a>
           <Link to="/map" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Карта</Link>
@@ -439,7 +439,9 @@ export default function Index() {
           </div>
           
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
-            © 2023 WSE.AM. Все права защищены.
+            <Link to="/admin" className="hover:text-[#FF7A00] transition-colors cursor-pointer">
+              © 2023 WSE.AM. Все права защищены.
+            </Link>
           </div>
         </div>
       </footer>
