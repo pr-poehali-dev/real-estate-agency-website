@@ -191,18 +191,11 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Mount Ararat Illustration */}
-        <div className="absolute right-0 top-0 w-full h-full pointer-events-none overflow-hidden">
-          <svg viewBox="0 0 1200 400" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
-            {/* Малый Арарат (левая гора, ниже) */}
-            <path d="M 200 300 L 400 120 L 500 180 L 600 300 Z" fill="#FF8C1A" opacity="0.85"/>
-            
-            {/* Большой Арарат (правая гора, выше) */}
-            <path d="M 450 300 L 750 40 L 1050 300 Z" fill="#FF7A00" opacity="0.95"/>
-            
-            {/* Передние холмы для глубины */}
-            <path d="M 0 320 Q 150 280 300 320 T 600 320 T 900 320 T 1200 320 L 1200 400 L 0 400 Z" fill="#FF9933" opacity="0.7"/>
-            <path d="M 0 350 Q 200 310 400 350 T 800 350 T 1200 350 L 1200 400 L 0 400 Z" fill="#FFB366" opacity="0.5"/>
+        {/* Mountain Illustration */}
+        <div className="absolute right-0 top-0 w-1/2 h-full pointer-events-none overflow-hidden">
+          <svg viewBox="0 0 800 400" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
+            <path d="M 0 250 Q 200 100 350 200 T 650 150 L 800 400 L 0 400 Z" fill="#FF7A00" opacity="0.9"/>
+            <path d="M 100 300 Q 300 150 500 250 T 800 200 L 800 400 L 100 400 Z" fill="#FF7A00" opacity="0.7"/>
           </svg>
         </div>
       </section>
