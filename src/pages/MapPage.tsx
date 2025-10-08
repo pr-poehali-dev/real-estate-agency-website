@@ -4,6 +4,7 @@ import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { MultiSelect } from '@/components/ui/multi-select';
 import Icon from '@/components/ui/icon';
 import { Properties } from '@/lib/api';
 import type { Property as ApiProperty } from '@/lib/api';
@@ -204,21 +205,21 @@ const MapPage: React.FC = () => {
             </SelectContent>
           </Select>
 
-          <Select value={amenities.join(',')} onValueChange={(val) => setAmenities(val ? [val] : [])}>
-            <SelectTrigger className="w-40 rounded-full">
-              <SelectValue placeholder="Удобства" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="">Все</SelectItem>
-              <SelectItem value="tv">Телевизор</SelectItem>
-              <SelectItem value="ac">Кондиционер</SelectItem>
-              <SelectItem value="internet">Интернет</SelectItem>
-              <SelectItem value="fridge">Холодильник</SelectItem>
-              <SelectItem value="stove">Плита</SelectItem>
-              <SelectItem value="washing_machine">Стиральная машина</SelectItem>
-              <SelectItem value="water_heater">Водонагреватель</SelectItem>
-            </SelectContent>
-          </Select>
+          <MultiSelect
+            options={[
+              { label: 'Телевизор', value: 'tv' },
+              { label: 'Кондиционер', value: 'ac' },
+              { label: 'Интернет', value: 'internet' },
+              { label: 'Холодильник', value: 'fridge' },
+              { label: 'Плита', value: 'stove' },
+              { label: 'Стиральная машина', value: 'washing_machine' },
+              { label: 'Водонагреватель', value: 'water_heater' },
+            ]}
+            selected={amenities}
+            onChange={setAmenities}
+            placeholder="Удобства"
+            className="w-44"
+          />
 
           <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
             <SelectTrigger className="w-48 rounded-full">
