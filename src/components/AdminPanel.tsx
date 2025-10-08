@@ -97,18 +97,6 @@ const AdminPanel: React.FC = () => {
     const token = localStorage.getItem('admin_token');
     if (!token) return;
 
-    if (token.startsWith('demo-token-')) {
-      const mockUser: AdminUser = {
-        id: 1,
-        username: 'admin',
-        email: 'admin@wse.am',
-        full_name: 'Администратор WSE.AM',
-        role: 'admin'
-      };
-      setUser(mockUser);
-      return;
-    }
-
     try {
       const data = await Auth.me();
       setUser(data.user);
@@ -123,30 +111,13 @@ const AdminPanel: React.FC = () => {
     setLoading(true);
     setError('');
 
-    if (loginForm.username === 'admin' && loginForm.password === 'admin123') {
-      const mockUser: AdminUser = {
-        id: 1,
-        username: 'admin',
-        email: 'admin@wse.am',
-        full_name: 'Администратор WSE.AM',
-        role: 'admin'
-      };
-      
-      const mockToken = 'demo-token-' + Date.now();
-      localStorage.setItem('admin_token', mockToken);
-      setUser(mockUser);
-      setLoginForm({ username: '', password: '' });
-      setLoading(false);
-      return;
-    }
-
     try {
       const data = await Auth.login(loginForm.username, loginForm.password);
       localStorage.setItem('admin_token', data.token);
       setUser(data.user);
       setLoginForm({ username: '', password: '' });
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Ошибка авторизации. Попробуйте: admin / admin123');
+      setError(error instanceof Error ? error.message : 'Ошибка авторизации');
     } finally {
       setLoading(false);
     }
@@ -200,15 +171,6 @@ const AdminPanel: React.FC = () => {
     if (!token) {
       setError('Необходима авторизация');
       setLoading(false);
-      return;
-    }
-
-    if (token.startsWith('demo-token-')) {
-      const action = isEditing ? 'обновлён' : 'добавлен';
-      setSuccess(`Объект "${propertyForm.title}" успешно ${action} в демо режиме!`);
-      resetForm();
-      setLoading(false);
-      setRefetchTrigger(prev => prev + 1);
       return;
     }
 
@@ -285,13 +247,6 @@ const AdminPanel: React.FC = () => {
 
   const handleDeleteProperty = async (propertyId: number) => {
     if (!confirm('Вы уверены, что хотите удалить это объявление?')) {
-      return;
-    }
-
-    const token = localStorage.getItem('admin_token');
-    if (token && token.startsWith('demo-token-')) {
-      setSuccess(`Объявление #${propertyId} удалено в демо режиме!`);
-      setRefetchTrigger(prev => prev + 1);
       return;
     }
 
