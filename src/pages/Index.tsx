@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ServicesSection from "@/components/ServicesSection";
+import MapPreview from "@/components/MapPreview";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
@@ -47,6 +48,7 @@ export default function Index() {
         scrollToContact={scrollToContact} 
       />
       <HeroSection t={t} isVisible={isVisible} scrollToContact={scrollToContact} />
+      <MapPreview t={t} isVisible={isVisible} />
       <AboutSection t={t} isVisible={isVisible} />
       <ServicesSection t={t} isVisible={isVisible} />
       <ContactSection t={t} isVisible={isVisible} language={language} />
