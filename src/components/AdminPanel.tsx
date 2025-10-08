@@ -50,7 +50,9 @@ const AdminPanel: React.FC = () => {
           latitude: 40.1792,
           longitude: 44.4991,
           features: [],
-          images: []
+          images: [],
+          pets_allowed: 'any',
+          children_allowed: 'any'
         };
       }
     }
@@ -76,7 +78,9 @@ const AdminPanel: React.FC = () => {
       latitude: 40.1792,
       longitude: 44.4991,
       features: [],
-      images: []
+      images: [],
+      pets_allowed: 'any',
+      children_allowed: 'any'
     };
   });
 
@@ -184,7 +188,9 @@ const AdminPanel: React.FC = () => {
       latitude: 40.1792,
       longitude: 44.4991,
       features: [],
-      images: []
+      images: [],
+      pets_allowed: 'any',
+      children_allowed: 'any'
     };
     setPropertyForm(emptyForm);
     setFeaturesText('');
@@ -260,6 +266,8 @@ const AdminPanel: React.FC = () => {
         apartment_number: propertyForm.apartment_number?.trim() || '',
         features,
         images: propertyForm.images || [],
+        pets_allowed: propertyForm.pets_allowed || 'any',
+        children_allowed: propertyForm.children_allowed || 'any',
         status: 'active'
       };
 
@@ -291,7 +299,9 @@ const AdminPanel: React.FC = () => {
       house_number: property.house_number || '',
       apartment_number: property.apartment_number || '',
       features: property.features || [],
-      images: property.images || []
+      images: property.images || [],
+      pets_allowed: property.pets_allowed || 'any',
+      children_allowed: property.children_allowed || 'any'
     });
     
     setFeaturesText((property.features || []).join('\n'));

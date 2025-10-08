@@ -177,54 +177,34 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="bedrooms">Спален</Label>
-                  <Input
-                    id="bedrooms"
-                    type="number"
-                    value={propertyForm.bedrooms || ''}
-                    onChange={(e) => setPropertyForm(prev => ({...prev, bedrooms: e.target.value ? Number(e.target.value) : 0}))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="bathrooms">Ванных</Label>
-                  <Input
-                    id="bathrooms"
-                    type="number"
-                    value={propertyForm.bathrooms || ''}
-                    onChange={(e) => setPropertyForm(prev => ({...prev, bathrooms: e.target.value ? Number(e.target.value) : 0}))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="year_built">Год постройки</Label>
-                  <Input
-                    id="year_built"
-                    type="number"
-                    value={propertyForm.year_built || ''}
-                    onChange={(e) => setPropertyForm(prev => ({...prev, year_built: e.target.value ? Number(e.target.value) : 0}))}
-                  />
-                </div>
-              </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="floor">Этаж</Label>
-                  <Input
-                    id="floor"
-                    type="number"
-                    value={propertyForm.floor || ''}
-                    onChange={(e) => setPropertyForm(prev => ({...prev, floor: e.target.value ? Number(e.target.value) : 0}))}
-                  />
+                  <Label htmlFor="pets_allowed">Можно с животными</Label>
+                  <Select value={propertyForm.pets_allowed || 'any'} onValueChange={(value) => setPropertyForm(prev => ({...prev, pets_allowed: value}))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Не важно" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="any">Не важно</SelectItem>
+                      <SelectItem value="yes">Да</SelectItem>
+                      <SelectItem value="no">Нет</SelectItem>
+                      <SelectItem value="negotiable">По договоренности</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
-                  <Label htmlFor="total_floors">Всего этажей</Label>
-                  <Input
-                    id="total_floors"
-                    type="number"
-                    value={propertyForm.total_floors || ''}
-                    onChange={(e) => setPropertyForm(prev => ({...prev, total_floors: e.target.value ? Number(e.target.value) : 0}))}
-                  />
+                  <Label htmlFor="children_allowed">Можно с детьми</Label>
+                  <Select value={propertyForm.children_allowed || 'any'} onValueChange={(value) => setPropertyForm(prev => ({...prev, children_allowed: value}))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Не важно" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="any">Не важно</SelectItem>
+                      <SelectItem value="yes">Да</SelectItem>
+                      <SelectItem value="no">Нет</SelectItem>
+                      <SelectItem value="negotiable">По договоренности</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
