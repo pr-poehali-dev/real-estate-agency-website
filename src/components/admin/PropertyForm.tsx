@@ -90,7 +90,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
             {isEditing ? "Редактировать объект недвижимости" : "Добавить объект недвижимости"}
           </div>
           {isEditing && onCancel && (
-            <Button variant="ghost" onClick={onCancel}>
+            <Button type="button" variant="ghost" onClick={onCancel}>
               <Icon name="X" size={16} />
             </Button>
           )}
