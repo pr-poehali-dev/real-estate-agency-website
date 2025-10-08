@@ -168,8 +168,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   <Input
                     id="price"
                     type="number"
-                    value={propertyForm.price}
-                    onChange={(e) => setPropertyForm({...propertyForm, price: Number(e.target.value)})}
+                    value={propertyForm.price || ''}
+                    onChange={(e) => setPropertyForm({...propertyForm, price: e.target.value ? Number(e.target.value) : 0})}
                     required
                   />
                 </div>
@@ -198,8 +198,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     id="area"
                     type="number"
                     step="0.1"
-                    value={propertyForm.area}
-                    onChange={(e) => setPropertyForm({...propertyForm, area: Number(e.target.value)})}
+                    value={propertyForm.area || ''}
+                    onChange={(e) => setPropertyForm({...propertyForm, area: e.target.value ? Number(e.target.value) : 0})}
                   />
                 </div>
                 <div>
@@ -207,8 +207,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   <Input
                     id="rooms"
                     type="number"
-                    value={propertyForm.rooms}
-                    onChange={(e) => setPropertyForm({...propertyForm, rooms: Number(e.target.value)})}
+                    value={propertyForm.rooms || ''}
+                    onChange={(e) => setPropertyForm({...propertyForm, rooms: e.target.value ? Number(e.target.value) : 0})}
                   />
                 </div>
               </div>
@@ -219,8 +219,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   <Input
                     id="bedrooms"
                     type="number"
-                    value={propertyForm.bedrooms}
-                    onChange={(e) => setPropertyForm({...propertyForm, bedrooms: Number(e.target.value)})}
+                    value={propertyForm.bedrooms || ''}
+                    onChange={(e) => setPropertyForm({...propertyForm, bedrooms: e.target.value ? Number(e.target.value) : 0})}
                   />
                 </div>
                 <div>
@@ -228,8 +228,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   <Input
                     id="bathrooms"
                     type="number"
-                    value={propertyForm.bathrooms}
-                    onChange={(e) => setPropertyForm({...propertyForm, bathrooms: Number(e.target.value)})}
+                    value={propertyForm.bathrooms || ''}
+                    onChange={(e) => setPropertyForm({...propertyForm, bathrooms: e.target.value ? Number(e.target.value) : 0})}
                   />
                 </div>
                 <div>
@@ -237,8 +237,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   <Input
                     id="year_built"
                     type="number"
-                    value={propertyForm.year_built}
-                    onChange={(e) => setPropertyForm({...propertyForm, year_built: Number(e.target.value)})}
+                    value={propertyForm.year_built || ''}
+                    onChange={(e) => setPropertyForm({...propertyForm, year_built: e.target.value ? Number(e.target.value) : 0})}
                   />
                 </div>
               </div>
@@ -249,8 +249,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   <Input
                     id="floor"
                     type="number"
-                    value={propertyForm.floor}
-                    onChange={(e) => setPropertyForm({...propertyForm, floor: Number(e.target.value)})}
+                    value={propertyForm.floor || ''}
+                    onChange={(e) => setPropertyForm({...propertyForm, floor: e.target.value ? Number(e.target.value) : 0})}
                   />
                 </div>
                 <div>
@@ -258,8 +258,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   <Input
                     id="total_floors"
                     type="number"
-                    value={propertyForm.total_floors}
-                    onChange={(e) => setPropertyForm({...propertyForm, total_floors: Number(e.target.value)})}
+                    value={propertyForm.total_floors || ''}
+                    onChange={(e) => setPropertyForm({...propertyForm, total_floors: e.target.value ? Number(e.target.value) : 0})}
                   />
                 </div>
               </div>
