@@ -191,13 +191,7 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Mountain Illustration */}
-        <div className="absolute right-0 top-0 w-1/2 h-full pointer-events-none overflow-hidden">
-          <svg viewBox="0 0 800 400" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
-            <path d="M 0 250 Q 200 100 350 200 T 650 150 L 800 400 L 0 400 Z" fill="#FF7A00" opacity="0.9"/>
-            <path d="M 100 300 Q 300 150 500 250 T 800 200 L 800 400 L 100 400 Z" fill="#FF7A00" opacity="0.7"/>
-          </svg>
-        </div>
+
       </section>
 
       {/* Recently Added */}
