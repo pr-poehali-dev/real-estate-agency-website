@@ -112,37 +112,37 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b border-gray-100">
-        <div className="px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
-          <Link to="/" className="text-xl font-bold">WSE.AM</Link>
-          <nav className="hidden md:flex items-center gap-8">
+      <header className="bg-white">
+        <div className="px-6 py-3 flex items-center justify-between max-w-7xl mx-auto">
+          <Link to="/" className="text-lg font-bold">WSE.AM</Link>
+          <nav className="hidden md:flex items-center gap-6">
             <Link to="/map" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">Аренда</Link>
             <Link to="/map?transaction=sale" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">Продажа</Link>
             <a href="#contact" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">О компании</a>
             <Button 
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg px-6 h-9 text-sm"
+              className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-5 h-8 text-sm"
             >
-              Связаться
+              СТА
             </Button>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-[#FAFAFA] overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 pt-12 pb-8">
-          <div className="relative z-10 max-w-xl">
-            <h1 className="text-4xl font-bold mb-2 leading-tight">
+      <section className="relative bg-[#F8F8F8] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 pt-8 pb-6">
+          <div className="relative z-10 max-w-lg">
+            <h1 className="text-3xl font-bold mb-1 leading-tight">
               Поиск недвижимости<br />в Ереване
             </h1>
-            <p className="text-sm text-gray-600 mb-6">Найдите идеальный вариант</p>
+            <p className="text-xs text-gray-600 mb-5">Найдите идеальный вариант</p>
 
             {/* Search Form */}
-            <div className="bg-white rounded-lg shadow-sm p-3">
-              <div className="flex gap-2 mb-2">
+            <div className="bg-white rounded-md shadow-sm p-2.5 mb-3">
+              <div className="flex gap-2">
                 <Select value={transactionType} onValueChange={setTransactionType}>
-                  <SelectTrigger className="h-10 rounded-md border-gray-200 text-sm flex-1">
+                  <SelectTrigger className="h-9 rounded border-gray-300 text-xs flex-1">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -152,7 +152,7 @@ export default function Index() {
                 </Select>
 
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="h-10 rounded-md border-gray-200 text-sm flex-1">
+                  <SelectTrigger className="h-9 rounded border-gray-300 text-xs flex-1">
                     <SelectValue placeholder="Тип недвижимости" />
                   </SelectTrigger>
                   <SelectContent>
@@ -168,31 +168,31 @@ export default function Index() {
                   placeholder="Цена до, $"
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
-                  className="h-10 rounded-md border-gray-200 text-sm flex-1"
+                  className="h-9 rounded border-gray-300 text-xs flex-1"
                 />
+                
+                <Link to="/map">
+                  <Button className="h-9 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded text-xs font-medium px-6">
+                    Найти
+                  </Button>
+                </Link>
               </div>
-              
-              <Link to="/map">
-                <Button className="w-full h-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md text-sm font-medium">
-                  Найти
-                </Button>
-              </Link>
             </div>
             
             {/* Category Buttons */}
-            <div className="flex gap-2 mt-4">
+            <div className="flex gap-2">
               <Link to="/map?type=apartment">
-                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium">
+                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded px-5 h-8 text-xs font-medium">
                   КВАРТИРЫ
                 </Button>
               </Link>
               <Link to="/map?type=house">
-                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium">
+                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded px-5 h-8 text-xs font-medium">
                   ДОМА
                 </Button>
               </Link>
               <Link to="/map?type=commercial">
-                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium">
+                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded px-5 h-8 text-xs font-medium">
                   КОММЕРЧЕСКАЯ
                 </Button>
               </Link>
@@ -202,16 +202,16 @@ export default function Index() {
 
         {/* Mountain Illustration */}
         <div className="absolute right-0 top-0 w-1/2 h-full pointer-events-none">
-          <svg viewBox="0 0 700 250" className="w-full h-full" preserveAspectRatio="xMaxYMax slice">
-            <path d="M 100 150 Q 200 80 280 120 L 380 80 L 480 130 L 600 70 L 700 100 L 700 250 L 0 250 Z" fill="#FF7A00" opacity="0.95"/>
-            <path d="M 0 180 L 150 130 Q 250 100 350 140 L 500 110 L 700 140 L 700 250 L 0 250 Z" fill="#FF9933" opacity="0.8"/>
+          <svg viewBox="0 0 800 200" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
+            <path d="M 200 120 L 350 50 L 500 100 L 650 60 L 800 90 L 800 200 L 0 200 Z" fill="#FF7A00"/>
+            <path d="M 0 150 L 200 110 L 400 140 L 600 100 L 800 130 L 800 200 L 0 200 Z" fill="#FF9944" opacity="0.85"/>
           </svg>
         </div>
       </section>
 
       {/* Recently Added */}
-      <section className="px-6 py-8 max-w-7xl mx-auto bg-white">
-        <h2 className="text-2xl font-bold mb-6">Недавно добавленные</h2>
+      <section className="px-6 py-6 max-w-7xl mx-auto bg-white">
+        <h2 className="text-xl font-bold mb-4">Недавно добавленные</h2>
         
         {loading ? (
           <div className="text-center py-12 text-gray-500">Загрузка...</div>
@@ -225,30 +225,30 @@ export default function Index() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {properties.map((property) => (
-              <div key={property.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+              <div key={property.id} className="bg-white rounded-md overflow-hidden shadow hover:shadow-md transition-shadow">
                 {property.images && property.images.length > 0 ? (
                   <img
                     src={property.images[0]}
                     alt={property.title}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-44 object-cover"
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400 text-sm">Нет фото</span>
+                  <div className="w-full h-44 bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-xs">Нет фото</span>
                   </div>
                 )}
                 
-                <div className="p-4">
-                  <p className="text-xl font-bold text-gray-900 mb-1">
+                <div className="p-3">
+                  <p className="text-base font-bold text-gray-900 mb-0.5">
                     {formatPrice(property.price, property.currency)}
-                    {property.transaction_type === 'rent' && <span className="text-sm font-normal"> в месяц</span>}
+                    {property.transaction_type === 'rent' && <span className="text-xs font-normal"> в месяц</span>}
                   </p>
                   
-                  <p className="text-gray-600 text-sm mb-2">
+                  <p className="text-gray-600 text-xs mb-1">
                     {property.street_name || property.address}
                   </p>
                   
-                  <div className="flex items-center gap-3 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 text-[10px] text-gray-500">
                     {property.rooms && <span>{property.rooms} комнат</span>}
                     {property.area && <span>• {property.area} м²</span>}
                     {property.floor && <span>• {property.floor} этаж</span>}
