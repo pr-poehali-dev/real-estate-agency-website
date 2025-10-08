@@ -107,7 +107,7 @@ export default function Index() {
     <div className="min-h-screen bg-[#F5F3EE]">
       {/* Header */}
       <header className="px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
-        <Link to="/admin" className="text-2xl font-bold cursor-pointer">WSE.AM</Link>
+        <Link to="/admin" className="text-3xl font-black text-[#FF7A00] cursor-pointer">WSE.AM</Link>
         <nav className="hidden md:flex items-center gap-8">
           <a href="#services" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Услуги</a>
           <Link to="/map" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Карта</Link>
