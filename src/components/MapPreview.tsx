@@ -28,6 +28,7 @@ export default function MapPreview({ t, isVisible }: MapPreviewProps) {
       try {
         const response = await Properties.list();
         const props = (response.properties || []).slice(0, 10);
+        console.log('MapPreview: Loaded properties:', props.length, props);
         setPreviewProperties(props);
       } catch (err) {
         console.error('Error loading preview properties:', err);
@@ -73,6 +74,13 @@ export default function MapPreview({ t, isVisible }: MapPreviewProps) {
 
             {/* CTA Button Bar */}
             <div className="bg-white border-t p-6 text-center">
+              <div className="mb-3 text-sm text-gray-600">
+                {previewProperties.length > 0 ? (
+                  `Показано ${previewProperties.length} объектов на карте`
+                ) : (
+                  'Загрузка объектов...'
+                )}
+              </div>
               <Button 
                 size="lg" 
                 className="bg-primary hover:bg-primary/90 text-white px-10 py-6 text-xl font-semibold shadow-lg hover:shadow-xl transition-all"
