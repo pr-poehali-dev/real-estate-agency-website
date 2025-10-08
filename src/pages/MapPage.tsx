@@ -275,7 +275,7 @@ const MapPage: React.FC = () => {
         </div>
       )}
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden max-h-[calc(100vh-280px)]">
         <div className="flex-[2] relative">
           <YerevanMapLeaflet
             properties={filteredProperties}
