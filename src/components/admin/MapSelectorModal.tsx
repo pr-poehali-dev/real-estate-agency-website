@@ -107,7 +107,7 @@ const MapSelectorModal: React.FC<MapSelectorModalProps> = ({
         mapInstance.current = null;
       }
     };
-  }, [initialCoordinates]);
+  }, []);
 
   const handleConfirm = () => {
     onSelect(selectedCoords);
