@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
@@ -23,30 +23,18 @@ const AddressSelector: React.FC<AddressSelectorProps> = ({
 }) => {
   const [showMapSelector, setShowMapSelector] = useState(false);
 
-  // Обновляем полный адрес при изменении компонентов
-  const updateFormattedAddress = useCallback(() => {
-    const parts = [
-      address.street_name,
-    ].filter(Boolean);
-
-    const formatted_address = parts.join('') + (address.district ? `, ${address.district}` : '');
-    
-    if (formatted_address !== address.formatted_address) {
-      onAddressChange({
-        ...address,
-        formatted_address: formatted_address || ''
-      });
-    }
-  }, [address, onAddressChange]);
-
-  useEffect(() => {
-    updateFormattedAddress();
-  }, [address.street_name, address.district, updateFormattedAddress]);
-
   const handleFieldChange = (field: keyof AddressComponents, value: string) => {
-    onAddressChange({
+    const newAddress = {
       ...address,
       [field]: value
+    };
+    
+    const parts = [newAddress.street_name].filter(Boolean);
+    const formatted_address = parts.join('') + (newAddress.district ? `, ${newAddress.district}` : '');
+    
+    onAddressChange({
+      ...newAddress,
+      formatted_address: formatted_address || ''
     });
   };
 
