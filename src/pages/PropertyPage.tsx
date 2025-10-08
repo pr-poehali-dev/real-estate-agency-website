@@ -240,14 +240,14 @@ export default function PropertyPage() {
               </div>
             )}
 
-            <div className="flex gap-4">
-              <a href="tel:+37495129260" className="flex-1">
+            <div className="flex flex-col gap-4">
+              <a href="tel:+37495129260">
                 <Button className="w-full h-14 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl text-lg font-medium">
                   <Icon name="Phone" size={20} className="mr-2" />
-                  Позвонить
+                  Позвонить +374 95 129260
                 </Button>
               </a>
-              <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="flex-1">
+              <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer">
                 <Button className="w-full h-14 bg-[#0088cc] hover:bg-[#006699] text-white rounded-xl text-lg font-medium">
                   <Icon name="Send" size={20} className="mr-2" />
                   Telegram
