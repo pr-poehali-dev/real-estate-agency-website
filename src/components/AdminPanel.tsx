@@ -146,7 +146,7 @@ const AdminPanel: React.FC = () => {
     setUser(null);
   };
 
-  const handleAddProperty = async (e: React.FormEvent) => {
+  const handleAddOrUpdateProperty = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -161,8 +161,8 @@ const AdminPanel: React.FC = () => {
 
     // Демо режим для локального токена
     if (token.startsWith('demo-token-')) {
-      // Симуляция успешного добавления
-      setSuccess(`Объект "${propertyForm.title}" успешно добавлен в демо режиме!`);
+      const action = isEditing ? 'обновлён' : 'добавлен';
+      setSuccess(`Объект "${propertyForm.title}" успешно ${action} в демо режиме!`);
       
       // Сброс формы
       setPropertyForm({
@@ -181,12 +181,17 @@ const AdminPanel: React.FC = () => {
         year_built: new Date().getFullYear(),
         district: 'Центр (Кентрон)',
         address: '',
+        street_name: '',
+        house_number: '',
+        apartment_number: '',
         latitude: 40.1792,
         longitude: 44.4991,
         features: [],
         images: []
       });
       setFeaturesText('');
+      setIsEditing(false);
+      setEditingProperty(null);
       setLoading(false);
       return;
     }
@@ -349,7 +354,7 @@ const AdminPanel: React.FC = () => {
           loading={loading}
           error={error}
           success={success}
-          onSubmit={handleAddProperty}
+          onSubmit={handleAddOrUpdateProperty}
           isEditing={isEditing}
           onCancel={handleCancelEdit}
         />

@@ -37,7 +37,10 @@ export default function MapPreview({ t, isVisible }: MapPreviewProps) {
         <div className="max-w-6xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             {/* Map */}
-            <div className="h-[500px] relative">
+            <div 
+              className="h-[400px] relative cursor-pointer group"
+              onClick={() => navigate('/map')}
+            >
               <YerevanMapLeaflet
                 properties={previewProperties}
                 onPropertySelect={() => {}}
@@ -49,8 +52,11 @@ export default function MapPreview({ t, isVisible }: MapPreviewProps) {
                 <div className="absolute bottom-0 left-0 right-0 p-8 text-center pointer-events-auto">
                   <Button 
                     size="lg" 
-                    className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg shadow-2xl"
-                    onClick={() => navigate('/map')}
+                    className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg shadow-2xl group-hover:scale-105 transition-transform"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/map');
+                    }}
                   >
                     <Icon name="Map" size={24} className="mr-2" />
                     Открыть полную карту
