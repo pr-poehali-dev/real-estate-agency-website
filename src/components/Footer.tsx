@@ -8,21 +8,12 @@ export default function Footer({ t }: FooterProps) {
   return (
     <footer className="bg-black text-white py-12 px-6">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div>
             <h3 className="text-2xl font-bold font-montserrat mb-4 text-primary">WSE.AM</h3>
             <p className="text-gray-300">
               {t.footer.description}
             </p>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold mb-4">{t.nav.services}</h4>
-            <ul className="space-y-2 text-gray-300">
-              <li>{t.services.rental.title}</li>
-              <li>{t.services.purchase.title}</li>
-              <li>{t.services.consultation.title}</li>
-            </ul>
           </div>
           
           <div>

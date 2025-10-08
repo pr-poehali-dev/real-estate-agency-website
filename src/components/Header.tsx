@@ -19,8 +19,6 @@ export default function Header({ t, language, setLanguage, isMenuOpen, setIsMenu
           WSE.AM
         </Link>
         <div className="hidden md:flex space-x-8 items-center">
-          <a href="#about" className="text-gray-700 hover:text-primary transition-colors">{t.nav.about}</a>
-          <a href="#services" className="text-gray-700 hover:text-primary transition-colors">{t.nav.services}</a>
           <Link to="/map" className="text-gray-700 hover:text-primary transition-colors flex items-center gap-1">
             <Icon name="Map" size={18} />
             {t.nav.map}
@@ -60,8 +58,6 @@ export default function Header({ t, language, setLanguage, isMenuOpen, setIsMenu
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t shadow-lg">
           <div className="container mx-auto px-6 py-4 space-y-4">
-            <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.about}</a>
-            <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.services}</a>
             <Link to="/map" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.map}</Link>
             <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.contact}</a>
             <div className="flex space-x-2 mt-2">
