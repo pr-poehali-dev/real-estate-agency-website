@@ -106,14 +106,14 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-[#F5F3EE]">
       {/* Header */}
-      <header className="px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
-        <Link to="/admin" className="text-3xl font-black text-[#FF7A00] cursor-pointer">WSE.AM</Link>
+      <header className="px-6 py-6 flex items-center justify-between max-w-7xl mx-auto animate-in fade-in slide-in-from-top duration-700">
+        <Link to="/admin" className="text-3xl font-black text-[#FF7A00] cursor-pointer hover:scale-110 transition-transform duration-300">WSE.AM</Link>
         <nav className="hidden md:flex items-center gap-8">
-          <Link to="/map" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Карта</Link>
-          <a href="#contact" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Контакты</a>
+          <Link to="/map" className="text-gray-800 hover:text-[#FF7A00] hover:scale-110 transition-all duration-300">Карта</Link>
+          <a href="#contact" className="text-gray-800 hover:text-[#FF7A00] hover:scale-110 transition-all duration-300">Контакты</a>
           <Button 
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl px-6"
+            className="bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-105 text-white rounded-xl px-6 transition-all duration-300"
           >
             Связаться
           </Button>
@@ -123,13 +123,13 @@ export default function Index() {
       {/* Hero Section */}
       <section className="relative px-6 pt-12 pb-8 max-w-7xl mx-auto">
         <div className="relative z-10">
-          <h1 className="text-5xl md:text-6xl font-black mb-4 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-black mb-4 leading-tight animate-in fade-in slide-in-from-left duration-700">
             Поиск недвижимости<br />в Ереване
           </h1>
-          <p className="text-xl font-medium text-gray-600 mb-12">Найдите идеальный вариант</p>
+          <p className="text-xl font-medium text-gray-600 mb-12 animate-in fade-in slide-in-from-left duration-700 delay-150">Найдите идеальный вариант</p>
 
           {/* Search Form */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-4xl">
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-4xl animate-in fade-in slide-in-from-bottom duration-700 delay-300 hover:shadow-2xl transition-shadow duration-300">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Select value={transactionType} onValueChange={setTransactionType}>
                 <SelectTrigger className="h-12 rounded-xl">
@@ -161,7 +161,7 @@ export default function Index() {
               />
 
               <Link to="/map">
-                <Button className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl text-base font-medium">
+                <Button className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-105 text-white rounded-xl text-base font-medium transition-all duration-300">
                   Найти
                 </Button>
               </Link>
@@ -169,14 +169,14 @@ export default function Index() {
           </div>
 
           {/* Transaction Type Buttons */}
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 animate-in fade-in slide-in-from-bottom duration-700 delay-500">
             <Link to="/map?transaction=rent">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
+              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-110 text-white rounded-full px-8 h-12 text-base font-medium transition-all duration-300">
                 АРЕНДА
               </Button>
             </Link>
             <Link to="/map?transaction=sale">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
+              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-110 text-white rounded-full px-8 h-12 text-base font-medium transition-all duration-300">
                 ПРОДАЖА
               </Button>
             </Link>
@@ -188,7 +188,7 @@ export default function Index() {
 
       {/* Recently Added */}
       <section className="px-6 py-8 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8">Недавно добавленные</h2>
+        <h2 className="text-3xl font-bold mb-8 animate-in fade-in slide-in-from-left duration-700">Недавно добавленные</h2>
         
         {loading ? (
           <div className="text-center py-12 text-gray-500">Загрузка...</div>
@@ -242,11 +242,11 @@ export default function Index() {
       {/* Contact Section */}
       <section id="contact" className="px-6 py-16 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center">Свяжитесь с нами</h2>
+          <h2 className="text-4xl font-bold mb-12 text-center animate-in fade-in slide-in-from-bottom duration-700">Свяжитесь с нами</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Contact Form */}
-            <div className="bg-[#F5F3EE] rounded-2xl p-8">
+            <div className="bg-[#F5F3EE] rounded-2xl p-8 animate-in fade-in slide-in-from-left duration-700 delay-300 hover:shadow-xl transition-shadow duration-300">
               <form onSubmit={handleContactSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-2">Имя</label>
@@ -318,7 +318,7 @@ export default function Index() {
                 <Button 
                   type="submit" 
                   disabled={formLoading}
-                  className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl text-base font-medium"
+                  className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-105 text-white rounded-xl text-base font-medium transition-all duration-300"
                 >
                   {formLoading ? 'Отправка...' : 'Отправить заявку'}
                 </Button>
@@ -326,12 +326,12 @@ export default function Index() {
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-8">
+            <div className="space-y-8 animate-in fade-in slide-in-from-right duration-700 delay-300">
               <h3 className="text-2xl font-bold mb-6">Свяжитесь с нами</h3>
               
               <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start gap-4 hover:scale-105 transition-transform duration-300">
+                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 hover:rotate-12 transition-transform duration-300">
                     <Icon name="Phone" size={24} className="text-white" />
                   </div>
                   <div>
@@ -342,8 +342,8 @@ export default function Index() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start gap-4 hover:scale-105 transition-transform duration-300">
+                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 hover:rotate-12 transition-transform duration-300">
                     <Icon name="Send" size={24} className="text-white" />
                   </div>
                   <div>
@@ -354,8 +354,8 @@ export default function Index() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start gap-4 hover:scale-105 transition-transform duration-300">
+                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 hover:rotate-12 transition-transform duration-300">
                     <Icon name="Instagram" size={24} className="text-white" />
                   </div>
                   <div>
@@ -366,8 +366,8 @@ export default function Index() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start gap-4 hover:scale-105 transition-transform duration-300">
+                  <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 hover:rotate-12 transition-transform duration-300">
                     <Icon name="MapPin" size={24} className="text-white" />
                   </div>
                   <div>
