@@ -4,14 +4,9 @@ import AdminHeader from './admin/AdminHeader';
 import PropertyForm from './admin/PropertyForm';
 import PropertyList from './admin/PropertyList';
 import { Property } from '@/types/property';
+import { Auth, User as ApiUser } from '@/lib/api';
 
-interface AdminUser {
-  id: number;
-  username: string;
-  email: string;
-  full_name: string;
-  role: string;
-}
+type AdminUser = ApiUser;
 
 const AdminPanel: React.FC = () => {
   const [user, setUser] = useState<AdminUser | null>(null);
@@ -59,7 +54,6 @@ const AdminPanel: React.FC = () => {
     const token = localStorage.getItem('admin_token');
     if (!token) return;
 
-    // Проверяем demo токен
     if (token.startsWith('demo-token-')) {
       const mockUser: AdminUser = {
         id: 1,
@@ -73,20 +67,8 @@ const AdminPanel: React.FC = () => {
     }
 
     try {
-      const response = await fetch('https://functions.poehali.dev/ff6ed7aa-f0f1-4101-8caf-5bfcad13ef59', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-      } else {
-        localStorage.removeItem('admin_token');
-      }
+      const data = await Auth.me();
+      setUser(data.user);
     } catch (error) {
       console.error('Auth check failed:', error);
       localStorage.removeItem('admin_token');
@@ -98,7 +80,6 @@ const AdminPanel: React.FC = () => {
     setLoading(true);
     setError('');
 
-    // Локальная авторизация для демо
     if (loginForm.username === 'admin' && loginForm.password === 'admin123') {
       const mockUser: AdminUser = {
         id: 1,
@@ -117,25 +98,12 @@ const AdminPanel: React.FC = () => {
     }
 
     try {
-      const response = await fetch('https://functions.poehali.dev/ff6ed7aa-f0f1-4101-8caf-5bfcad13ef59', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(loginForm),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        localStorage.setItem('admin_token', data.token);
-        setUser(data.user);
-        setLoginForm({ username: '', password: '' });
-      } else {
-        setError('Неверный логин или пароль. Попробуйте: admin / admin123');
-      }
+      const data = await Auth.login(loginForm.username, loginForm.password);
+      localStorage.setItem('admin_token', data.token);
+      setUser(data.user);
+      setLoginForm({ username: '', password: '' });
     } catch (error) {
-      setError('Неверный логин или пароль. Попробуйте: admin / admin123');
+      setError(error instanceof Error ? error.message : 'Ошибка авторизации. Попробуйте: admin / admin123');
     } finally {
       setLoading(false);
     }

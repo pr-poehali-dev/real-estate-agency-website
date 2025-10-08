@@ -6,9 +6,10 @@
       "path": "/",
       "expectedStatus": 200,
       "expectedBody": {
-        "success": true,
-        "properties": [],
-        "count": 0
+        "ok": true,
+        "data": {
+          "properties": []
+        }
       },
       "bodyMatcher": "partial"
     },
@@ -18,8 +19,10 @@
       "path": "/?district=Центр",
       "expectedStatus": 200,
       "expectedBody": {
-        "success": true,
-        "properties": []
+        "ok": true,
+        "data": {
+          "properties": []
+        }
       },
       "bodyMatcher": "partial"
     }
