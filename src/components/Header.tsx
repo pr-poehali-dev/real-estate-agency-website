@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
   t: any;
@@ -14,12 +15,16 @@ export default function Header({ t, language, setLanguage, isMenuOpen, setIsMenu
   return (
     <header className="bg-white shadow-sm">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div className="text-2xl font-bold font-montserrat text-primary">
+        <Link to="/" className="text-2xl font-bold font-montserrat text-primary hover:opacity-80 transition-opacity">
           WSE.AM
-        </div>
-        <div className="hidden md:flex space-x-8">
+        </Link>
+        <div className="hidden md:flex space-x-8 items-center">
           <a href="#about" className="text-gray-700 hover:text-primary transition-colors">{t.nav.about}</a>
           <a href="#services" className="text-gray-700 hover:text-primary transition-colors">{t.nav.services}</a>
+          <Link to="/map" className="text-gray-700 hover:text-primary transition-colors flex items-center gap-1">
+            <Icon name="Map" size={18} />
+            {t.nav.map}
+          </Link>
           <a href="#contact" className="text-gray-700 hover:text-primary transition-colors">{t.nav.contact}</a>
         </div>
         <div className="flex items-center space-x-4">
@@ -57,6 +62,7 @@ export default function Header({ t, language, setLanguage, isMenuOpen, setIsMenu
           <div className="container mx-auto px-6 py-4 space-y-4">
             <a href="#about" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.about}</a>
             <a href="#services" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.services}</a>
+            <Link to="/map" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.map}</Link>
             <a href="#contact" className="block text-gray-700 hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>{t.nav.contact}</a>
             <div className="flex space-x-2 mt-2">
               <button

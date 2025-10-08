@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import YerevanMap2GIS from '@/components/YerevanMap2GIS';
 import PropertyFilters from '@/components/PropertyFilters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -135,14 +136,15 @@ const MapPage: React.FC = () => {
         <div className="mb-8">
           {/* Back button */}
           <div className="mb-4">
-            <Button 
-              variant="outline" 
-              onClick={() => window.history.back()}
-              className="flex items-center gap-2"
-            >
-              <Icon name="ArrowLeft" size={16} />
-              Назад
-            </Button>
+            <Link to="/">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+              >
+                <Icon name="ArrowLeft" size={16} />
+                Назад
+              </Button>
+            </Link>
           </div>
           
           {/* Centered title section */}

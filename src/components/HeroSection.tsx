@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface HeroSectionProps {
   t: any;
@@ -7,6 +8,8 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ t, isVisible, scrollToContact }: HeroSectionProps) {
+  const navigate = useNavigate();
+  
   return (
     <section 
       className="min-h-screen px-6 bg-cover bg-center bg-no-repeat relative flex items-center" 
@@ -28,7 +31,7 @@ export default function HeroSection({ t, isVisible, scrollToContact }: HeroSecti
           {t.hero.description}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3" onClick={() => window.open('https://t.me/Arenda_kvartir_yerevan', '_blank')}>
+          <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3" onClick={() => navigate('/map')}>
             {t.hero.findHousing}
           </Button>
           <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white px-8 py-3" onClick={scrollToContact}>
