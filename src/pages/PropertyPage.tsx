@@ -371,26 +371,26 @@ export default function PropertyPage() {
                     <Link 
                       key={prop.id} 
                       to={`/property/${prop.id}`}
-                      className="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
+                      className="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow h-[180px]"
                     >
-                      <div className="flex gap-4 p-4">
+                      <div className="flex gap-4 p-4 h-full">
                         <img 
                           src={prop.images?.[0] || '/placeholder.jpg'} 
                           alt={prop.title}
-                          className="w-32 h-32 object-cover rounded-lg flex-shrink-0"
+                          className="w-[150px] h-full object-cover rounded-lg flex-shrink-0"
                         />
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-lg mb-2 truncate">{prop.title}</h4>
+                        <div className="flex-1 min-w-0 flex flex-col">
+                          <h4 className="font-bold text-lg mb-2 line-clamp-2">{prop.title}</h4>
                           <p className="text-2xl font-bold text-[#FF7A00] mb-2">
                             {formatPrice(prop.price, prop.currency)}
                           </p>
-                          <div className="flex gap-4 text-sm text-gray-600">
+                          <div className="flex gap-4 text-sm text-gray-600 mb-2">
                             {prop.rooms && <span>{prop.rooms} комн.</span>}
                             {prop.area && <span>{prop.area} м²</span>}
                             {prop.floor && <span>{prop.floor} этаж</span>}
                           </div>
                           {prop.address && (
-                            <p className="text-sm text-gray-500 mt-2 truncate">
+                            <p className="text-sm text-gray-500 mt-auto line-clamp-1">
                               <Icon name="MapPin" size={14} className="inline mr-1" />
                               {prop.address}
                             </p>
