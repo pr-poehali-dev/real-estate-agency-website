@@ -17,7 +17,7 @@ interface Property {
 
 interface YerevanMapLeafletProps {
   properties: Property[];
-  onPropertySelect: (property: Property) => void;
+  onPropertySelect?: (property: Property) => void;
   selectedDistrict?: string;
   isPreview?: boolean;
 }
@@ -49,7 +49,6 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
     return labels[type] || type;
   };
 
-  // Координаты районов Еревана
   const getDistrictCoordinates = (district: string): [number, number] => {
     const coordinates: Record<string, [number, number]> = {
       'Центр (Кентрон)': [40.1776, 44.5126],
@@ -66,18 +65,22 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
     return coordinates[district] || [40.1776, 44.5126];
   };
 
+  const stableOffset = (id: number): [number, number] => {
+    const dy = Math.sin(id * 99991) * 0.00025;
+    const dx = Math.cos(id * 12347) * 0.00025;
+    return [dy, dx];
+  };
+
   useEffect(() => {
     if (!mapContainer.current || mapInstance.current) return;
 
-    // Создаём карту
     mapInstance.current = L.map(mapContainer.current, {
-      center: [40.1776, 44.5126], // Центр Еревана
+      center: [40.1792, 44.4991],
       zoom: 12,
       zoomControl: true,
       scrollWheelZoom: !isPreview
     });
 
-    // Добавляем слой OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
       maxZoom: 19
@@ -94,21 +97,17 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
   useEffect(() => {
     if (!mapInstance.current) return;
 
-    // Очищаем предыдущие маркеры
-    markersRef.current.forEach(marker => {
-      marker.remove();
-    });
+    markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    // Создаём кастомную иконку
     const customIcon = L.divIcon({
       className: 'custom-marker',
       html: `
         <div style="position: relative;">
           <svg width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 0C7.163 0 0 7.163 0 16c0 8.837 16 24 16 24s16-15.163 16-24C32 7.163 24.837 0 16 0z" fill="#FF6B35"/>
+            <path d="M16 0C7.163 0 0 7.163 0 16c0 8.837 16 24 16 24s16-15.163 16-24C32 7.163 24.837 0 16 0z" fill="#FF7A00"/>
             <circle cx="16" cy="16" r="8" fill="white"/>
-            <path d="M13 13h6v6h-6z" fill="#FF6B35"/>
+            <path d="M13 13h6v6h-6z" fill="#FF7A00"/>
           </svg>
         </div>
       `,
@@ -117,28 +116,23 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       popupAnchor: [0, -40]
     });
 
-    // Добавляем маркеры для каждого объекта
     properties.forEach((property) => {
-      const [lat, lng] = property.latitude && property.longitude 
+      const [baseLat, baseLng] = property.latitude && property.longitude 
         ? [property.latitude, property.longitude]
         : getDistrictCoordinates(property.district);
       
-      // Стабильное смещение на основе ID (без Math.random)
-      const id = property.id || 0;
-      const offsetLat = lat + (Math.sin(id * 99991) * 0.0003);
-      const offsetLng = lng + (Math.cos(id * 12347) * 0.0003);
+      const [dy, dx] = stableOffset(property.id || 0);
+      const lat = Number(baseLat) + dy;
+      const lng = Number(baseLng) + dx;
 
-      const marker = L.marker([offsetLat, offsetLng], {
-        icon: customIcon
-      });
+      const marker = L.marker([lat, lng], { icon: customIcon });
 
-      // Создаём попап
       const popupContent = `
         <div style="min-width: 250px; font-family: system-ui;">
           <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; line-height: 1.3;">
             ${property.title}
           </h4>
-          <p style="margin: 0 0 8px 0; color: #FF6B35; font-size: 16px; font-weight: 700;">
+          <p style="margin: 0 0 8px 0; color: #FF7A00; font-size: 16px; font-weight: 700;">
             ${formatPrice(property.price, property.currency)}
           </p>
           <div style="margin: 0 0 8px 0; font-size: 12px; color: #666;">
@@ -152,11 +146,10 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
 
       marker.bindPopup(popupContent);
       
-      // Обработчик клика
       marker.on('click', () => {
         if (isPreview) {
           window.location.href = '/map';
-        } else {
+        } else if (onPropertySelect) {
           onPropertySelect(property);
         }
       });
@@ -165,14 +158,14 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       markersRef.current.push(marker);
     });
 
-    // Подстраиваем зум под все маркеры
     if (properties.length > 0 && !isPreview) {
       const bounds = L.latLngBounds(
         properties.map(p => {
-          const [lat, lng] = p.latitude && p.longitude 
+          const [baseLat, baseLng] = p.latitude && p.longitude 
             ? [p.latitude, p.longitude]
             : getDistrictCoordinates(p.district);
-          return [lat, lng] as [number, number];
+          const [dy, dx] = stableOffset(p.id || 0);
+          return [Number(baseLat) + dy, Number(baseLng) + dx] as [number, number];
         })
       );
       mapInstance.current.fitBounds(bounds, { padding: [50, 50] });
@@ -181,14 +174,12 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
 
   return (
     <div className="h-full w-full relative">
-      {/* Контейнер для карты */}
-      <div ref={mapContainer} className="h-full w-full rounded-lg" />
+      <div ref={mapContainer} className="h-full w-full rounded-xl" />
       
-      {/* Информационная панель */}
       {!isPreview && (
         <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-[1000] max-w-sm">
           <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-2">
-            <Icon name="MapPin" size={20} className="text-primary" />
+            <Icon name="MapPin" size={20} className="text-[#FF7A00]" />
             Карта недвижимости Еревана
           </h3>
           <p className="text-sm text-gray-600 mb-2">Найдено объектов: {properties.length}</p>
@@ -200,10 +191,9 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         </div>
       )}
 
-      {/* Легенда */}
       <div className="absolute bottom-4 right-4 bg-white rounded-lg shadow-lg p-3 z-[1000]">
         <div className="flex items-center gap-2 text-sm text-gray-600">
-          <div className="w-4 h-4 bg-primary rounded-full border border-white shadow-sm"></div>
+          <div className="w-4 h-4 bg-[#FF7A00] rounded-full border border-white shadow-sm"></div>
           <span>Объекты недвижимости</span>
         </div>
         <p className="text-xs text-gray-500 mt-1">Кликните на маркер для деталей</p>
