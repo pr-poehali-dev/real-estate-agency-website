@@ -117,13 +117,12 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
     });
 
     properties.forEach((property) => {
-      const [baseLat, baseLng] = property.latitude && property.longitude 
-        ? [property.latitude, property.longitude]
-        : getDistrictCoordinates(property.district);
+      if (!property.latitude || !property.longitude) {
+        return;
+      }
       
-      const [dy, dx] = stableOffset(property.id || 0);
-      const lat = Number(baseLat) + dy;
-      const lng = Number(baseLng) + dx;
+      const lat = Number(property.latitude);
+      const lng = Number(property.longitude);
 
       const marker = L.marker([lat, lng], { icon: customIcon });
 
@@ -158,15 +157,11 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       markersRef.current.push(marker);
     });
 
-    if (properties.length > 0 && !isPreview) {
+    const propertiesWithCoords = properties.filter(p => p.latitude && p.longitude);
+    
+    if (propertiesWithCoords.length > 0 && !isPreview) {
       const bounds = L.latLngBounds(
-        properties.map(p => {
-          const [baseLat, baseLng] = p.latitude && p.longitude 
-            ? [p.latitude, p.longitude]
-            : getDistrictCoordinates(p.district);
-          const [dy, dx] = stableOffset(p.id || 0);
-          return [Number(baseLat) + dy, Number(baseLng) + dx] as [number, number];
-        })
+        propertiesWithCoords.map(p => [Number(p.latitude), Number(p.longitude)] as [number, number])
       );
       mapInstance.current.fitBounds(bounds, { padding: [50, 50] });
     }
