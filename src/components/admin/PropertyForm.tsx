@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -38,48 +38,48 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
   onCancel
 }) => {
 
-  const handleImagesChange = (newImages: string[]) => {
-    setPropertyForm({
-      ...propertyForm,
+  const handleImagesChange = useCallback((newImages: string[]) => {
+    setPropertyForm(prev => ({
+      ...prev,
       images: newImages
-    });
-  };
+    }));
+  }, []);
 
   // Новые обработчики для AddressSelector
-  const handleAddressChange = (address: AddressComponents) => {
-    setPropertyForm({
-      ...propertyForm,
+  const handleAddressChange = useCallback((address: AddressComponents) => {
+    setPropertyForm(prev => ({
+      ...prev,
       street_name: address.street_name,
       house_number: address.house_number,
       apartment_number: address.apartment_number,
       district: address.district,
-      address: address.formatted_address || propertyForm.address
-    });
-  };
+      address: address.formatted_address || prev.address
+    }));
+  }, []);
 
-  const handleCoordinatesChange = (coordinates: LocationPoint) => {
-    setPropertyForm({
-      ...propertyForm,
+  const handleCoordinatesChange = useCallback((coordinates: LocationPoint) => {
+    setPropertyForm(prev => ({
+      ...prev,
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,
-      address: coordinates.address || propertyForm.address
-    });
-  };
+      address: coordinates.address || prev.address
+    }));
+  }, []);
 
   // Формируем текущий адрес для AddressSelector
-  const currentAddress: AddressComponents = {
+  const currentAddress: AddressComponents = useMemo(() => ({
     street_name: propertyForm.street_name || '',
     house_number: propertyForm.house_number || '',
     apartment_number: propertyForm.apartment_number || '',
     district: propertyForm.district,
     formatted_address: propertyForm.address
-  };
+  }), [propertyForm.street_name, propertyForm.house_number, propertyForm.apartment_number, propertyForm.district, propertyForm.address]);
 
-  const currentCoordinates: LocationPoint = {
+  const currentCoordinates: LocationPoint = useMemo(() => ({
     latitude: propertyForm.latitude,
     longitude: propertyForm.longitude,
     address: propertyForm.address
-  };
+  }), [propertyForm.latitude, propertyForm.longitude, propertyForm.address]);
 
   return (
     <Card>

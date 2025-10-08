@@ -24,17 +24,9 @@ const AddressSelector: React.FC<AddressSelectorProps> = ({
   const [showMapSelector, setShowMapSelector] = useState(false);
 
   const handleFieldChange = (field: keyof AddressComponents, value: string) => {
-    const newAddress = {
+    onAddressChange({
       ...address,
       [field]: value
-    };
-    
-    const parts = [newAddress.street_name].filter(Boolean);
-    const formatted_address = parts.join('') + (newAddress.district ? `, ${newAddress.district}` : '');
-    
-    onAddressChange({
-      ...newAddress,
-      formatted_address: formatted_address || ''
     });
   };
 
