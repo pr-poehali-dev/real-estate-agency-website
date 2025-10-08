@@ -19,13 +19,7 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const [transactionType, setTransactionType] = useState('rent');
   const [propertyType, setPropertyType] = useState('all');
-  const [district, setDistrict] = useState('all');
   const [maxPrice, setMaxPrice] = useState('');
-  
-  const districts = [
-    'Аван', 'Аджапняк', 'Арабкир', 'Давташен', 'Канакер-Зейтун',
-    'Малатия-Себастия', 'Нор Норк', 'Нубарашен', 'Центр', 'Шенгавит', 'Эребуни'
-  ];
   
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -110,108 +104,112 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F5F3EE]">
       {/* Header */}
-      <header className="bg-white border-b border-gray-100">
-        <div className="px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
-          <Link to="/" className="text-xl font-bold">WSE.AM</Link>
-          <nav className="hidden md:flex items-center gap-8">
-            <Link to="/map" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">Аренда</Link>
-            <Link to="/map?transaction=sale" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">Продажа</Link>
-            <a href="#contact" className="text-gray-700 hover:text-[#FF7A00] transition-colors text-sm">О компании</a>
-            <Button 
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg px-6 h-9 text-sm"
-            >
-              Связаться
-            </Button>
-          </nav>
-        </div>
+      <header className="px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
+        <Link to="/" className="text-2xl font-bold">WSE.AM</Link>
+        <nav className="hidden md:flex items-center gap-8">
+          <a href="#services" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Услуги</a>
+          <Link to="/map" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Карта</Link>
+          <a href="#contact" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Контакты</a>
+          <Link to="/admin" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Вход</Link>
+          <Button 
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl px-6"
+          >
+            Связаться
+          </Button>
+        </nav>
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-[#FAFAFA] overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 pt-12 pb-8">
-          <div className="relative z-10 max-w-xl">
-            <h1 className="text-4xl font-bold mb-2 leading-tight">
-              Поиск недвижимости<br />в Ереване
-            </h1>
-            <p className="text-sm text-gray-600 mb-6">Найдите идеальный вариант</p>
+      <section className="relative px-6 pt-12 pb-24 max-w-7xl mx-auto">
+        <div className="relative z-10">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
+            Поиск недвижимости<br />в Ереване
+          </h1>
+          <p className="text-xl text-gray-600 mb-12">Найдите идеальный вариант</p>
 
-            {/* Search Form */}
-            <div className="bg-white rounded-lg shadow-sm p-3">
-              <div className="flex gap-2 mb-2">
-                <Select value={transactionType} onValueChange={setTransactionType}>
-                  <SelectTrigger className="h-10 rounded-md border-gray-200 text-sm flex-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="rent">Аренда</SelectItem>
-                    <SelectItem value="sale">Продажа</SelectItem>
-                  </SelectContent>
-                </Select>
+          {/* Search Form */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-4xl">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Select value={transactionType} onValueChange={setTransactionType}>
+                <SelectTrigger className="h-12 rounded-xl">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="rent">Аренда</SelectItem>
+                  <SelectItem value="sale">Продажа</SelectItem>
+                </SelectContent>
+              </Select>
 
-                <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="h-10 rounded-md border-gray-200 text-sm flex-1">
-                    <SelectValue placeholder="Тип недвижимости" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Все типы</SelectItem>
-                    <SelectItem value="apartment">Квартира</SelectItem>
-                    <SelectItem value="house">Дом</SelectItem>
-                    <SelectItem value="commercial">Коммерческая</SelectItem>
-                  </SelectContent>
-                </Select>
+              <Select value={propertyType} onValueChange={setPropertyType}>
+                <SelectTrigger className="h-12 rounded-xl">
+                  <SelectValue placeholder="Тип недвижимости" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все типы</SelectItem>
+                  <SelectItem value="apartment">Квартира</SelectItem>
+                  <SelectItem value="house">Дом</SelectItem>
+                  <SelectItem value="commercial">Коммерческая</SelectItem>
+                </SelectContent>
+              </Select>
 
-                <Input
-                  type="number"
-                  placeholder="Цена до, $"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                  className="h-10 rounded-md border-gray-200 text-sm flex-1"
-                />
-              </div>
-              
+              <Input
+                type="number"
+                placeholder="Цена до, ₽"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="h-12 rounded-xl"
+              />
+
               <Link to="/map">
-                <Button className="w-full h-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md text-sm font-medium">
+                <Button className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl text-base font-medium">
                   Найти
                 </Button>
               </Link>
             </div>
-            
-            {/* Category Buttons */}
-            <div className="flex gap-2 mt-4">
-              <Link to="/map?type=apartment">
-                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium">
-                  КВАРТИРЫ
-                </Button>
-              </Link>
-              <Link to="/map?type=house">
-                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium">
-                  ДОМА
-                </Button>
-              </Link>
-              <Link to="/map?type=commercial">
-                <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-md px-6 h-9 text-sm font-medium">
-                  КОММЕРЧЕСКАЯ
-                </Button>
-              </Link>
-            </div>
+          </div>
+
+          {/* Category Buttons */}
+          <div className="flex flex-wrap gap-4">
+            <Link to="/map?type=apartment">
+              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
+                КВАРТИРЫ
+              </Button>
+            </Link>
+            <Link to="/map?type=house">
+              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
+                ДОМА
+              </Button>
+            </Link>
+            <Link to="/map?type=commercial">
+              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
+                КОММЕРЧЕСКАЯ
+              </Button>
+            </Link>
           </div>
         </div>
 
-        {/* Mountain Illustration */}
-        <div className="absolute right-0 top-0 w-1/2 h-full pointer-events-none">
-          <svg viewBox="0 0 700 250" className="w-full h-full" preserveAspectRatio="xMaxYMax slice">
-            <path d="M 100 150 Q 200 80 280 120 L 380 80 L 480 130 L 600 70 L 700 100 L 700 250 L 0 250 Z" fill="#FF7A00" opacity="0.95"/>
-            <path d="M 0 180 L 150 130 Q 250 100 350 140 L 500 110 L 700 140 L 700 250 L 0 250 Z" fill="#FF9933" opacity="0.8"/>
+        {/* Mount Ararat Illustration */}
+        <div className="absolute right-0 top-0 w-full h-full pointer-events-none overflow-hidden">
+          <svg viewBox="0 0 1200 400" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
+            {/* Малый Арарат (левая гора, ниже) */}
+            <path d="M 200 300 L 400 120 L 500 180 L 600 300 Z" fill="#FF8C1A" opacity="0.85"/>
+            
+            {/* Большой Арарат (правая гора, выше) */}
+            <path d="M 450 300 L 750 40 L 1050 300 Z" fill="#FF7A00" opacity="0.95"/>
+            
+            {/* Передние холмы для глубины */}
+            <path d="M 0 320 Q 150 280 300 320 T 600 320 T 900 320 T 1200 320 L 1200 400 L 0 400 Z" fill="#FF9933" opacity="0.7"/>
+            <path d="M 0 350 Q 200 310 400 350 T 800 350 T 1200 350 L 1200 400 L 0 400 Z" fill="#FFB366" opacity="0.5"/>
           </svg>
         </div>
       </section>
 
       {/* Recently Added */}
-      <section className="px-6 py-8 max-w-7xl mx-auto bg-white">
-        <h2 className="text-2xl font-bold mb-6">Недавно добавленные</h2>
+      <section className="px-6 py-16 max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8">Недавно добавленные</h2>
         
         {loading ? (
           <div className="text-center py-12 text-gray-500">Загрузка...</div>
@@ -223,32 +221,32 @@ export default function Index() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {properties.map((property) => (
-              <div key={property.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+              <div key={property.id} className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                 {property.images && property.images.length > 0 ? (
                   <img
                     src={property.images[0]}
                     alt={property.title}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-56 object-cover"
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400 text-sm">Нет фото</span>
+                  <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400">Нет фото</span>
                   </div>
                 )}
                 
-                <div className="p-4">
-                  <p className="text-xl font-bold text-gray-900 mb-1">
+                <div className="p-6">
+                  <p className="text-2xl font-bold text-gray-900 mb-2">
                     {formatPrice(property.price, property.currency)}
-                    {property.transaction_type === 'rent' && <span className="text-sm font-normal"> в месяц</span>}
+                    {property.transaction_type === 'rent' && <span className="text-base font-normal"> в месяц</span>}
                   </p>
                   
-                  <p className="text-gray-600 text-sm mb-2">
+                  <p className="text-gray-700 font-medium mb-3">
                     {property.street_name || property.address}
                   </p>
                   
-                  <div className="flex items-center gap-3 text-xs text-gray-500">
+                  <div className="flex items-center gap-4 text-sm text-gray-600">
                     {property.rooms && <span>{property.rooms} комнат</span>}
                     {property.area && <span>• {property.area} м²</span>}
                     {property.floor && <span>• {property.floor} этаж</span>}
