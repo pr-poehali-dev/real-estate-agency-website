@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ const MapPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const propertyRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   
   const [selectedType, setSelectedType] = useState<string>('');
   const [selectedTransaction, setSelectedTransaction] = useState<string>('');
@@ -125,6 +126,15 @@ const MapPage: React.FC = () => {
   useEffect(() => {
     loadProperties();
   }, []);
+
+  useEffect(() => {
+    if (selectedProperty && propertyRefs.current[selectedProperty.id]) {
+      propertyRefs.current[selectedProperty.id]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }, [selectedProperty]);
 
   return (
     <div className="h-screen flex flex-col bg-white">
@@ -294,8 +304,9 @@ const MapPage: React.FC = () => {
                 className="block"
               >
                 <div
+                  ref={(el) => { propertyRefs.current[property.id] = el; }}
                   className={`p-4 border rounded-xl cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-[280px] flex flex-col ${
-                    selectedProperty?.id === property.id ? 'bg-orange-50 border-[#FF7A00] shadow-md' : 'hover:border-gray-300'
+                    selectedProperty?.id === property.id ? 'bg-orange-50 border-[#FF7A00] shadow-md ring-2 ring-[#FF7A00] ring-opacity-50' : 'hover:border-gray-300'
                   }`}
                   onClick={(e) => {
                     e.preventDefault();
