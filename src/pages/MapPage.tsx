@@ -137,8 +137,8 @@ const MapPage: React.FC = () => {
         <div className="w-24"></div>
       </header>
 
-      <div className="px-6 py-4 border-b bg-gray-50">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="px-6 py-4 border-b bg-gray-50 overflow-auto">
+        <div className="flex flex-wrap items-center gap-2 max-w-full">
           <button
             onClick={() => setSelectedTransaction('rent')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
