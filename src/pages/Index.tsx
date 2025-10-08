@@ -151,13 +151,12 @@ export default function Index() {
                   <SelectItem value="all">Все типы</SelectItem>
                   <SelectItem value="apartment">Квартира</SelectItem>
                   <SelectItem value="house">Дом</SelectItem>
-                  <SelectItem value="commercial">Коммерческая</SelectItem>
                 </SelectContent>
               </Select>
 
               <Input
                 type="number"
-                placeholder="Цена до, ₽"
+                placeholder="Цена до"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
                 className="h-12 rounded-xl"
