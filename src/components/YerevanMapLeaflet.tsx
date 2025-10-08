@@ -150,11 +150,21 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         </div>
       `;
 
-      const popup = L.popup().setContent(popupContent);
+      const popup = L.popup({
+        closeButton: true,
+        autoClose: false,
+        closeOnClick: false,
+        offset: [0, -10]
+      }).setContent(popupContent);
+      
       marker.bindPopup(popup);
+      
+      let popupTimeout: NodeJS.Timeout | null = null;
       
       marker.on('popupopen', () => {
         const popupElement = document.querySelector('.property-popup');
+        const leafletPopup = document.querySelector('.leaflet-popup');
+        
         if (popupElement) {
           popupElement.addEventListener('click', () => {
             if (onPropertySelect) {
@@ -162,22 +172,40 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
             }
           });
         }
+        
+        if (leafletPopup) {
+          leafletPopup.addEventListener('mouseenter', () => {
+            if (popupTimeout) {
+              clearTimeout(popupTimeout);
+              popupTimeout = null;
+            }
+          });
+          
+          leafletPopup.addEventListener('mouseleave', () => {
+            popupTimeout = setTimeout(() => {
+              marker.closePopup();
+            }, 300);
+          });
+        }
       });
       
       marker.on('mouseover', () => {
+        if (popupTimeout) {
+          clearTimeout(popupTimeout);
+          popupTimeout = null;
+        }
         marker.openPopup();
       });
       
       marker.on('mouseout', () => {
-        marker.closePopup();
+        popupTimeout = setTimeout(() => {
+          marker.closePopup();
+        }, 300);
       });
       
-      marker.on('click', () => {
-        if (isPreview) {
-          window.location.href = '/map';
-        } else if (onPropertySelect) {
-          onPropertySelect(property);
-        }
+      marker.on('click', (e) => {
+        L.DomEvent.stopPropagation(e);
+        marker.openPopup();
       });
 
       marker.addTo(mapInstance.current!);
@@ -248,6 +276,17 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         }
         .property-popup:hover {
           background-color: rgba(255, 122, 0, 0.05);
+        }
+        .leaflet-popup-close-button {
+          font-size: 20px;
+          padding: 4px 8px;
+          color: #666;
+          font-weight: bold;
+        }
+        .leaflet-popup-close-button:hover {
+          color: #FF7A00;
+          background-color: rgba(255, 122, 0, 0.1);
+          border-radius: 4px;
         }
         @keyframes popupFadeIn {
           from {
