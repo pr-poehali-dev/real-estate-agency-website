@@ -171,6 +171,20 @@ export default function Index() {
             </div>
           </div>
 
+          {/* Transaction Type Buttons */}
+          <div className="flex flex-wrap gap-4 mb-4">
+            <Link to="/map?transaction=rent">
+              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
+                АРЕНДА
+              </Button>
+            </Link>
+            <Link to="/map?transaction=sale">
+              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
+                ПРОДАЖА
+              </Button>
+            </Link>
+          </div>
+
           {/* Category Buttons */}
           <div className="flex flex-wrap gap-4">
             <Link to="/map?type=apartment">
