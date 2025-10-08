@@ -19,7 +19,13 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const [transactionType, setTransactionType] = useState('rent');
   const [propertyType, setPropertyType] = useState('all');
+  const [district, setDistrict] = useState('all');
   const [maxPrice, setMaxPrice] = useState('');
+  
+  const districts = [
+    'Аван', 'Аджапняк', 'Арабкир', 'Давташен', 'Канакер-Зейтун',
+    'Малатия-Себастия', 'Нор Норк', 'Нубарашен', 'Центр', 'Шенгавит', 'Эребуни'
+  ];
   
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -155,13 +161,17 @@ export default function Index() {
                 </SelectContent>
               </Select>
 
-              <Input
-                type="number"
-                placeholder="Цена до, ₽"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className="h-12 rounded-xl"
-              />
+              <Select value={district} onValueChange={setDistrict}>
+                <SelectTrigger className="h-12 rounded-xl">
+                  <SelectValue placeholder="Район" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все районы</SelectItem>
+                  {districts.map(d => (
+                    <SelectItem key={d} value={d}>{d}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
               <Link to="/map">
                 <Button className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl text-base font-medium">
@@ -173,19 +183,14 @@ export default function Index() {
 
           {/* Category Buttons */}
           <div className="flex flex-wrap gap-4">
-            <Link to="/map?type=apartment">
+            <Link to="/map?transaction=rent">
               <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
-                КВАРТИРЫ
+                АРЕНДА
               </Button>
             </Link>
-            <Link to="/map?type=house">
+            <Link to="/map?transaction=sale">
               <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
-                ДОМА
-              </Button>
-            </Link>
-            <Link to="/map?type=commercial">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-8 h-12 text-base font-medium">
-                КОММЕРЧЕСКАЯ
+                ПОКУПКА
               </Button>
             </Link>
           </div>
@@ -201,7 +206,7 @@ export default function Index() {
       </section>
 
       {/* Recently Added */}
-      <section className="px-6 py-16 max-w-7xl mx-auto">
+      <section className="px-6 py-8 max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold mb-8">Недавно добавленные</h2>
         
         {loading ? (
