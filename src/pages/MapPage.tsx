@@ -73,7 +73,7 @@ const MapPage: React.FC = () => {
       if (minPrice && price < Number(minPrice)) return false;
       if (maxPrice && price > Number(maxPrice)) return false;
       
-      if (rooms && prop.rooms !== Number(rooms)) return false;
+      if (rooms && rooms !== 'any' && prop.rooms !== Number(rooms)) return false;
       
       if (amenities.length > 0) {
         const propAmenities = prop.amenities || [];
@@ -81,8 +81,8 @@ const MapPage: React.FC = () => {
         if (!hasAllAmenities) return false;
       }
       
-      if (petsAllowed && prop.pets_allowed !== petsAllowed) return false;
-      if (childrenAllowed && prop.children_allowed !== childrenAllowed) return false;
+      if (petsAllowed && petsAllowed !== 'any' && prop.pets_allowed !== petsAllowed) return false;
+      if (childrenAllowed && childrenAllowed !== 'any' && prop.children_allowed !== childrenAllowed) return false;
       
       return true;
     });
@@ -197,7 +197,7 @@ const MapPage: React.FC = () => {
               <SelectValue placeholder="Количество комнат" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Не важно</SelectItem>
+              <SelectItem value="any">Не важно</SelectItem>
               <SelectItem value="1">1 комната</SelectItem>
               <SelectItem value="2">2 комнаты</SelectItem>
               <SelectItem value="3">3 комнаты</SelectItem>
@@ -226,7 +226,7 @@ const MapPage: React.FC = () => {
               <SelectValue placeholder="Можно с детьми" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Не важно</SelectItem>
+              <SelectItem value="any">Не важно</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
               <SelectItem value="negotiable">По договоренности</SelectItem>
@@ -238,7 +238,7 @@ const MapPage: React.FC = () => {
               <SelectValue placeholder="Можно с животными" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Не важно</SelectItem>
+              <SelectItem value="any">Не важно</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
               <SelectItem value="negotiable">По договоренности</SelectItem>
