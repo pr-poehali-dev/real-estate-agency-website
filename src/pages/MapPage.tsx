@@ -249,57 +249,69 @@ const MapPage: React.FC = () => {
             filteredProperties
               .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
               .map((property) => (
-              <div
+              <Link
                 key={property.id}
-                className={`p-4 border rounded-xl cursor-pointer hover:shadow-md transition-all ${
-                  selectedProperty?.id === property.id ? 'bg-orange-50 border-[#FF7A00] shadow-md' : 'hover:border-gray-300'
-                }`}
-                onClick={() => setSelectedProperty(property)}
+                to={`/property/${property.id}`}
+                className="block"
               >
-                {property.images && property.images.length > 0 && (
-                  <img
-                    src={property.images[0]}
-                    alt={property.title}
-                    className="w-full h-32 object-cover rounded-lg mb-3"
-                  />
-                )}
-                
-                <h3 className="font-semibold text-gray-900 mb-1 leading-tight">
-                  {property.title}
-                </h3>
-                <p className="text-[#FF7A00] font-bold text-lg mb-2">
-                  {formatPrice(property.price, property.currency)}
-                </p>
+                <div
+                  className={`p-4 border rounded-xl cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-[280px] flex flex-col ${
+                    selectedProperty?.id === property.id ? 'bg-orange-50 border-[#FF7A00] shadow-md' : 'hover:border-gray-300'
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setSelectedProperty(property);
+                  }}
+                >
+                  {property.images && property.images.length > 0 ? (
+                    <img
+                      src={property.images[0]}
+                      alt={property.title}
+                      className="w-full h-32 object-cover rounded-lg mb-3 flex-shrink-0"
+                    />
+                  ) : (
+                    <div className="w-full h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center flex-shrink-0">
+                      <span className="text-gray-400 text-sm">Нет фото</span>
+                    </div>
+                  )}
+                  
+                  <h3 className="font-semibold text-gray-900 mb-1 leading-tight line-clamp-2">
+                    {property.title}
+                  </h3>
+                  <p className="text-[#FF7A00] font-bold text-lg mb-2">
+                    {formatPrice(property.price, property.currency)}
+                  </p>
 
-                <div className="flex flex-wrap gap-2 text-xs text-gray-600 mb-2">
-                  {property.area && (
-                    <span className="bg-gray-100 px-2 py-1 rounded-full">
-                      {property.area} м²
-                    </span>
-                  )}
-                  {property.rooms && (
-                    <span className="bg-gray-100 px-2 py-1 rounded-full">
-                      {property.rooms} комн.
-                    </span>
-                  )}
-                  {property.floor && (
-                    <span className="bg-gray-100 px-2 py-1 rounded-full">
-                      {property.floor} этаж
-                    </span>
-                  )}
-                </div>
+                  <div className="flex flex-wrap gap-2 text-xs text-gray-600 mb-2">
+                    {property.area && (
+                      <span className="bg-gray-100 px-2 py-1 rounded-full">
+                        {property.area} м²
+                      </span>
+                    )}
+                    {property.rooms && (
+                      <span className="bg-gray-100 px-2 py-1 rounded-full">
+                        {property.rooms} комн.
+                      </span>
+                    )}
+                    {property.floor && (
+                      <span className="bg-gray-100 px-2 py-1 rounded-full">
+                        {property.floor} этаж
+                      </span>
+                    )}
+                  </div>
 
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <Icon name="MapPin" size={12} />
-                  <span>{property.district}</span>
-                  {property.street_name && (
-                    <>
-                      <span>•</span>
-                      <span>{property.street_name} {property.house_number}</span>
-                    </>
-                  )}
+                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-auto line-clamp-1">
+                    <Icon name="MapPin" size={12} />
+                    <span className="truncate">{property.district}</span>
+                    {property.street_name && (
+                      <>
+                        <span>•</span>
+                        <span className="truncate">{property.street_name} {property.house_number}</span>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <div className="text-center py-16 text-gray-400">
