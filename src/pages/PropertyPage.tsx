@@ -324,10 +324,9 @@ export default function PropertyPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">Все</SelectItem>
+                      <SelectItem value="all">Все типы</SelectItem>
                       <SelectItem value="apartment">Квартира</SelectItem>
                       <SelectItem value="house">Дом</SelectItem>
-                      <SelectItem value="commercial">Коммерческая</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
