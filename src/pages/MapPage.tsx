@@ -1,63 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
 import PropertyFilters from '@/components/PropertyFilters';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
-import { sampleProperties as allProperties } from '@/data/sampleProperties';
+import { Properties } from '@/lib/api';
+import type { Property as ApiProperty } from '@/lib/api';
 
-interface Property {
+interface Property extends ApiProperty {
   id: number;
-  title: string;
-  description: string;
-  property_type: string;
-  transaction_type: string;
-  price: number;
-  currency: string;
-  area?: number;
-  rooms?: number;
-  bedrooms?: number;
-  bathrooms?: number;
-  floor?: number;
-  total_floors?: number;
-  year_built?: number;
-  district: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  features: string[];
-  images: string[];
-  status: string;
   created_at: string;
   updated_at: string;
 }
 
 const MapPage: React.FC = () => {
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   
-  // Filter states
   const [selectedDistrict, setSelectedDistrict] = useState('Все районы');
   const [selectedType, setSelectedType] = useState('all');
   const [selectedTransaction, setSelectedTransaction] = useState('all');
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [streetSearch, setStreetSearch] = useState('');
 
-  // Применяем фильтры к данным из централизованного источника
-  const getMockProperties = (): Property[] => {
-    return allProperties.filter(prop => {
+  const loadProperties = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await Properties.list();
+      const props = (response.properties || []) as Property[];
+      setAllProperties(props);
+    } catch (err: any) {
+      console.error('Error loading properties:', err);
+      setError(err.message || 'Не удалось загрузить объекты');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredProperties = useMemo(() => {
+    return allProperties.filter((prop) => {
       if (selectedDistrict !== 'Все районы' && prop.district !== selectedDistrict) return false;
       if (selectedType !== 'all' && prop.property_type !== selectedType) return false;
       if (selectedTransaction !== 'all' && prop.transaction_type !== selectedTransaction) return false;
       
-      // Поиск по улице
       if (streetSearch.trim()) {
         const searchLower = streetSearch.toLowerCase();
-        const addressMatch = prop.address.toLowerCase().includes(searchLower);
-        if (!addressMatch) return false;
+        const streetMatch = (prop.street_name || '').toLowerCase().includes(searchLower);
+        const addressMatch = (prop.address || '').toLowerCase().includes(searchLower);
+        if (!streetMatch && !addressMatch) return false;
       }
       
       if (priceRange.min) {
@@ -72,28 +67,7 @@ const MapPage: React.FC = () => {
       
       return true;
     });
-  };
-
-  const loadProperties = async () => {
-    setLoading(true);
-    setError('');
-
-    try {
-      // Используем моковые данные для демо
-      const mockData = getMockProperties();
-      
-      // Симуляция загрузки
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setProperties(mockData);
-    } catch (err) {
-      console.error('Error loading properties:', err);
-      const mockData = getMockProperties();
-      setProperties(mockData);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [allProperties, selectedDistrict, selectedType, selectedTransaction, priceRange, streetSearch]);
 
   const resetFilters = () => {
     setSelectedDistrict('Все районы');
@@ -110,7 +84,8 @@ const MapPage: React.FC = () => {
   const getPropertyTypeLabel = (type: string) => {
     const labels: { [key: string]: string } = {
       'apartment': 'Квартира',
-      'house': 'Дом'
+      'house': 'Дом',
+      'commercial': 'Коммерция'
     };
     return labels[type] || type;
   };
@@ -124,17 +99,14 @@ const MapPage: React.FC = () => {
     return labels[type] || type;
   };
 
-  // Load properties on component mount and when filters change
   useEffect(() => {
     loadProperties();
-  }, [selectedDistrict, selectedType, selectedTransaction, priceRange, streetSearch]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Page Header */}
         <div className="mb-8">
-          {/* Back button */}
           <div className="mb-4">
             <Link to="/">
               <Button 
@@ -147,7 +119,6 @@ const MapPage: React.FC = () => {
             </Link>
           </div>
           
-          {/* Centered title section */}
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
               Карта недвижимости Еревана
@@ -159,7 +130,6 @@ const MapPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Filters */}
         <PropertyFilters
           selectedDistrict={selectedDistrict}
           selectedType={selectedType}
@@ -174,10 +144,9 @@ const MapPage: React.FC = () => {
           onReset={resetFilters}
         />
 
-        {/* Results Info */}
         <div className="mb-6 flex items-center justify-between">
           <div className="text-sm text-gray-600">
-            {loading ? 'Загрузка...' : `Найдено объектов: ${properties.length}`}
+            {loading ? 'Загрузка...' : `Найдено объектов: ${filteredProperties.length}`}
           </div>
           <div className="flex items-center gap-2">
             <Icon name="MapPin" size={16} />
@@ -187,7 +156,6 @@ const MapPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 flex items-center gap-2">
             <Icon name="AlertCircle" size={20} />
@@ -204,7 +172,6 @@ const MapPage: React.FC = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Interactive Map */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
@@ -216,7 +183,7 @@ const MapPage: React.FC = () => {
               <CardContent className="p-0">
                 <div className="h-96 w-full">
                   <YerevanMapLeaflet
-                    properties={properties}
+                    properties={filteredProperties}
                     selectedDistrict={selectedDistrict !== 'Все районы' ? selectedDistrict : undefined}
                     onPropertySelect={setSelectedProperty}
                   />
@@ -225,7 +192,6 @@ const MapPage: React.FC = () => {
             </Card>
           </div>
 
-          {/* Property Details */}
           <div>
             <Card className="sticky top-8">
               <CardHeader>
@@ -237,7 +203,7 @@ const MapPage: React.FC = () => {
               <CardContent>
                 {selectedProperty ? (
                   <div className="space-y-4">
-                    {selectedProperty.images.length > 0 && (
+                    {selectedProperty.images && selectedProperty.images.length > 0 && (
                       <img
                         src={selectedProperty.images[0]}
                         alt={selectedProperty.title}
@@ -264,13 +230,19 @@ const MapPage: React.FC = () => {
                         <span>{getTransactionTypeLabel(selectedProperty.transaction_type)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Дата добавления:</span>
-                        <span>{new Date(selectedProperty.created_at).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
+                        <span className="text-gray-600">Дата:</span>
+                        <span>{new Date(selectedProperty.created_at).toLocaleDateString('ru-RU')}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Район:</span>
                         <span>{selectedProperty.district}</span>
                       </div>
+                      {selectedProperty.street_name && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Адрес:</span>
+                          <span>{selectedProperty.street_name} {selectedProperty.house_number}</span>
+                        </div>
+                      )}
                       {selectedProperty.area && (
                         <div className="flex justify-between">
                           <span className="text-gray-600">Площадь:</span>
@@ -294,17 +266,10 @@ const MapPage: React.FC = () => {
                       )}
                       {selectedProperty.year_built && (
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Год постройки:</span>
+                          <span className="text-gray-600">Год:</span>
                           <span>{selectedProperty.year_built}</span>
                         </div>
                       )}
-                    </div>
-
-                    <div className="border-t pt-4">
-                      <p className="text-gray-600 text-sm mb-2">
-                        <Icon name="MapPin" size={14} className="inline mr-1" />
-                        {selectedProperty.address}
-                      </p>
                     </div>
 
                     {selectedProperty.description && (
@@ -316,7 +281,7 @@ const MapPage: React.FC = () => {
                       </div>
                     )}
 
-                    {selectedProperty.features.length > 0 && (
+                    {selectedProperty.features && selectedProperty.features.length > 0 && (
                       <div className="border-t pt-4">
                         <h4 className="font-medium mb-2">Особенности</h4>
                         <div className="flex flex-wrap gap-2">
@@ -349,13 +314,13 @@ const MapPage: React.FC = () => {
                     
                     <div className="border-t pt-4">
                       <h4 className="font-medium mb-3 text-sm text-gray-700">
-                        {properties.length > 0 
-                          ? `Найденные объекты (${properties.length})` 
+                        {filteredProperties.length > 0 
+                          ? `Найденные объекты (${filteredProperties.length})` 
                           : 'Объекты не найдены'}
                       </h4>
                       <div className="space-y-2 max-h-64 overflow-y-auto">
-                        {properties.length > 0 ? (
-                          properties
+                        {filteredProperties.length > 0 ? (
+                          filteredProperties
                             .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                             .map((property) => (
                             <div
@@ -380,11 +345,7 @@ const MapPage: React.FC = () => {
                                     <span>{getTransactionTypeLabel(property.transaction_type)}</span>
                                   </div>
                                   <div className="text-xs text-gray-400 mt-1">
-                                    {new Date(property.created_at).toLocaleDateString('ru-RU', { 
-                                      day: '2-digit', 
-                                      month: '2-digit', 
-                                      year: 'numeric' 
-                                    })}
+                                    {new Date(property.created_at).toLocaleDateString('ru-RU')}
                                   </div>
                                 </div>
                               </div>

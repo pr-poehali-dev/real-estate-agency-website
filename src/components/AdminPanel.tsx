@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import LoginForm from './admin/LoginForm';
 import AdminHeader from './admin/AdminHeader';
 import PropertyForm from './admin/PropertyForm';
 import PropertyList from './admin/PropertyList';
 import { Property } from '@/types/property';
-import { Auth, User as ApiUser } from '@/lib/api';
+import { Auth, Properties, User as ApiUser } from '@/lib/api';
 
 type AdminUser = ApiUser;
 
@@ -16,8 +16,8 @@ const AdminPanel: React.FC = () => {
   const [success, setSuccess] = useState('');
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
 
-  // Property form state
   const [propertyForm, setPropertyForm] = useState<Property>({
     title: '',
     description: '',
@@ -32,7 +32,7 @@ const AdminPanel: React.FC = () => {
     floor: 0,
     total_floors: 0,
     year_built: new Date().getFullYear(),
-    district: 'Центр',
+    district: 'Центр (Кентрон)',
     address: '',
     street_name: '',
     house_number: '',
@@ -45,7 +45,6 @@ const AdminPanel: React.FC = () => {
 
   const [featuresText, setFeaturesText] = useState('');
 
-  // Check existing auth on component mount
   useEffect(() => {
     checkAuthStatus();
   }, []);
@@ -114,138 +113,7 @@ const AdminPanel: React.FC = () => {
     setUser(null);
   };
 
-  const handleAddOrUpdateProperty = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess('');
-
-    const token = localStorage.getItem('admin_token');
-    if (!token) {
-      setError('Необходима авторизация');
-      setLoading(false);
-      return;
-    }
-
-    // Демо режим для локального токена
-    if (token.startsWith('demo-token-')) {
-      const action = isEditing ? 'обновлён' : 'добавлен';
-      setSuccess(`Объект "${propertyForm.title}" успешно ${action} в демо режиме!`);
-      
-      // Сброс формы
-      setPropertyForm({
-        title: '',
-        description: '',
-        property_type: 'apartment',
-        transaction_type: 'rent',
-        price: 0,
-        currency: 'AMD',
-        area: 0,
-        rooms: 0,
-        bedrooms: 0,
-        bathrooms: 0,
-        floor: 0,
-        total_floors: 0,
-        year_built: new Date().getFullYear(),
-        district: 'Центр (Кентрон)',
-        address: '',
-        street_name: '',
-        house_number: '',
-        apartment_number: '',
-        latitude: 40.1792,
-        longitude: 44.4991,
-        features: [],
-        images: []
-      });
-      setFeaturesText('');
-      setIsEditing(false);
-      setEditingProperty(null);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      // Parse features from text
-      const features = featuresText.split('\n').filter(f => f.trim()).map(f => f.trim());
-
-      const propertyData = {
-        ...propertyForm,
-        features
-      };
-
-      const response = await fetch('https://functions.poehali.dev/8571bb44-9242-4aac-8df9-754908175968', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(propertyData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setSuccess('Объект недвижимости успешно добавлен!');
-        // Reset form
-        setPropertyForm({
-          title: '',
-          description: '',
-          property_type: 'apartment',
-          transaction_type: 'rent',
-          price: 0,
-          currency: 'AMD',
-          area: 0,
-          rooms: 0,
-          bedrooms: 0,
-          bathrooms: 0,
-          floor: 0,
-          total_floors: 0,
-          year_built: new Date().getFullYear(),
-          district: 'Центр (Кентрон)',
-          address: '',
-          latitude: 40.1792,
-          longitude: 44.4991,
-          features: [],
-          images: []
-        });
-        setFeaturesText('');
-      } else {
-        setError(data.error || 'Ошибка добавления объекта');
-      }
-    } catch (error) {
-      setError('В демо режиме используйте логин admin/admin123');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEditProperty = (property: Property) => {
-    setEditingProperty(property);
-    setIsEditing(true);
-    
-    // Заполняем форму данными редактируемого объекта
-    setPropertyForm({
-      ...property,
-      street_name: property.street_name || '',
-      house_number: property.house_number || '',
-      apartment_number: property.apartment_number || '',
-      features: property.features || [],
-      images: property.images || []
-    });
-    
-    // Заполняем текстовые поля
-    setFeaturesText((property.features || []).join('\n'));
-    
-    // Очищаем сообщения
-    setError('');
-    setSuccess('');
-  };
-
-  const handleCancelEdit = () => {
-    setEditingProperty(null);
-    setIsEditing(false);
-    
-    // Сбрасываем форму к начальным значениям
+  const resetForm = useCallback(() => {
     setPropertyForm({
       title: '',
       description: '',
@@ -260,7 +128,7 @@ const AdminPanel: React.FC = () => {
       floor: 0,
       total_floors: 0,
       year_built: new Date().getFullYear(),
-      district: 'Центр',
+      district: 'Центр (Кентрон)',
       address: '',
       street_name: '',
       house_number: '',
@@ -270,8 +138,100 @@ const AdminPanel: React.FC = () => {
       features: [],
       images: []
     });
-    
     setFeaturesText('');
+    setIsEditing(false);
+    setEditingProperty(null);
+  }, []);
+
+  const handleAddOrUpdateProperty = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      setError('Необходима авторизация');
+      setLoading(false);
+      return;
+    }
+
+    if (token.startsWith('demo-token-')) {
+      const action = isEditing ? 'обновлён' : 'добавлен';
+      setSuccess(`Объект "${propertyForm.title}" успешно ${action} в демо режиме!`);
+      resetForm();
+      setLoading(false);
+      setRefetchTrigger(prev => prev + 1);
+      return;
+    }
+
+    try {
+      const features = featuresText.split('\n').filter(f => f.trim()).map(f => f.trim());
+
+      const payload = {
+        title: propertyForm.title?.trim(),
+        description: propertyForm.description?.trim() || '',
+        property_type: propertyForm.property_type,
+        transaction_type: propertyForm.transaction_type,
+        price: Number(propertyForm.price) || 0,
+        currency: propertyForm.currency || 'AMD',
+        area: propertyForm.area ? Number(propertyForm.area) : 0,
+        rooms: propertyForm.rooms ? Number(propertyForm.rooms) : 0,
+        bedrooms: propertyForm.bedrooms ? Number(propertyForm.bedrooms) : 0,
+        bathrooms: propertyForm.bathrooms ? Number(propertyForm.bathrooms) : 0,
+        floor: propertyForm.floor ? Number(propertyForm.floor) : 0,
+        total_floors: propertyForm.total_floors ? Number(propertyForm.total_floors) : 0,
+        year_built: propertyForm.year_built ? Number(propertyForm.year_built) : new Date().getFullYear(),
+        latitude: Number(propertyForm.latitude) || 40.1792,
+        longitude: Number(propertyForm.longitude) || 44.4991,
+        district: propertyForm.district?.trim() || 'Центр (Кентрон)',
+        address: propertyForm.address?.trim() || '',
+        street_name: propertyForm.street_name?.trim() || '',
+        house_number: propertyForm.house_number?.trim() || '',
+        apartment_number: propertyForm.apartment_number?.trim() || '',
+        features,
+        images: propertyForm.images || [],
+        status: 'active'
+      };
+
+      if (isEditing && propertyForm.id) {
+        await Properties.update(propertyForm.id, payload);
+        setSuccess(`Объект "${propertyForm.title}" успешно обновлён!`);
+      } else {
+        await Properties.create(payload);
+        setSuccess(`Объект "${propertyForm.title}" успешно добавлен!`);
+      }
+
+      resetForm();
+      setRefetchTrigger(prev => prev + 1);
+    } catch (error: any) {
+      setError(error.message || 'Ошибка сохранения объекта');
+      console.error('Property save error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditProperty = (property: Property) => {
+    setEditingProperty(property);
+    setIsEditing(true);
+    
+    setPropertyForm({
+      ...property,
+      street_name: property.street_name || '',
+      house_number: property.house_number || '',
+      apartment_number: property.apartment_number || '',
+      features: property.features || [],
+      images: property.images || []
+    });
+    
+    setFeaturesText((property.features || []).join('\n'));
+    setError('');
+    setSuccess('');
+  };
+
+  const handleCancelEdit = () => {
+    resetForm();
     setError('');
     setSuccess('');
   };
@@ -281,15 +241,20 @@ const AdminPanel: React.FC = () => {
       return;
     }
 
-    // В демо режиме просто показываем сообщение
     const token = localStorage.getItem('admin_token');
     if (token && token.startsWith('demo-token-')) {
       setSuccess(`Объявление #${propertyId} удалено в демо режиме!`);
+      setRefetchTrigger(prev => prev + 1);
       return;
     }
 
-    // В реальном режиме здесь был бы API вызов
-    setSuccess(`Объявление #${propertyId} помечено для удаления`);
+    try {
+      await Properties.remove(propertyId);
+      setSuccess('Объявление успешно удалено!');
+      setRefetchTrigger(prev => prev + 1);
+    } catch (error: any) {
+      setError(error.message || 'Ошибка удаления объекта');
+    }
   };
 
   if (!user) {
@@ -312,6 +277,7 @@ const AdminPanel: React.FC = () => {
         <PropertyList
           onEdit={handleEditProperty}
           onDelete={handleDeleteProperty}
+          refetchTrigger={refetchTrigger}
         />
         
         <PropertyForm

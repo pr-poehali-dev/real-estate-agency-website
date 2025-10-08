@@ -123,9 +123,10 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         ? [property.latitude, property.longitude]
         : getDistrictCoordinates(property.district);
       
-      // Небольшое случайное смещение для объектов в одном районе
-      const offsetLat = lat + (Math.random() - 0.5) * 0.01;
-      const offsetLng = lng + (Math.random() - 0.5) * 0.01;
+      // Стабильное смещение на основе ID (без Math.random)
+      const id = property.id || 0;
+      const offsetLat = lat + (Math.sin(id * 99991) * 0.0003);
+      const offsetLng = lng + (Math.cos(id * 12347) * 0.0003);
 
       const marker = L.marker([offsetLat, offsetLng], {
         icon: customIcon

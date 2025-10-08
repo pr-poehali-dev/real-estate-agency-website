@@ -318,8 +318,108 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             body_data = json.loads(event.get('body', '{}'))
             
-            update_query = f"UPDATE properties SET updated_at = CURRENT_TIMESTAMP WHERE id = {property_id} RETURNING id"
+            set_clauses = []
+            
+            if 'title' in body_data:
+                title = escape_sql_string(body_data['title'])
+                set_clauses.append(f"title = '{title}'")
+            if 'description' in body_data:
+                description = escape_sql_string(body_data['description'])
+                set_clauses.append(f"description = '{description}'")
+            if 'property_type' in body_data:
+                property_type = escape_sql_string(body_data['property_type'])
+                set_clauses.append(f"property_type = '{property_type}'")
+            if 'transaction_type' in body_data:
+                transaction_type = escape_sql_string(body_data['transaction_type'])
+                set_clauses.append(f"transaction_type = '{transaction_type}'")
+            if 'price' in body_data:
+                price = float(body_data['price'])
+                set_clauses.append(f"price = {price}")
+            if 'currency' in body_data:
+                currency = escape_sql_string(body_data['currency'])
+                set_clauses.append(f"currency = '{currency}'")
+            if 'area' in body_data:
+                area = float(body_data['area']) if body_data['area'] else 0
+                set_clauses.append(f"area = {area}")
+            if 'rooms' in body_data:
+                rooms = int(body_data['rooms']) if body_data['rooms'] else 0
+                set_clauses.append(f"rooms = {rooms}")
+            if 'bedrooms' in body_data:
+                bedrooms = int(body_data['bedrooms']) if body_data['bedrooms'] else 0
+                set_clauses.append(f"bedrooms = {bedrooms}")
+            if 'bathrooms' in body_data:
+                bathrooms = int(body_data['bathrooms']) if body_data['bathrooms'] else 0
+                set_clauses.append(f"bathrooms = {bathrooms}")
+            if 'floor' in body_data:
+                floor = int(body_data['floor']) if body_data['floor'] else 0
+                set_clauses.append(f"floor = {floor}")
+            if 'total_floors' in body_data:
+                total_floors = int(body_data['total_floors']) if body_data['total_floors'] else 0
+                set_clauses.append(f"total_floors = {total_floors}")
+            if 'year_built' in body_data:
+                year_built = int(body_data['year_built']) if body_data['year_built'] else 2020
+                set_clauses.append(f"year_built = {year_built}")
+            if 'district' in body_data:
+                district = escape_sql_string(body_data['district'])
+                set_clauses.append(f"district = '{district}'")
+            if 'address' in body_data:
+                address = escape_sql_string(body_data['address'])
+                set_clauses.append(f"address = '{address}'")
+            if 'street_name' in body_data:
+                street_name = escape_sql_string(body_data['street_name'])
+                set_clauses.append(f"street_name = '{street_name}'")
+            if 'house_number' in body_data:
+                house_number = escape_sql_string(body_data['house_number'])
+                set_clauses.append(f"house_number = '{house_number}'")
+            if 'apartment_number' in body_data:
+                apartment_number = escape_sql_string(body_data['apartment_number'])
+                set_clauses.append(f"apartment_number = '{apartment_number}'")
+            if 'latitude' in body_data:
+                latitude = float(body_data['latitude'])
+                set_clauses.append(f"latitude = {latitude}")
+            if 'longitude' in body_data:
+                longitude = float(body_data['longitude'])
+                set_clauses.append(f"longitude = {longitude}")
+            if 'status' in body_data:
+                status = escape_sql_string(body_data['status'])
+                set_clauses.append(f"status = '{status}'")
+            if 'features' in body_data:
+                features = body_data['features']
+                features_str = "ARRAY[" + ",".join([f"'{escape_sql_string(f)}'" for f in features]) + "]" if features else "'{}'"
+                set_clauses.append(f"features = {features_str}")
+            if 'images' in body_data:
+                images = body_data['images']
+                images_str = "ARRAY[" + ",".join([f"'{escape_sql_string(img)}'" for img in images]) + "]" if images else "'{}'"
+                set_clauses.append(f"images = {images_str}")
+            
+            set_clauses.append("updated_at = CURRENT_TIMESTAMP")
+            
+            if not set_clauses:
+                return {
+                    'statusCode': 400,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    'body': json.dumps({'ok': False, 'error': 'No fields to update'}),
+                    'isBase64Encoded': False
+                }
+            
+            update_query = f"UPDATE properties SET {', '.join(set_clauses)} WHERE id = {property_id} RETURNING id"
             cursor.execute(update_query)
+            result = cursor.fetchone()
+            
+            if not result:
+                return {
+                    'statusCode': 404,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    'body': json.dumps({'ok': False, 'error': 'Property not found'}),
+                    'isBase64Encoded': False
+                }
+            
             conn.commit()
             
             return {
