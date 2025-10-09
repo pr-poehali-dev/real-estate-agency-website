@@ -25,10 +25,10 @@ export default function Index() {
   const [maxPrice, setMaxPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [currency, setCurrency] = useState('AMD');
-  const [rooms, setRooms] = useState('');
+  const [rooms, setRooms] = useState('any');
   const [amenities, setAmenities] = useState<string[]>([]);
-  const [petsAllowed, setPetsAllowed] = useState('');
-  const [childrenAllowed, setChildrenAllowed] = useState('');
+  const [petsAllowed, setPetsAllowed] = useState('any');
+  const [childrenAllowed, setChildrenAllowed] = useState('any');
   const [streetSearch, setStreetSearch] = useState('');
   
   const [contactForm, setContactForm] = useState({
@@ -120,10 +120,10 @@ export default function Index() {
       maxPrice: maxPrice,
       minPrice: minPrice,
       currency: currency,
-      rooms: rooms,
+      rooms: rooms === 'any' ? '' : rooms,
       amenities: amenities,
-      petsAllowed: petsAllowed,
-      childrenAllowed: childrenAllowed,
+      petsAllowed: petsAllowed === 'any' ? '' : petsAllowed,
+      childrenAllowed: childrenAllowed === 'any' ? '' : childrenAllowed,
       streetSearch: streetSearch
     };
     localStorage.setItem('map_filters', JSON.stringify(filters));
@@ -221,7 +221,7 @@ export default function Index() {
                     <SelectValue placeholder="Количество комнат" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Любое</SelectItem>
+                    <SelectItem value="any">Любое</SelectItem>
                     <SelectItem value="1">1 комната</SelectItem>
                     <SelectItem value="2">2 комнаты</SelectItem>
                     <SelectItem value="3">3 комнаты</SelectItem>
@@ -284,7 +284,7 @@ export default function Index() {
                     <SelectValue placeholder="Разрешены ли питомцы" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Не важно</SelectItem>
+                    <SelectItem value="any">Не важно</SelectItem>
                     <SelectItem value="yes">Разрешены</SelectItem>
                     <SelectItem value="no">Не разрешены</SelectItem>
                   </SelectContent>
@@ -295,7 +295,7 @@ export default function Index() {
                     <SelectValue placeholder="Разрешены ли дети" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Не важно</SelectItem>
+                    <SelectItem value="any">Не важно</SelectItem>
                     <SelectItem value="yes">Разрешены</SelectItem>
                     <SelectItem value="no">Не разрешены</SelectItem>
                   </SelectContent>
