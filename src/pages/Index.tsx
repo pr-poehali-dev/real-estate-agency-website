@@ -190,7 +190,7 @@ export default function Index() {
         ref={heroRef}
         className="relative px-6 py-20 min-h-[500px] flex items-center overflow-hidden" 
         style={{
-          backgroundImage: 'url(https://cdn.poehali.dev/projects/73745f0c-4271-4bf6-a60b-4537cc7c5835/files/10d4019f-2510-4dff-9892-8f4b773e4217.jpg)',
+          backgroundImage: 'url(https://cdn.poehali.dev/projects/73745f0c-4271-4bf6-a60b-4537cc7c5835/files/9773e250-1b14-471d-b010-960b927ea3c5.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed'
