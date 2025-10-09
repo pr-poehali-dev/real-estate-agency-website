@@ -118,7 +118,7 @@ const MapPage: React.FC = () => {
   };
 
   const filteredProperties = useMemo(() => {
-    return allProperties.filter((prop) => {
+    const filtered = allProperties.filter((prop) => {
       if (selectedType && prop.property_type !== selectedType) return false;
       if (selectedTransaction && prop.transaction_type !== selectedTransaction) return false;
       if (selectedDistrict && selectedDistrict !== 'Все районы' && prop.district !== selectedDistrict) return false;
@@ -148,6 +148,13 @@ const MapPage: React.FC = () => {
       if (childrenAllowed && childrenAllowed !== 'any' && prop.children_allowed !== childrenAllowed) return false;
       
       return true;
+    });
+
+    // Сортируем от новых к старым
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.created_at).getTime();
+      const dateB = new Date(b.created_at).getTime();
+      return dateB - dateA; // от новых к старым
     });
   }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
