@@ -65,6 +65,18 @@ export default function PropertyPage() {
     return `${price.toLocaleString()} ${currency}`;
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Сегодня';
+    if (diffDays === 1) return 'Вчера';
+    if (diffDays < 7) return `${diffDays} дн. назад`;
+    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+  };
+
   const nextImage = () => {
     if (property?.images && property.images.length > 0) {
       setCurrentImageIndex((prev) => (prev + 1) % property.images.length);
@@ -202,7 +214,15 @@ export default function PropertyPage() {
             </div>
 
             {/* Details */}
-            <h1 className="text-3xl font-bold mb-3">{property.title}</h1>
+            <div className="flex items-start justify-between mb-3">
+              <h1 className="text-3xl font-bold flex-1">{property.title}</h1>
+              {property.created_at && (
+                <span className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                  <Icon name="Calendar" size={16} />
+                  {formatDate(property.created_at)}
+                </span>
+              )}
+            </div>
             
             <div className="flex items-center gap-3 mb-6">
               <span className="text-4xl font-bold text-[#FF7A00]">
@@ -380,7 +400,14 @@ export default function PropertyPage() {
                           className="w-[150px] h-full object-cover rounded-lg flex-shrink-0"
                         />
                         <div className="flex-1 min-w-0 flex flex-col">
-                          <h4 className="font-bold text-lg mb-2 line-clamp-2">{prop.title}</h4>
+                          <div className="flex items-start justify-between mb-2">
+                            <h4 className="font-bold text-lg line-clamp-2 flex-1 pr-2">{prop.title}</h4>
+                            {prop.created_at && (
+                              <span className="text-xs text-gray-500 flex-shrink-0">
+                                {formatDate(prop.created_at)}
+                              </span>
+                            )}
+                          </div>
                           <p className="text-2xl font-bold text-[#FF7A00] mb-2">
                             {formatPrice(prop.price, prop.currency)}
                           </p>

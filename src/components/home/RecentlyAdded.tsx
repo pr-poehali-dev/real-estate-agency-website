@@ -17,6 +17,18 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
     return `${price.toLocaleString()} ${currency}`;
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Сегодня';
+    if (diffDays === 1) return 'Вчера';
+    if (diffDays < 7) return `${diffDays} дн. назад`;
+    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+  };
+
   return (
     <section className="py-6">
       <div className="max-w-7xl mx-auto px-6">
@@ -54,9 +66,16 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                   )}
                   
                   <div className="p-4 flex flex-col flex-1 h-[40%]">
-                    <p className="text-lg font-bold text-[#FF7A00] mb-1">
-                      {formatPrice(property.price, property.currency)}
-                    </p>
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-lg font-bold text-[#FF7A00]">
+                        {formatPrice(property.price, property.currency)}
+                      </p>
+                      {property.created_at && (
+                        <span className="text-xs text-gray-500">
+                          {formatDate(property.created_at)}
+                        </span>
+                      )}
+                    </div>
                     
                     <p className="text-gray-900 font-medium mb-2 line-clamp-1 text-sm">
                       {property.street_name || property.address}
