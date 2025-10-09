@@ -22,6 +22,7 @@ interface MapFilters {
   selectedTransaction: string;
   minPrice: string;
   maxPrice: string;
+  currency: string;
   rooms: string;
   amenities: string[];
   petsAllowed: string;
@@ -43,6 +44,7 @@ const loadFilters = (): MapFilters => {
     selectedTransaction: '',
     minPrice: '',
     maxPrice: '',
+    currency: 'AMD',
     rooms: '',
     amenities: [],
     petsAllowed: '',
@@ -71,6 +73,7 @@ const MapPage: React.FC = () => {
   const [selectedTransaction, setSelectedTransaction] = useState<string>(initialFilters.selectedTransaction);
   const [minPrice, setMinPrice] = useState(initialFilters.minPrice);
   const [maxPrice, setMaxPrice] = useState(initialFilters.maxPrice);
+  const [currency, setCurrency] = useState(initialFilters.currency);
   const [rooms, setRooms] = useState<string>(initialFilters.rooms);
   const [amenities, setAmenities] = useState<string[]>(initialFilters.amenities);
   const [petsAllowed, setPetsAllowed] = useState<string>(initialFilters.petsAllowed);
@@ -116,6 +119,8 @@ const MapPage: React.FC = () => {
         if (!streetMatch && !addressMatch) return false;
       }
       
+      if (currency && prop.currency !== currency) return false;
+      
       const price = Number(prop.price);
       if (minPrice && price < Number(minPrice)) return false;
       if (maxPrice && price > Number(maxPrice)) return false;
@@ -133,7 +138,7 @@ const MapPage: React.FC = () => {
       
       return true;
     });
-  }, [allProperties, selectedType, selectedTransaction, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
+  }, [allProperties, selectedType, selectedTransaction, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   useEffect(() => {
     const filters: MapFilters = {
@@ -141,6 +146,7 @@ const MapPage: React.FC = () => {
       selectedTransaction,
       minPrice,
       maxPrice,
+      currency,
       rooms,
       amenities,
       petsAllowed,
@@ -148,13 +154,14 @@ const MapPage: React.FC = () => {
       streetSearch
     };
     saveFilters(filters);
-  }, [selectedType, selectedTransaction, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
+  }, [selectedType, selectedTransaction, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   const resetFilters = () => {
     setSelectedType('');
     setSelectedTransaction('');
     setMinPrice('');
     setMaxPrice('');
+    setCurrency('AMD');
     setRooms('');
     setAmenities([]);
     setPetsAllowed('');
@@ -195,49 +202,48 @@ const MapPage: React.FC = () => {
           {/* Transaction Type */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">Тип сделки</label>
-            <div className="space-y-2">
-              <button
-                onClick={() => setSelectedTransaction(selectedTransaction === 'rent' ? '' : 'rent')}
-                className={`w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-left ${
-                  selectedTransaction === 'rent'
-                    ? 'bg-[#FF7A00] text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Аренда
-              </button>
-              <button
-                onClick={() => setSelectedTransaction(selectedTransaction === 'sale' ? '' : 'sale')}
-                className={`w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-left ${
-                  selectedTransaction === 'sale'
-                    ? 'bg-[#FF7A00] text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Продажа
-              </button>
-            </div>
+            <Select value={selectedTransaction} onValueChange={setSelectedTransaction}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Все типы сделок" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Все типы сделок</SelectItem>
+                <SelectItem value="rent">Долгосрочная аренда</SelectItem>
+                <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
+                <SelectItem value="sale">Продажа</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Property Type */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">Тип недвижимости</label>
-            <button
-              onClick={() => setSelectedType(selectedType === 'apartment' ? '' : 'apartment')}
-              className={`w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-left ${
-                selectedType === 'apartment'
-                  ? 'bg-[#FF7A00] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Квартира
-            </button>
+            <Select value={selectedType} onValueChange={setSelectedType}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Все типы" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Все типы</SelectItem>
+                <SelectItem value="apartment">Квартира</SelectItem>
+                <SelectItem value="house">Дом</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Price Range */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">Цена</label>
             <div className="space-y-2">
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="AMD">AMD (֏)</SelectItem>
+                  <SelectItem value="USD">USD ($)</SelectItem>
+                  <SelectItem value="RUB">RUB (₽)</SelectItem>
+                </SelectContent>
+              </Select>
               <Input
                 type="number"
                 placeholder="Мин цена"
@@ -393,8 +399,7 @@ const MapPage: React.FC = () => {
                     className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col ${
                       selectedProperty?.id === property.id ? 'ring-4 ring-[#FF7A00]' : ''
                     }`}
-                    onClick={() => setSelectedProperty(property)}
-                    onDoubleClick={() => window.location.href = `/property/${property.id}`}
+                    onClick={() => window.location.href = `/property/${property.id}`}
                   >
                     {property.images && property.images.length > 0 ? (
                       <img
