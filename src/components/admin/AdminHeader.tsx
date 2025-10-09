@@ -33,7 +33,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout }) => {
       {/* Header content */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Админ-панель WSE.AM</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Админ-панель <span className="text-[#FF7A00]">WSE.AM</span></h1>
           <p className="text-gray-600">Добро пожаловать, {user.full_name}</p>
         </div>
         <Button variant="outline" onClick={onLogout}>

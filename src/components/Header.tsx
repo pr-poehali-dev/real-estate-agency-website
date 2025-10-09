@@ -15,7 +15,7 @@ export default function Header({ t, language, setLanguage, isMenuOpen, setIsMenu
   return (
     <header className="bg-white shadow-sm">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold font-montserrat text-primary hover:opacity-80 transition-opacity">
+        <Link to="/" className="text-2xl font-bold text-[#FF7A00] hover:text-[#E66D00] transition-colors">
           WSE.AM
         </Link>
         <div className="hidden md:flex space-x-8 items-center">
