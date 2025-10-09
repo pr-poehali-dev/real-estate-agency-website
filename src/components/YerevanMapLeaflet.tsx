@@ -156,7 +156,8 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         closeButton: true,
         autoClose: false,
         closeOnClick: false,
-        offset: [0, -10]
+        offset: [0, -10],
+        autoPan: false
       }).setContent(popupContent);
       
       marker.bindPopup(popup);
