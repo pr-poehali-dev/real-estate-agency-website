@@ -6,7 +6,7 @@ import type { Property as ApiProperty } from "@/lib/api";
 import Icon from "@/components/ui/icon";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-// import YerevanMapLeaflet from "@/components/YerevanMapLeaflet";
+import YerevanMapLeaflet from "@/components/YerevanMapLeaflet";
 
 interface Property extends ApiProperty {
   id: number;
@@ -642,7 +642,7 @@ export default function PropertyPage() {
       </div>
 
       {/* Карта с объектами на всю ширину */}
-      {/* {filteredProperties.length > 0 && (
+      {filteredProperties.length > 0 && (
         <div id="map-section" className="bg-white border-t border-gray-200">
           <div className="px-6 py-6">
             <h2 className="text-xl font-bold mb-4">Похожие объекты на карте</h2>
@@ -660,7 +660,7 @@ export default function PropertyPage() {
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

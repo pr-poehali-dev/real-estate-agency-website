@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
-// import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
+import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -434,7 +434,7 @@ const MapPage: React.FC = () => {
         )}
 
         {/* Map Section - Narrow horizontal strip */}
-        {/* <div className={`bg-gray-100 flex-shrink-0 border-b relative transition-all duration-300 ${isMapExpanded ? 'h-[50vh]' : 'h-[180px]'}`}>
+        <div className={`bg-gray-100 flex-shrink-0 border-b relative transition-all duration-300 ${isMapExpanded ? 'h-[50vh]' : 'h-[180px]'}`}>
           <YerevanMapLeaflet
             properties={filteredProperties}
             onPropertySelect={setSelectedProperty}
@@ -448,7 +448,7 @@ const MapPage: React.FC = () => {
           >
             <Icon name={isMapExpanded ? 'Minimize2' : 'Maximize2'} size={20} />
           </button>
-        </div> */}
+        </div>
 
         {/* Property Cards Grid - 3x3 with scroll */}
         <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
