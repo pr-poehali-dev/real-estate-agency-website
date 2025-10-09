@@ -266,13 +266,15 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       
 
 
-      <div className="absolute bottom-4 right-4 bg-white rounded-lg shadow-lg p-3 z-[1000]">
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <div className="w-4 h-4 bg-[#FF7A00] rounded-full border border-white shadow-sm"></div>
-          <span>Объекты недвижимости</span>
-        </div>
-        <p className="text-xs text-gray-500 mt-1">Кликните на маркер для деталей</p>
-      </div>
+      {!isPreview && (
+        <a 
+          href="/full-map"
+          className="absolute bottom-4 right-4 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg shadow-lg px-4 py-2.5 z-[1000] flex items-center gap-2 font-medium transition-all hover:shadow-xl"
+        >
+          <Icon name="Map" size={18} />
+          Показать на карте
+        </a>
+      )}
 
       <style>{`
         .custom-marker {
