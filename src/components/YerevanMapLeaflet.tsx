@@ -324,6 +324,9 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
           background-color: rgba(255, 122, 0, 0.1);
           border-radius: 4px;
         }
+        .leaflet-control-attribution {
+          display: none !important;
+        }
         @keyframes popupFadeIn {
           from {
             opacity: 0;
