@@ -31,15 +31,7 @@ interface MapFilters {
 }
 
 const loadFilters = (): MapFilters => {
-  try {
-    const saved = localStorage.getItem(FILTERS_KEY);
-    if (saved) {
-      return JSON.parse(saved);
-    }
-  } catch (e) {
-    console.error('Failed to load filters:', e);
-  }
-  return {
+  const defaults = {
     selectedType: '',
     selectedTransaction: '',
     minPrice: '',
@@ -51,6 +43,21 @@ const loadFilters = (): MapFilters => {
     childrenAllowed: '',
     streetSearch: ''
   };
+  
+  try {
+    const saved = localStorage.getItem(FILTERS_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return {
+        ...defaults,
+        ...parsed,
+        currency: parsed.currency || 'AMD'
+      };
+    }
+  } catch (e) {
+    console.error('Failed to load filters:', e);
+  }
+  return defaults;
 };
 
 const saveFilters = (filters: MapFilters) => {
