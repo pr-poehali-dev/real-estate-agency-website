@@ -25,6 +25,7 @@ export default function Index() {
   const [maxPrice, setMaxPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [currency, setCurrency] = useState('AMD');
+  const [district, setDistrict] = useState('all');
   const [rooms, setRooms] = useState('any');
   const [amenities, setAmenities] = useState<string[]>([]);
   const [petsAllowed, setPetsAllowed] = useState('any');
@@ -186,6 +187,27 @@ export default function Index() {
                   <SelectContent>
                     <SelectItem value="apartment">Квартира</SelectItem>
                     <SelectItem value="house">Дом</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={district} onValueChange={setDistrict}>
+                  <SelectTrigger className="h-14 rounded-lg md:w-56">
+                    <SelectValue placeholder="Все районы" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Все районы</SelectItem>
+                    <SelectItem value="ajapnyak">Аджапняк</SelectItem>
+                    <SelectItem value="arabkir">Арабкир</SelectItem>
+                    <SelectItem value="avan">Аван</SelectItem>
+                    <SelectItem value="davtashen">Давташен</SelectItem>
+                    <SelectItem value="erebuni">Эребуни</SelectItem>
+                    <SelectItem value="kentron">Кентрон</SelectItem>
+                    <SelectItem value="malatia-sebastia">Малатия-Себастия</SelectItem>
+                    <SelectItem value="nor-nork">Нор Норк</SelectItem>
+                    <SelectItem value="nubarashen">Нубарашен</SelectItem>
+                    <SelectItem value="shengavit">Шенгавит</SelectItem>
+                    <SelectItem value="kanaker-zeytun">Канакер-Зейтун</SelectItem>
+                    <SelectItem value="qanaqer-zeytun">Канакер-Зейтун</SelectItem>
                   </SelectContent>
                 </Select>
 
