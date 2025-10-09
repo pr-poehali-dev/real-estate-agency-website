@@ -162,8 +162,8 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
 
       const popup = L.popup({
         closeButton: true,
-        autoClose: false,
-        closeOnClick: false,
+        autoClose: !keepPopupsOpen,
+        closeOnClick: !keepPopupsOpen,
         offset: [0, -10],
         autoPan: false,
         maxWidth: 240,
