@@ -162,37 +162,26 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       let popupTimeout: NodeJS.Timeout | null = null;
       
       marker.on('popupopen', () => {
-        const popupElement = document.querySelector(`[data-property-id="${property.id}"]`);
-        const leafletPopup = document.querySelector('.leaflet-popup');
-        
-        if (popupElement) {
-          let clickCount = 0;
-          let clickTimer: NodeJS.Timeout | null = null;
+        setTimeout(() => {
+          const popupElement = document.querySelector(`[data-property-id="${property.id}"]`);
+          const leafletPopup = document.querySelector('.leaflet-popup');
           
-          const handleClick = () => {
-            clickCount++;
-            
-            if (clickCount === 1) {
-              clickTimer = setTimeout(() => {
-                if (onPropertySelect) {
-                  onPropertySelect(property);
-                }
-                clickCount = 0;
-              }, 300);
-            } else if (clickCount === 2) {
-              if (clickTimer) {
-                clearTimeout(clickTimer);
+          if (popupElement) {
+            const handleClick = (e: Event) => {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              if (onPropertySelect) {
+                onPropertySelect(property);
               }
+              
               window.location.href = `/property/${property.id}`;
-              clickCount = 0;
-            }
-          };
+            };
+            
+            popupElement.addEventListener('click', handleClick, { once: true });
+          }
           
-          popupElement.removeEventListener('click', handleClick);
-          popupElement.addEventListener('click', handleClick);
-        }
-        
-        if (leafletPopup) {
+          if (leafletPopup) {
           leafletPopup.addEventListener('mouseenter', () => {
             if (popupTimeout) {
               clearTimeout(popupTimeout);
@@ -206,6 +195,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
             }, 300);
           });
         }
+        }, 100);
       });
       
       marker.on('mouseover', () => {
