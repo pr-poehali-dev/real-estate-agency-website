@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,39 +41,10 @@ export default function Index() {
   });
   const [formLoading, setFormLoading] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     loadProperties();
   }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-in');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll('.scroll-animate').forEach((el) => {
-      observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [properties]);
 
   const loadProperties = async () => {
     setLoading(true);
@@ -171,40 +142,30 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-[#F5F3EE]">
       {/* Header */}
-      <header className="px-6 py-6 flex items-center justify-between max-w-7xl mx-auto animate-in fade-in slide-in-from-top duration-700">
-        <Link to="/admin" className="text-3xl font-black text-[#FF7A00] cursor-pointer hover:scale-110 transition-transform duration-300">WSE.AM</Link>
+      <header className="px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
+        <Link to="/admin" className="text-3xl font-black text-[#FF7A00] cursor-pointer hover:text-[#E66D00] transition-colors">WSE.AM</Link>
         <nav className="hidden md:flex items-center gap-8">
-          <Link to="/map" className="text-gray-800 hover:text-[#FF7A00] hover:scale-110 transition-all duration-300">Карта</Link>
-          <a href="#contact" className="text-gray-800 hover:text-[#FF7A00] hover:scale-110 transition-all duration-300">Контакты</a>
+          <Link to="/map" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Карта</Link>
+          <a href="#contact" className="text-gray-800 hover:text-[#FF7A00] transition-colors">Контакты</a>
           <Button 
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-105 text-white rounded-xl px-6 transition-all duration-300"
+            className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl px-6"
           >
             Связаться
           </Button>
         </nav>
       </header>
 
-      {/* Hero Search Section */}
-      <section 
-        ref={heroRef}
-        className="relative px-6 py-20 min-h-[500px] flex items-center overflow-hidden" 
-        style={{
-          backgroundImage: 'url(https://cdn.poehali.dev/projects/73745f0c-4271-4bf6-a60b-4537cc7c5835/files/9773e250-1b14-471d-b010-960b927ea3c5.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-orange-900/20 to-black/60" />
-        <div className="relative z-10 max-w-7xl mx-auto w-full">
-          <div className="mb-10 text-center animate-in fade-in slide-in-from-bottom duration-700">
-            <h1 className="text-5xl md:text-6xl font-black mb-4 text-white drop-shadow-2xl">Поиск недвижимости в Ереване</h1>
-            <p className="text-white text-xl md:text-2xl drop-shadow-lg">Найди свой идеальный вариант</p>
+      {/* Compact Search Section */}
+      <section className="relative px-6 py-4 max-w-7xl mx-auto">
+        <div className="relative z-10">
+          <div className="mb-8">
+            <h1 className="text-3xl font-black mb-2">Поиск недвижимости в Ереване</h1>
+            <p className="text-gray-600 text-lg">Найди свой идеальный вариант</p>
           </div>
 
           {/* Search Form */}
-          <div className="bg-white rounded-2xl shadow-2xl p-8 animate-in fade-in slide-in-from-bottom duration-700 delay-150">
+          <div className="bg-white rounded-xl shadow-md p-6">
             <div className="space-y-4">
               {/* Main Row: 3 Filters + Button */}
               <div className="flex flex-col md:flex-row gap-3">
@@ -279,7 +240,7 @@ export default function Index() {
 
                 <Button 
                   onClick={handleSearch}
-                  className="h-14 px-10 bg-gradient-to-r from-[#FF7A00] to-[#FF9933] hover:from-[#E66D00] hover:to-[#FF7A00] text-white rounded-lg font-medium transition-all text-base whitespace-nowrap shadow-lg hover:shadow-xl hover:scale-105 duration-300"
+                  className="h-14 px-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all text-base whitespace-nowrap"
                 >
                   Найти
                 </Button>
@@ -288,9 +249,10 @@ export default function Index() {
               {/* Map Button */}
               <Button 
                 onClick={() => navigate('/map')}
-                className="w-full h-14 rounded-lg border-2 bg-gradient-to-r from-orange-50 to-orange-100 border-[#FF7A00] hover:border-[#E66D00] hover:from-orange-100 hover:to-orange-200 font-semibold transition-all text-[#FF7A00] hover:text-[#E66D00] hover:scale-[1.02] duration-300 shadow-md hover:shadow-lg"
+                variant="outline"
+                className="w-full h-12 rounded-lg border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-medium transition-all"
               >
-                <Icon name="MapPin" size={24} className="mr-2" />
+                <Icon name="Map" size={20} className="mr-2" />
                 Открыть карту
               </Button>
             </div>
@@ -301,9 +263,9 @@ export default function Index() {
       </section>
 
       {/* Recently Added */}
-      <section className="py-24 bg-gradient-to-b from-white to-gray-50 scroll-animate opacity-0">
+      <section className="py-6">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-8 text-center">Недавно добавленные</h2>
+          <h2 className="text-2xl font-bold mb-4">Недавно добавленные</h2>
         </div>
         
         {loading ? (
@@ -317,10 +279,10 @@ export default function Index() {
           </div>
         ) : (
           <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {properties.slice(0, 3).map((property) => (
-              <Link key={property.id} to={`/property/${property.id}`} className="block group">
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col">
+              <Link key={property.id} to={`/property/${property.id}`} className="block aspect-square">
+                <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col">
                   {property.images && property.images.length > 0 ? (
                     <img
                       src={property.images[0]}
@@ -333,34 +295,19 @@ export default function Index() {
                     </div>
                   )}
                   
-                  <div className="p-6 flex flex-col flex-1 h-[40%]">
-                    <p className="text-2xl font-bold bg-gradient-to-r from-[#FF7A00] to-[#FF9933] bg-clip-text text-transparent mb-2">
+                  <div className="p-4 flex flex-col flex-1 h-[40%]">
+                    <p className="text-lg font-bold text-[#FF7A00] mb-1">
                       {formatPrice(property.price, property.currency)}
                     </p>
                     
-                    <p className="text-gray-900 font-semibold mb-3 line-clamp-1 text-base">
+                    <p className="text-gray-900 font-medium mb-2 line-clamp-1 text-sm">
                       {property.street_name || property.address}
                     </p>
                     
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mt-auto">
-                      {property.rooms && (
-                        <span className="flex items-center gap-1">
-                          <Icon name="Bed" size={16} />
-                          {property.rooms}
-                        </span>
-                      )}
-                      {property.area && (
-                        <span className="flex items-center gap-1">
-                          <Icon name="Square" size={16} />
-                          {property.area} м²
-                        </span>
-                      )}
-                      {property.floor && (
-                        <span className="flex items-center gap-1">
-                          <Icon name="Layers" size={16} />
-                          {property.floor} эт.
-                        </span>
-                      )}
+                    <div className="flex items-center gap-2 text-xs text-gray-600 mt-auto">
+                      {property.rooms && <span>{property.rooms} комн.</span>}
+                      {property.area && <span>• {property.area} м²</span>}
+                      {property.floor && <span>• {property.floor} эт.</span>}
                     </div>
                   </div>
                 </div>
@@ -561,28 +508,8 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Mobile Sticky Bottom Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-50 px-4 py-3 flex gap-3 safe-area-inset-bottom">
-        <a 
-          href="tel:+37495129260"
-          className="flex-1 h-14 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg"
-        >
-          <Icon name="Phone" size={20} />
-          Позвонить
-        </a>
-        <a 
-          href="https://wa.me/37495129260"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 h-14 bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#128C7E] hover:to-[#075E54] text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg"
-        >
-          <Icon name="MessageCircle" size={20} />
-          WhatsApp
-        </a>
-      </div>
-
       {/* Footer */}
-      <footer id="services" className="bg-gray-900 text-white py-12 px-6 mb-20 md:mb-0">
+      <footer id="services" className="bg-gray-900 text-white py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8">
             <div>
