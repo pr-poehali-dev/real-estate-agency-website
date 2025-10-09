@@ -165,7 +165,7 @@ export default function PropertyPage() {
       <div className="flex-1 flex overflow-hidden">
         {/* Left side - Property details */}
         <div className="w-1/2 overflow-y-auto">
-          <div className="px-6 pb-6 pt-12">
+          <div className="px-6 pb-6" style={{ paddingTop: '1.5cm' }}>
             {/* Images */}
             <div>
               {property.images && property.images.length > 0 ? (
@@ -221,7 +221,7 @@ export default function PropertyPage() {
             </div>
 
             {/* Details */}
-            <div className="flex items-start justify-between mb-3 mt-6">
+            <div className="flex items-start justify-between mb-3">
               <h1 className="text-3xl font-bold flex-1">{property.title}</h1>
               {property.created_at && (
                 <span className="text-sm text-gray-500 mt-1 flex items-center gap-1">
