@@ -365,7 +365,7 @@ const MapPage: React.FC = () => {
         )}
 
         {/* Map Section - Narrow horizontal strip */}
-        <div className={`bg-gray-100 flex-shrink-0 border-b relative transition-all duration-300 ${isMapExpanded ? 'h-[50vh]' : 'h-[200px]'}`}>
+        <div className={`bg-gray-100 flex-shrink-0 border-b relative transition-all duration-300 ${isMapExpanded ? 'h-[50vh]' : 'h-[180px]'}`}>
           <YerevanMapLeaflet
             properties={filteredProperties}
             onPropertySelect={setSelectedProperty}
@@ -380,9 +380,9 @@ const MapPage: React.FC = () => {
         </div>
 
         {/* Property Cards Grid - 3x3 with scroll */}
-        <div className="flex-1 overflow-y-auto bg-gray-50 p-6">
+        <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
           {filteredProperties.length > 0 ? (
-            <div className="grid grid-cols-3 gap-6 auto-rows-min">
+            <div className="grid grid-cols-3 gap-4 auto-rows-min">
               {filteredProperties
                 .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                 .map((property) => (
@@ -399,32 +399,32 @@ const MapPage: React.FC = () => {
                       <img
                         src={property.images[0]}
                         alt={property.title}
-                        className="w-full h-48 object-cover"
+                        className="w-full h-36 object-cover"
                       />
                     ) : (
-                      <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-400">Нет фото</span>
+                      <div className="w-full h-36 bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-400 text-sm">Нет фото</span>
                       </div>
                     )}
                     
-                    <div className="p-4 flex flex-col flex-1">
-                      <p className="text-xl font-bold text-[#FF7A00] mb-2">
+                    <div className="p-3 flex flex-col flex-1">
+                      <p className="text-lg font-bold text-[#FF7A00] mb-1">
                         {formatPrice(property.price, property.currency)}
-                        {property.transaction_type === 'rent' && <span className="text-sm font-normal text-gray-600"> /мес</span>}
+                        {property.transaction_type === 'rent' && <span className="text-xs font-normal text-gray-600"> /мес</span>}
                       </p>
                       
-                      <p className="text-gray-900 font-medium mb-2 line-clamp-2">
+                      <p className="text-gray-900 font-medium mb-2 line-clamp-1 text-sm">
                         {property.title}
                       </p>
                       
-                      <div className="flex items-center gap-3 text-sm text-gray-600 mb-3">
+                      <div className="flex items-center gap-2 text-xs text-gray-600 mb-2">
                         {property.rooms && <span>{property.rooms} комн.</span>}
                         {property.area && <span>• {property.area} м²</span>}
                         {property.floor && <span>• {property.floor} эт.</span>}
                       </div>
 
                       <div className="flex items-center gap-1 text-xs text-gray-500 mt-auto">
-                        <Icon name="MapPin" size={14} />
+                        <Icon name="MapPin" size={12} />
                         <span className="truncate">
                           {property.street_name ? `${property.street_name} ${property.house_number || ''}` : property.district}
                         </span>
