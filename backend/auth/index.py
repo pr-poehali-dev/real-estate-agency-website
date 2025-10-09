@@ -70,14 +70,25 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             cursor.execute(query)
             user = cursor.fetchone()
             
-            if not user or not user['is_active']:
+            if not user:
                 return {
                     'statusCode': 401,
                     'headers': {
                         'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin': '*'
                     },
-                    'body': json.dumps({'ok': False, 'error': 'Invalid credentials'}),
+                    'body': json.dumps({'ok': False, 'error': 'User not found'}),
+                    'isBase64Encoded': False
+                }
+            
+            if not user['is_active']:
+                return {
+                    'statusCode': 401,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    'body': json.dumps({'ok': False, 'error': 'User is not active'}),
                     'isBase64Encoded': False
                 }
             
@@ -85,14 +96,27 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             if isinstance(password_hash, str):
                 password_hash = password_hash.encode('utf-8')
             
-            if not bcrypt.checkpw(password.encode('utf-8'), password_hash):
+            try:
+                password_match = bcrypt.checkpw(password.encode('utf-8'), password_hash)
+            except Exception as e:
+                return {
+                    'statusCode': 500,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    'body': json.dumps({'ok': False, 'error': f'Password check error: {str(e)}'}),
+                    'isBase64Encoded': False
+                }
+            
+            if not password_match:
                 return {
                     'statusCode': 401,
                     'headers': {
                         'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin': '*'
                     },
-                    'body': json.dumps({'ok': False, 'error': 'Invalid credentials'}),
+                    'body': json.dumps({'ok': False, 'error': 'Invalid password'}),
                     'isBase64Encoded': False
                 }
             
