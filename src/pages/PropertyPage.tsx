@@ -401,24 +401,6 @@ export default function PropertyPage() {
               </a>
             </div>
 
-            {/* Карта с объектами */}
-            {filteredProperties.length > 0 && (
-              <div className="mb-4 -mx-6">
-                <h2 className="text-xl font-bold mb-4 px-6">Похожие объекты на карте</h2>
-                <div className="h-[500px]">
-                  <YerevanMapLeaflet
-                    properties={[property, ...filteredProperties.slice(0, 20)]}
-                    onPropertySelect={(selected) => {
-                      if (selected.id !== property.id) {
-                        navigate(`/property/${selected.id}`);
-                      }
-                    }}
-                    isPreview={false}
-                    openOnClick={true}
-                  />
-                </div>
-              </div>
-            )}
             </div>
           </div>
         </div>
@@ -538,6 +520,27 @@ export default function PropertyPage() {
           )}
         </div>
       </div>
+
+      {/* Карта с объектами на всю ширину */}
+      {filteredProperties.length > 0 && (
+        <div className="bg-white border-t border-gray-200">
+          <div className="px-6 py-6">
+            <h2 className="text-xl font-bold mb-4">Похожие объекты на карте</h2>
+            <div className="h-[500px] rounded-xl overflow-hidden">
+              <YerevanMapLeaflet
+                properties={[property, ...filteredProperties.slice(0, 20)]}
+                onPropertySelect={(selected) => {
+                  if (selected.id !== property.id) {
+                    navigate(`/property/${selected.id}`);
+                  }
+                }}
+                isPreview={false}
+                openOnClick={true}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
