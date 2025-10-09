@@ -283,18 +283,20 @@ const AdminPanel: React.FC = () => {
       };
 
       if (isEditing && propertyForm.id) {
-        await Properties.update(propertyForm.id, payload);
+        const result = await Properties.update(propertyForm.id, payload);
+        console.log('Update result:', result);
         setSuccess(`Объект "${propertyForm.title}" успешно обновлён!`);
       } else {
-        await Properties.create(payload);
+        const result = await Properties.create(payload);
+        console.log('Create result:', result);
         setSuccess(`Объект "${propertyForm.title}" успешно добавлен!`);
       }
 
       resetForm();
       setRefetchTrigger(prev => prev + 1);
     } catch (error: any) {
-      setError(error.message || 'Ошибка сохранения объекта');
       console.error('Property save error:', error);
+      setError(error.message || 'Ошибка сохранения объекта');
     } finally {
       setLoading(false);
     }
