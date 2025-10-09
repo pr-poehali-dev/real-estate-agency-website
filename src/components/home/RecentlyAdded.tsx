@@ -35,7 +35,10 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
       ) : (
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {properties.slice(0, 3).map((property) => (
+            {properties
+              .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+              .slice(0, 3)
+              .map((property) => (
               <Link key={property.id} to={`/property/${property.id}`} className="block aspect-square">
                 <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col">
                   {property.images && property.images.length > 0 ? (

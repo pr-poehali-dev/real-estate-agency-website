@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -36,6 +36,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
   onCancel
 }) => {
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [geocoding, setGeocoding] = useState(false);
 
   const handleLocationChange = (lat: number, lng: number) => {
     setPropertyForm(prev => ({
@@ -44,6 +45,42 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
       longitude: lng
     }));
   };
+
+  const geocodeAddress = async (streetName: string, district: string) => {
+    if (!streetName || !district) return;
+    
+    setGeocoding(true);
+    try {
+      const query = `${streetName}, ${district}, Ереван, Армения`;
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`
+      );
+      const data = await response.json();
+      
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        setPropertyForm(prev => ({
+          ...prev,
+          latitude: parseFloat(lat),
+          longitude: parseFloat(lon)
+        }));
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error);
+    } finally {
+      setGeocoding(false);
+    }
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (propertyForm.street_name && propertyForm.district) {
+        geocodeAddress(propertyForm.street_name, propertyForm.district);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [propertyForm.street_name, propertyForm.district]);
 
   return (
     <Card>
@@ -264,7 +301,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
 
             <div className="border rounded-lg p-4 bg-gray-50">
               <div className="flex items-center justify-between mb-2">
-                <Label>Местоположение на карте</Label>
+                <Label>Местоположение на карте {geocoding && <span className="text-xs text-gray-500">(определение...)</span>}</Label>
                 <Button type="button" variant="outline" size="sm" onClick={() => setIsMapOpen(true)}>
                   <Icon name="MapPin" size={16} className="mr-1" />
                   Выбрать на карте
@@ -273,6 +310,9 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
               <div className="text-sm text-gray-600">
                 <p>Широта: {propertyForm.latitude?.toFixed(6) || 'не указано'}</p>
                 <p>Долгота: {propertyForm.longitude?.toFixed(6) || 'не указано'}</p>
+                {propertyForm.latitude && propertyForm.longitude && (
+                  <p className="text-xs text-green-600 mt-1">✓ Координаты установлены автоматически</p>
+                )}
               </div>
             </div>
           </div>
