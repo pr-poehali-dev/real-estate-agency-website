@@ -125,21 +125,15 @@ function saveDemoProperties(properties: Property[]): void {
 
 export const Properties = {
   list: async (query = '') => {
-    if (isDemoMode()) {
-      const properties = getDemoProperties();
-      return { properties, count: properties.length };
-    }
-    return api<PropertyListResponse>(`${BACKEND_URLS.properties}${query}`);
+    const properties = getDemoProperties();
+    return { properties, count: properties.length };
   },
   
   get: async (id: number) => {
-    if (isDemoMode()) {
-      const properties = getDemoProperties();
-      const property = properties.find(p => p.id === id);
-      if (!property) throw new Error('Property not found');
-      return property;
-    }
-    return api<Property>(`${BACKEND_URLS.properties}?id=${id}`);
+    const properties = getDemoProperties();
+    const property = properties.find(p => p.id === id);
+    if (!property) throw new Error('Объект не найден');
+    return property;
   },
   
   create: async (payload: Partial<Property>) => {
