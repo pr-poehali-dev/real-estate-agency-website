@@ -98,28 +98,15 @@ const AdminPanel: React.FC = () => {
   }, []);
 
   const checkAuthStatus = async () => {
-    const token = localStorage.getItem('admin_token');
-    if (!token) return;
-
-    if (token.startsWith('demo-token-')) {
-      const mockUser: AdminUser = {
-        id: 1,
-        username: 'admin',
-        email: 'admin@wse.am',
-        full_name: 'Администратор WSE.AM',
-        role: 'admin'
-      };
-      setUser(mockUser);
-      return;
-    }
-
-    try {
-      const data = await Auth.me();
-      setUser(data.user);
-    } catch (error) {
-      console.error('Auth check failed:', error);
-      localStorage.removeItem('admin_token');
-    }
+    const mockUser: AdminUser = {
+      id: 1,
+      username: 'demo',
+      email: 'demo@wse.am',
+      full_name: 'Демо-режим',
+      role: 'admin'
+    };
+    setUser(mockUser);
+    localStorage.setItem('admin_token', 'demo-token-' + Date.now());
   };
 
   const handleLogin = async (e: React.FormEvent) => {
