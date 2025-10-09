@@ -383,6 +383,7 @@ const MapPage: React.FC = () => {
             properties={filteredProperties}
             onPropertySelect={setSelectedProperty}
             keepPopupsOpen={true}
+            zoomPosition="topleft"
           />
           <button
             onClick={() => setIsMapExpanded(!isMapExpanded)}

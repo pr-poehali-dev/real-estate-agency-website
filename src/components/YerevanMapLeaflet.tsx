@@ -23,6 +23,7 @@ interface YerevanMapLeafletProps {
   isPreview?: boolean;
   openOnClick?: boolean;
   keepPopupsOpen?: boolean;
+  zoomPosition?: 'topright' | 'topleft';
 }
 
 const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({ 
@@ -31,7 +32,8 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
   selectedDistrict,
   isPreview = false,
   openOnClick = false,
-  keepPopupsOpen = false
+  keepPopupsOpen = false,
+  zoomPosition = 'topright'
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
@@ -87,7 +89,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
     });
 
     L.control.zoom({
-      position: 'topright'
+      position: zoomPosition
     }).addTo(mapInstance.current);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
