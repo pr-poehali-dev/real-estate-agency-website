@@ -150,8 +150,20 @@ const MapPage: React.FC = () => {
       return true;
     });
 
-    // Сортируем от новых к старым по ID (больший ID = новее)
-    return filtered.sort((a, b) => b.id - a.id);
+    // Сортируем от новых к старым по дате и времени создания
+    return filtered.sort((a, b) => {
+      // Сначала пытаемся сортировать по created_at (дата + время)
+      const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+      
+      // Если даты разные - сортируем по дате
+      if (dateA !== dateB) {
+        return dateB - dateA; // от новых к старым
+      }
+      
+      // Если даты одинаковые - сортируем по ID (больший ID = новее)
+      return b.id - a.id;
+    });
   }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   useEffect(() => {
