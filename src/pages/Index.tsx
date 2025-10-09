@@ -120,19 +120,16 @@ export default function Index() {
         </nav>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative px-6 pt-12 pb-8 max-w-7xl mx-auto">
+      {/* Compact Search Section */}
+      <section className="relative px-6 py-4 max-w-7xl mx-auto">
         <div className="relative z-10">
-          <h1 className="text-5xl md:text-6xl font-black mb-4 leading-tight animate-in fade-in slide-in-from-left duration-700">
-            Поиск недвижимости<br />в Ереване
-          </h1>
-          <p className="text-xl font-medium text-gray-600 mb-12 animate-in fade-in slide-in-from-left duration-700 delay-150">Найдите идеальный вариант</p>
+          <h1 className="text-3xl font-black mb-4">Поиск недвижимости в Ереване</h1>
 
           {/* Search Form */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-4xl animate-in fade-in slide-in-from-bottom duration-700 delay-300 hover:shadow-2xl transition-shadow duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-xl shadow-md p-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               <Select value={transactionType} onValueChange={setTransactionType}>
-                <SelectTrigger className="h-12 rounded-xl">
+                <SelectTrigger className="h-10 rounded-lg">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -142,7 +139,7 @@ export default function Index() {
               </Select>
 
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="h-12 rounded-xl">
+                <SelectTrigger className="h-10 rounded-lg">
                   <SelectValue placeholder="Тип недвижимости" />
                 </SelectTrigger>
                 <SelectContent>
@@ -157,11 +154,11 @@ export default function Index() {
                 placeholder="Цена до"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                className="h-12 rounded-xl"
+                className="h-10 rounded-lg"
               />
 
               <Link to="/map">
-                <Button className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-105 text-white rounded-xl text-base font-medium transition-all duration-300">
+                <Button className="w-full h-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all">
                   Найти
                 </Button>
               </Link>
@@ -169,14 +166,14 @@ export default function Index() {
           </div>
 
           {/* Transaction Type Buttons */}
-          <div className="flex flex-wrap gap-4 animate-in fade-in slide-in-from-bottom duration-700 delay-500">
+          <div className="flex gap-3">
             <Link to="/map?transaction=rent">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-110 text-white rounded-full px-8 h-12 text-base font-medium transition-all duration-300">
+              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-6 h-9 text-sm font-medium transition-all">
                 АРЕНДА
               </Button>
             </Link>
             <Link to="/map?transaction=sale">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-110 text-white rounded-full px-8 h-12 text-base font-medium transition-all duration-300">
+              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-6 h-9 text-sm font-medium transition-all">
                 ПРОДАЖА
               </Button>
             </Link>
@@ -187,49 +184,49 @@ export default function Index() {
       </section>
 
       {/* Recently Added */}
-      <section className="py-8">
+      <section className="py-6">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold mb-8 animate-in fade-in slide-in-from-left duration-700">Недавно добавленные</h2>
+          <h2 className="text-2xl font-bold mb-4">Недавно добавленные</h2>
         </div>
         
         {loading ? (
-          <div className="text-center py-12 text-gray-500">Загрузка...</div>
+          <div className="text-center py-8 text-gray-500">Загрузка...</div>
         ) : properties.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-8 text-gray-500">
             <p>Нет добавленных объектов</p>
             <Link to="/admin" className="text-[#FF7A00] hover:underline mt-2 inline-block">
               Добавить первый объект
             </Link>
           </div>
         ) : (
-          <div className="overflow-x-auto pb-4 scrollbar-hide">
-            <div className="flex gap-6 px-6">
-            {properties.map((property) => (
-              <Link key={property.id} to={`/property/${property.id}`} className="block flex-shrink-0" style={{ width: '350px' }}>
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {properties.slice(0, 3).map((property) => (
+              <Link key={property.id} to={`/property/${property.id}`} className="block">
+                <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col">
                   {property.images && property.images.length > 0 ? (
                     <img
                       src={property.images[0]}
                       alt={property.title}
-                      className="w-full h-56 object-cover flex-shrink-0"
+                      className="w-full h-48 object-cover flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-full h-56 bg-gray-200 flex items-center justify-center flex-shrink-0">
+                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center flex-shrink-0">
                       <span className="text-gray-400">Нет фото</span>
                     </div>
                   )}
                   
-                  <div className="p-6 flex flex-col flex-1">
-                    <p className="text-2xl font-bold text-gray-900 mb-2">
+                  <div className="p-4 flex flex-col flex-1">
+                    <p className="text-xl font-bold text-gray-900 mb-2">
                       {formatPrice(property.price, property.currency)}
-                      {property.transaction_type === 'rent' && <span className="text-base font-normal"> в месяц</span>}
+                      {property.transaction_type === 'rent' && <span className="text-sm font-normal"> в месяц</span>}
                     </p>
                     
-                    <p className="text-gray-700 font-medium mb-3 line-clamp-2">
+                    <p className="text-gray-700 font-medium mb-2 line-clamp-2 text-sm">
                       {property.street_name || property.address}
                     </p>
                     
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mt-auto">
+                    <div className="flex items-center gap-3 text-xs text-gray-600 mt-auto">
                       {property.rooms && <span>{property.rooms} комнат</span>}
                       {property.area && <span>• {property.area} м²</span>}
                       {property.floor && <span>• {property.floor} этаж</span>}
