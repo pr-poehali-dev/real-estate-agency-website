@@ -15,21 +15,66 @@ interface Property extends ApiProperty {
   updated_at: string;
 }
 
+const FILTERS_KEY = 'map_filters';
+
+interface MapFilters {
+  selectedType: string;
+  selectedTransaction: string;
+  minPrice: string;
+  maxPrice: string;
+  rooms: string;
+  amenities: string[];
+  petsAllowed: string;
+  childrenAllowed: string;
+  streetSearch: string;
+}
+
+const loadFilters = (): MapFilters => {
+  try {
+    const saved = localStorage.getItem(FILTERS_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Failed to load filters:', e);
+  }
+  return {
+    selectedType: '',
+    selectedTransaction: '',
+    minPrice: '',
+    maxPrice: '',
+    rooms: '',
+    amenities: [],
+    petsAllowed: '',
+    childrenAllowed: '',
+    streetSearch: ''
+  };
+};
+
+const saveFilters = (filters: MapFilters) => {
+  try {
+    localStorage.setItem(FILTERS_KEY, JSON.stringify(filters));
+  } catch (e) {
+    console.error('Failed to save filters:', e);
+  }
+};
+
 const MapPage: React.FC = () => {
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   
-  const [selectedType, setSelectedType] = useState<string>('');
-  const [selectedTransaction, setSelectedTransaction] = useState<string>('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [rooms, setRooms] = useState<string>('');
-  const [amenities, setAmenities] = useState<string[]>([]);
-  const [petsAllowed, setPetsAllowed] = useState<string>('');
-  const [childrenAllowed, setChildrenAllowed] = useState<string>('');
-  const [streetSearch, setStreetSearch] = useState('');
+  const initialFilters = loadFilters();
+  const [selectedType, setSelectedType] = useState<string>(initialFilters.selectedType);
+  const [selectedTransaction, setSelectedTransaction] = useState<string>(initialFilters.selectedTransaction);
+  const [minPrice, setMinPrice] = useState(initialFilters.minPrice);
+  const [maxPrice, setMaxPrice] = useState(initialFilters.maxPrice);
+  const [rooms, setRooms] = useState<string>(initialFilters.rooms);
+  const [amenities, setAmenities] = useState<string[]>(initialFilters.amenities);
+  const [petsAllowed, setPetsAllowed] = useState<string>(initialFilters.petsAllowed);
+  const [childrenAllowed, setChildrenAllowed] = useState<string>(initialFilters.childrenAllowed);
+  const [streetSearch, setStreetSearch] = useState(initialFilters.streetSearch);
 
   const loadProperties = async () => {
     setLoading(true);
@@ -87,6 +132,21 @@ const MapPage: React.FC = () => {
       return true;
     });
   }, [allProperties, selectedType, selectedTransaction, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
+
+  useEffect(() => {
+    const filters: MapFilters = {
+      selectedType,
+      selectedTransaction,
+      minPrice,
+      maxPrice,
+      rooms,
+      amenities,
+      petsAllowed,
+      childrenAllowed,
+      streetSearch
+    };
+    saveFilters(filters);
+  }, [selectedType, selectedTransaction, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   const resetFilters = () => {
     setSelectedType('');
