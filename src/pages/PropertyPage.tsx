@@ -165,7 +165,7 @@ export default function PropertyPage() {
       <div className="flex-1 flex overflow-hidden">
         {/* Left side - Property details */}
         <div className="w-1/2 overflow-y-auto">
-          <div className="p-8">
+          <div className="p-6">
             {/* Images */}
             <div className="mb-6">
               {property.images && property.images.length > 0 ? (
@@ -466,13 +466,13 @@ export default function PropertyPage() {
             </div>
           ) : (
             <div className="p-6 flex flex-col h-full">
-              <h3 className="font-bold text-xl mb-4">Другие объекты ({filteredProperties.length})</h3>
+              <h3 className="font-bold text-xl mb-4">Другие объекты ({filteredProperties.filter(p => p.id !== property.id).length})</h3>
               
-              {filteredProperties.length === 0 ? (
+              {filteredProperties.filter(p => p.id !== property.id).length === 0 ? (
                 <p className="text-gray-500 text-center py-12">Нет объектов с такими параметрами</p>
               ) : (
                 <div className="overflow-y-auto pr-2 space-y-4" style={{ maxHeight: 'calc(9 * 196px)' }}>
-                  {filteredProperties.map((prop) => (
+                  {filteredProperties.filter(p => p.id !== property.id).map((prop) => (
                     <Link 
                       key={prop.id} 
                       to={`/property/${prop.id}`}
