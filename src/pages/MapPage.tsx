@@ -365,7 +365,7 @@ const MapPage: React.FC = () => {
         )}
 
         {/* Map Section - Narrow horizontal strip */}
-        <div className={`bg-gray-100 flex-shrink-0 border-b relative transition-all duration-300 ${isMapExpanded ? 'h-[calc(100vh-80px)]' : 'h-[200px]'}`}>
+        <div className={`bg-gray-100 flex-shrink-0 border-b relative transition-all duration-300 ${isMapExpanded ? 'h-[40vh]' : 'h-[200px]'}`}>
           <YerevanMapLeaflet
             properties={filteredProperties}
             onPropertySelect={setSelectedProperty}
