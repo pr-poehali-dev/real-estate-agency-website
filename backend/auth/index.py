@@ -93,12 +93,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 }
             
             password_hash = user['password_hash']
+            print(f"DEBUG: password_hash type: {type(password_hash)}, value: {password_hash}")
+            
             if isinstance(password_hash, str):
-                password_hash = password_hash.encode('utf-8')
+                password_hash_bytes = password_hash.encode('utf-8')
+            else:
+                password_hash_bytes = password_hash
+            
+            print(f"DEBUG: password_hash_bytes type: {type(password_hash_bytes)}, value: {password_hash_bytes}")
+            print(f"DEBUG: password to check: {password}")
             
             try:
-                password_match = bcrypt.checkpw(password.encode('utf-8'), password_hash)
+                password_match = bcrypt.checkpw(password.encode('utf-8'), password_hash_bytes)
+                print(f"DEBUG: password_match result: {password_match}")
             except Exception as e:
+                print(f"DEBUG: bcrypt.checkpw error: {str(e)}, type: {type(e)}")
                 return {
                     'statusCode': 500,
                     'headers': {
