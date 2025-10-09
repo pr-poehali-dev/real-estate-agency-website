@@ -93,7 +93,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
     }).addTo(mapInstance.current);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 19
     }).addTo(mapInstance.current);
 
