@@ -122,6 +122,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   <SelectContent>
                     <SelectItem value="rent">Долгосрочная аренда</SelectItem>
                     <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
+                    <SelectItem value="sale">Продажа</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -144,9 +145,9 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="AMD">AMD (драм)</SelectItem>
-                      <SelectItem value="USD">USD (доллар)</SelectItem>
-                      <SelectItem value="EUR">EUR (евро)</SelectItem>
+                      <SelectItem value="AMD">AMD</SelectItem>
+                      <SelectItem value="USD">USD</SelectItem>
+                      <SelectItem value="RUB">RUB</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -155,7 +156,21 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
 
             {/* Details */}
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="rooms">Комнат</Label>
+                  <Select value={propertyForm.rooms?.toString() || ''} onValueChange={(value) => setPropertyForm(prev => ({...prev, rooms: value ? Number(value) : 0}))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1 комната</SelectItem>
+                      <SelectItem value="2">2 комнаты</SelectItem>
+                      <SelectItem value="3">3 комнаты</SelectItem>
+                      <SelectItem value="4">4+ комнат</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div>
                   <Label htmlFor="area">Площадь (м²)</Label>
                   <Input
@@ -167,12 +182,12 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="rooms">Комнат</Label>
+                  <Label htmlFor="floor">Этаж</Label>
                   <Input
-                    id="rooms"
+                    id="floor"
                     type="number"
-                    value={propertyForm.rooms || ''}
-                    onChange={(e) => setPropertyForm(prev => ({...prev, rooms: e.target.value ? Number(e.target.value) : 0}))}
+                    value={propertyForm.floor || ''}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, floor: e.target.value ? Number(e.target.value) : 0}))}
                   />
                 </div>
               </div>
@@ -250,23 +265,62 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
             </div>
           </div>
 
-          {/* Features and Images */}
-          <div className="space-y-6">
+          {/* Amenities */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Удобства</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { label: 'Телевизор', value: 'tv' },
+                { label: 'Кондиционер', value: 'ac' },
+                { label: 'Интернет', value: 'internet' },
+                { label: 'Холодильник', value: 'fridge' },
+                { label: 'Плита', value: 'stove' },
+                { label: 'Стиральная машина', value: 'washing_machine' },
+                { label: 'Водонагреватель', value: 'water_heater' },
+                { label: 'Посудомоечная машина', value: 'dishwasher' },
+              ].map((amenity) => {
+                const currentFeatures = featuresText.split('\n').filter(f => f.trim());
+                const isChecked = currentFeatures.includes(amenity.label);
+                return (
+                  <label key={amenity.value} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFeaturesText(prev => prev ? `${prev}\n${amenity.label}` : amenity.label);
+                        } else {
+                          const newFeatures = currentFeatures.filter(f => f !== amenity.label);
+                          setFeaturesText(newFeatures.join('\n'));
+                        }
+                      }}
+                      className="w-4 h-4 rounded border-gray-300"
+                    />
+                    <span className="text-sm">{amenity.label}</span>
+                  </label>
+                );
+              })}
+            </div>
             <div>
-              <Label htmlFor="features">Особенности (каждая с новой строки)</Label>
+              <Label htmlFor="features">Дополнительные особенности (каждая с новой строки)</Label>
               <Textarea
                 id="features"
                 value={featuresText}
                 onChange={(e) => setFeaturesText(e.target.value)}
                 placeholder="Парковка&#10;Балкон&#10;Лифт&#10;Мебель"
-                rows={4}
+                rows={3}
               />
             </div>
+          </div>
+
+          {/* Images */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Фотографии</h3>
 
             <ImageUpload
               images={propertyForm.images || []}
               onImagesChange={(newImages) => setPropertyForm(prev => ({...prev, images: newImages}))}
-              maxImages={5}
+              maxImages={10}
             />
           </div>
 
