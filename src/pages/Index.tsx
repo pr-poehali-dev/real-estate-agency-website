@@ -81,7 +81,7 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F3EE]">
+    <div className="min-h-screen bg-white">
       <Header />
       
       <SearchSection
