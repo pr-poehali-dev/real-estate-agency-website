@@ -349,8 +349,12 @@ export default function PropertyPage() {
           {showMap ? (
             <div className="flex-1 bg-gray-100">
               <YerevanMapLeaflet
-                properties={[property]}
-                onPropertySelect={() => {}}
+                properties={[property, ...filteredProperties]}
+                onPropertySelect={(selected) => {
+                  if (selected.id !== property.id) {
+                    navigate(`/property/${selected.id}`);
+                  }
+                }}
                 isPreview={false}
               />
             </div>
