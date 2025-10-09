@@ -245,6 +245,26 @@ export default function PropertyPage() {
                     </div>
                   </div>
                 )}
+
+                {property.bedrooms && (
+                  <div className="flex items-center gap-3">
+                    <Icon name="Bed" size={24} className="text-[#FF7A00]" />
+                    <div>
+                      <p className="text-sm text-gray-600">Спален</p>
+                      <p className="font-semibold">{property.bedrooms}</p>
+                    </div>
+                  </div>
+                )}
+
+                {property.bathrooms && (
+                  <div className="flex items-center gap-3">
+                    <Icon name="Bath" size={24} className="text-[#FF7A00]" />
+                    <div>
+                      <p className="text-sm text-gray-600">Ванных</p>
+                      <p className="font-semibold">{property.bathrooms}</p>
+                    </div>
+                  </div>
+                )}
                 
                 {property.area && (
                   <div className="flex items-center gap-3">
@@ -267,6 +287,16 @@ export default function PropertyPage() {
                     </div>
                   </div>
                 )}
+
+                {property.year_built && (
+                  <div className="flex items-center gap-3">
+                    <Icon name="CalendarDays" size={24} className="text-[#FF7A00]" />
+                    <div>
+                      <p className="text-sm text-gray-600">Год постройки</p>
+                      <p className="font-semibold">{property.year_built}</p>
+                    </div>
+                  </div>
+                )}
                 
                 {property.property_type && (
                   <div className="flex items-center gap-3">
@@ -277,8 +307,70 @@ export default function PropertyPage() {
                     </div>
                   </div>
                 )}
+
+                {property.transaction_type && (
+                  <div className="flex items-center gap-3">
+                    <Icon name="FileText" size={24} className="text-[#FF7A00]" />
+                    <div>
+                      <p className="text-sm text-gray-600">Тип сделки</p>
+                      <p className="font-semibold">
+                        {property.transaction_type === 'rent' ? 'Аренда' : 
+                         property.transaction_type === 'daily_rent' ? 'Посуточно' : 'Продажа'}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
+
+            {/* Дополнительные условия */}
+            {(property.pets_allowed && property.pets_allowed !== 'any') || 
+             (property.children_allowed && property.children_allowed !== 'any') ? (
+              <div className="bg-white rounded-2xl p-6 mb-4">
+                <h2 className="text-xl font-bold mb-4">Дополнительные условия</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  {property.pets_allowed && property.pets_allowed !== 'any' && (
+                    <div className="flex items-center gap-3">
+                      <Icon name="Dog" size={24} className="text-[#FF7A00]" />
+                      <div>
+                        <p className="text-sm text-gray-600">Можно с животными</p>
+                        <p className="font-semibold">
+                          {property.pets_allowed === 'yes' ? 'Да' : 
+                           property.pets_allowed === 'no' ? 'Нет' : 'По договоренности'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {property.children_allowed && property.children_allowed !== 'any' && (
+                    <div className="flex items-center gap-3">
+                      <Icon name="Baby" size={24} className="text-[#FF7A00]" />
+                      <div>
+                        <p className="text-sm text-gray-600">Можно с детьми</p>
+                        <p className="font-semibold">
+                          {property.children_allowed === 'yes' ? 'Да' : 
+                           property.children_allowed === 'no' ? 'Нет' : 'По договоренности'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null}
+
+            {/* Особенности */}
+            {property.features && property.features.length > 0 && (
+              <div className="bg-white rounded-2xl p-6 mb-4">
+                <h2 className="text-xl font-bold mb-4">Особенности</h2>
+                <div className="flex flex-wrap gap-2">
+                  {property.features.map((feature, idx) => (
+                    <span key={idx} className="px-3 py-1 bg-orange-50 text-[#FF7A00] rounded-full text-sm">
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {property.address && (
               <div className="bg-white rounded-2xl p-6 mb-4">
