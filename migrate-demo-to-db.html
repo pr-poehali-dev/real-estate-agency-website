@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Миграция демо-данных в БД</title>
+  <style>
+    body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
+    .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Миграция демо-данных в PostgreSQL</h1>
+  <p>Эта страница перенесет все объявления из localStorage в реальную базу данных.</p>
+  
+  <button onclick="migrate()">Начать миграцию</button>
+  
+  <div id="results"></div>
+
+  <script>
+    const API_BASE = window.location.origin;
+    
+    async function migrate() {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '<p>Начинаю миграцию...</p>';
+      
+      // Получаем демо-данные из localStorage
+      const demoDataStr = localStorage.getItem('demo_properties');
+      if (!demoDataStr) {
+        resultsDiv.innerHTML = '<div class="result error">❌ Нет демо-данных в localStorage</div>';
+        return;
+      }
+      
+      const demoProperties = JSON.parse(demoDataStr);
+      resultsDiv.innerHTML += `<p>Найдено объявлений: ${demoProperties.length}</p>`;
+      
+      // Получаем токен админа
+      const token = localStorage.getItem('admin_token');
+      if (!token) {
+        resultsDiv.innerHTML += '<div class="result error">❌ Нет токена авторизации. Войдите в админ-панель.</div>';
+        return;
+      }
+      
+      let success = 0;
+      let failed = 0;
+      
+      // Переносим каждый объект
+      for (const property of demoProperties) {
+        const payload = {
+          title: property.title?.trim(),
+          description: property.description?.trim() || '',
+          property_type: property.property_type,
+          transaction_type: property.transaction_type,
+          price: Number(property.price) || 0,
+          currency: property.currency || 'AMD',
+          area: property.area ? Number(property.area) : 0,
+          rooms: property.rooms ? Number(property.rooms) : 0,
+          bedrooms: property.bedrooms ? Number(property.bedrooms) : 0,
+          bathrooms: property.bathrooms ? Number(property.bathrooms) : 0,
+          floor: property.floor ? Number(property.floor) : 0,
+          total_floors: property.total_floors ? Number(property.total_floors) : 0,
+          year_built: property.year_built ? Number(property.year_built) : new Date().getFullYear(),
+          latitude: Number(property.latitude) || 40.1792,
+          longitude: Number(property.longitude) || 44.4991,
+          district: property.district?.trim() || 'Центр (Кентрон)',
+          address: property.address?.trim() || '',
+          street_name: property.street_name?.trim() || '',
+          house_number: property.house_number?.trim() || '',
+          apartment_number: property.apartment_number?.trim() || '',
+          features: property.features || [],
+          images: property.images || [],
+          pets_allowed: property.pets_allowed || 'any',
+          children_allowed: property.children_allowed || 'any',
+          status: 'active'
+        };
+        
+        try {
+          const response = await fetch(`${API_BASE}/api/properties`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          
+          success++;
+          resultsDiv.innerHTML += `<div class="result success">✅ ${property.title}</div>`;
+        } catch (error) {
+          failed++;
+          resultsDiv.innerHTML += `<div class="result error">❌ ${property.title}: ${error.message}</div>`;
+        }
+      }
+      
+      resultsDiv.innerHTML += `<h2>Миграция завершена!</h2>`;
+      resultsDiv.innerHTML += `<p>Успешно: ${success}, Ошибок: ${failed}</p>`;
+    }
+  </script>
+</body>
+</html>
