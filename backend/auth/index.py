@@ -81,7 +81,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            if not bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
+            password_hash = user['password_hash']
+            if isinstance(password_hash, str):
+                password_hash = password_hash.encode('utf-8')
+            
+            if not bcrypt.checkpw(password.encode('utf-8'), password_hash):
                 return {
                     'statusCode': 401,
                     'headers': {
