@@ -363,18 +363,18 @@ const MapPage: React.FC = () => {
           </div>
         )}
 
-        {/* Map Section */}
-        <div className="h-[400px] bg-gray-100 flex-shrink-0">
+        {/* Map Section - Narrow horizontal strip */}
+        <div className="h-[200px] bg-gray-100 flex-shrink-0 border-b">
           <YerevanMapLeaflet
             properties={filteredProperties}
             onPropertySelect={setSelectedProperty}
           />
         </div>
 
-        {/* Property Cards Grid */}
+        {/* Property Cards Grid - 3x3 with scroll */}
         <div className="flex-1 overflow-y-auto bg-gray-50 p-6">
           {filteredProperties.length > 0 ? (
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-3 gap-6 auto-rows-min">
               {filteredProperties
                 .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                 .map((property) => (
