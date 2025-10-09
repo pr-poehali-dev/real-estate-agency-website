@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
 import { Button } from '@/components/ui/button';
@@ -64,6 +64,7 @@ const MapPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const propertyRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   
   const initialFilters = loadFilters();
   const [selectedType, setSelectedType] = useState<string>(initialFilters.selectedType);
@@ -167,6 +168,15 @@ const MapPage: React.FC = () => {
   useEffect(() => {
     loadProperties();
   }, []);
+
+  useEffect(() => {
+    if (selectedProperty && propertyRefs.current[selectedProperty.id]) {
+      propertyRefs.current[selectedProperty.id]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }, [selectedProperty]);
 
   return (
     <div className="h-screen flex bg-white">
@@ -368,19 +378,14 @@ const MapPage: React.FC = () => {
               {filteredProperties
                 .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                 .map((property) => (
-                <Link
-                  key={property.id}
-                  to={`/property/${property.id}`}
-                  className="block"
-                >
                   <div
+                    key={property.id}
+                    ref={(el) => { propertyRefs.current[property.id] = el; }}
                     className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col ${
-                      selectedProperty?.id === property.id ? 'ring-2 ring-[#FF7A00]' : ''
+                      selectedProperty?.id === property.id ? 'ring-4 ring-[#FF7A00]' : ''
                     }`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setSelectedProperty(property);
-                    }}
+                    onClick={() => setSelectedProperty(property)}
+                    onDoubleClick={() => window.location.href = `/property/${property.id}`}
                   >
                     {property.images && property.images.length > 0 ? (
                       <img
@@ -418,7 +423,6 @@ const MapPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </Link>
               ))}
             </div>
           ) : (
