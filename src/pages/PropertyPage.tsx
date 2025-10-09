@@ -6,6 +6,7 @@ import type { Property as ApiProperty } from "@/lib/api";
 import Icon from "@/components/ui/icon";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import YerevanMapLeaflet from "@/components/YerevanMapLeaflet";
 
 interface Property extends ApiProperty {
   id: number;
@@ -346,16 +347,11 @@ export default function PropertyPage() {
 
           {/* Map or List */}
           {showMap ? (
-            <div className="flex-1 relative">
-              <iframe
-                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48624.58415456418!2d44.47379!3d40.18111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x406abd39496ad82b%3A0x2e2579e7e2d4621b!2sYerevan%2C%20Armenia!5e0!3m2!1sen!2s!4v1234567890`}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0"
+            <div className="flex-1 bg-gray-100">
+              <YerevanMapLeaflet
+                properties={[property]}
+                onPropertySelect={() => {}}
+                isPreview={false}
               />
             </div>
           ) : (
