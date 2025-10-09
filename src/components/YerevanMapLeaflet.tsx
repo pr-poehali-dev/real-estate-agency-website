@@ -165,8 +165,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         autoClose: false,
         closeOnClick: false,
         offset: [0, -10],
-        autoPan: true,
-        autoPanPadding: [50, 50],
+        autoPan: false,
         maxWidth: 240,
         className: 'compact-popup'
       }).setContent(popupContent);
