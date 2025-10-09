@@ -252,26 +252,6 @@ export default function PropertyPage() {
                     </div>
                   </div>
                 )}
-
-                {property.bedrooms && (
-                  <div className="flex items-center gap-3">
-                    <Icon name="Bed" size={24} className="text-[#FF7A00]" />
-                    <div>
-                      <p className="text-sm text-gray-600">Спален</p>
-                      <p className="font-semibold">{property.bedrooms}</p>
-                    </div>
-                  </div>
-                )}
-
-                {property.bathrooms && (
-                  <div className="flex items-center gap-3">
-                    <Icon name="Bath" size={24} className="text-[#FF7A00]" />
-                    <div>
-                      <p className="text-sm text-gray-600">Ванных</p>
-                      <p className="font-semibold">{property.bathrooms}</p>
-                    </div>
-                  </div>
-                )}
                 
                 {property.area && (
                   <div className="flex items-center gap-3">
@@ -295,22 +275,16 @@ export default function PropertyPage() {
                   </div>
                 )}
 
-                {property.year_built && (
-                  <div className="flex items-center gap-3">
-                    <Icon name="CalendarDays" size={24} className="text-[#FF7A00]" />
-                    <div>
-                      <p className="text-sm text-gray-600">Год постройки</p>
-                      <p className="font-semibold">{property.year_built}</p>
-                    </div>
-                  </div>
-                )}
-                
                 {property.property_type && (
                   <div className="flex items-center gap-3">
                     <Icon name="Tag" size={24} className="text-[#FF7A00]" />
                     <div>
                       <p className="text-sm text-gray-600">Тип</p>
-                      <p className="font-semibold capitalize">{property.property_type}</p>
+                      <p className="font-semibold">
+                        {property.property_type === 'apartment' ? 'Квартира' :
+                         property.property_type === 'house' ? 'Дом' :
+                         property.property_type === 'commercial' ? 'Коммерция' : property.property_type}
+                      </p>
                     </div>
                   </div>
                 )}
