@@ -105,29 +105,94 @@ export interface PropertyListResponse {
   count: number;
 }
 
+function isDemoMode(): boolean {
+  const token = localStorage.getItem('admin_token');
+  return token?.startsWith('demo-token-') || false;
+}
+
+function getDemoProperties(): Property[] {
+  try {
+    const data = localStorage.getItem('demo_properties');
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveDemoProperties(properties: Property[]): void {
+  localStorage.setItem('demo_properties', JSON.stringify(properties));
+}
+
 export const Properties = {
-  list: (query = '') =>
-    api<PropertyListResponse>(`${BACKEND_URLS.properties}${query}`),
+  list: async (query = '') => {
+    if (isDemoMode()) {
+      const properties = getDemoProperties();
+      return { properties, count: properties.length };
+    }
+    return api<PropertyListResponse>(`${BACKEND_URLS.properties}${query}`);
+  },
   
-  get: (id: number) =>
-    api<Property>(`${BACKEND_URLS.properties}?id=${id}`),
+  get: async (id: number) => {
+    if (isDemoMode()) {
+      const properties = getDemoProperties();
+      const property = properties.find(p => p.id === id);
+      if (!property) throw new Error('Property not found');
+      return property;
+    }
+    return api<Property>(`${BACKEND_URLS.properties}?id=${id}`);
+  },
   
-  create: (payload: Partial<Property>) =>
-    api<{ property_id: number; message: string }>(BACKEND_URLS.properties, {
+  create: async (payload: Partial<Property>) => {
+    if (isDemoMode()) {
+      const properties = getDemoProperties();
+      const newProperty: Property = {
+        ...payload,
+        id: Date.now(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        status: 'active'
+      } as Property;
+      properties.push(newProperty);
+      saveDemoProperties(properties);
+      return { property_id: newProperty.id!, message: 'Объект добавлен (демо-режим)' };
+    }
+    return api<{ property_id: number; message: string }>(BACKEND_URLS.properties, {
       method: 'POST',
       body: JSON.stringify(payload)
-    }),
+    });
+  },
   
-  update: (id: number, payload: Partial<Property>) =>
-    api<{ message: string }>(`${BACKEND_URLS.properties}?id=${id}`, {
+  update: async (id: number, payload: Partial<Property>) => {
+    if (isDemoMode()) {
+      const properties = getDemoProperties();
+      const index = properties.findIndex(p => p.id === id);
+      if (index === -1) throw new Error('Property not found');
+      properties[index] = {
+        ...properties[index],
+        ...payload,
+        id,
+        updated_at: new Date().toISOString()
+      };
+      saveDemoProperties(properties);
+      return { message: 'Объект обновлён (демо-режим)' };
+    }
+    return api<{ message: string }>(`${BACKEND_URLS.properties}?id=${id}`, {
       method: 'PUT',
       body: JSON.stringify(payload)
-    }),
+    });
+  },
   
-  remove: (id: number) =>
-    api<{ message: string }>(`${BACKEND_URLS.properties}?id=${id}`, {
+  remove: async (id: number) => {
+    if (isDemoMode()) {
+      const properties = getDemoProperties();
+      const filtered = properties.filter(p => p.id !== id);
+      saveDemoProperties(filtered);
+      return { message: 'Объект удалён (демо-режим)' };
+    }
+    return api<{ message: string }>(`${BACKEND_URLS.properties}?id=${id}`, {
       method: 'DELETE'
-    })
+    });
+  }
 };
 
 export interface TelegramSubmission {
