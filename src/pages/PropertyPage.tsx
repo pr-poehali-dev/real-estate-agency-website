@@ -187,7 +187,7 @@ export default function PropertyPage() {
             <div>
               <label className="text-sm font-medium mb-1.5 block">Тип сделки</label>
               <Select value={transactionType} onValueChange={setTransactionType}>
-                <SelectTrigger className="h-9 text-sm">
+                <SelectTrigger className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -202,7 +202,7 @@ export default function PropertyPage() {
             <div>
               <label className="text-sm font-medium mb-1.5 block">Тип недвижимости</label>
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="h-9 text-sm">
+                <SelectTrigger className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -216,7 +216,7 @@ export default function PropertyPage() {
             <div>
               <label className="text-sm font-medium mb-1.5 block">Район</label>
               <Select value={district} onValueChange={setDistrict}>
-                <SelectTrigger className="h-9 text-sm">
+                <SelectTrigger className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -235,7 +235,7 @@ export default function PropertyPage() {
             <div>
               <label className="text-sm font-medium mb-1.5 block">Количество комнат</label>
               <Select value={rooms} onValueChange={setRooms}>
-                <SelectTrigger className="h-9 text-sm">
+                <SelectTrigger className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -250,27 +250,42 @@ export default function PropertyPage() {
             </div>
             
             <div>
-              <label className="text-sm font-medium mb-1.5 block">Валюта</label>
-              <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="h-9 text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Все</SelectItem>
-                  <SelectItem value="AMD">AMD</SelectItem>
-                  <SelectItem value="USD">USD</SelectItem>
-                  <SelectItem value="RUB">RUB</SelectItem>
-                </SelectContent>
-              </Select>
+              <label className="text-sm font-medium mb-1.5 block invisible">Валюта</label>
+              <div className="flex gap-1">
+                <Button 
+                  variant={currency === 'AMD' ? 'default' : 'outline'} 
+                  size="sm" 
+                  className="flex-1 h-10"
+                  onClick={() => setCurrency('AMD')}
+                >
+                  AMD
+                </Button>
+                <Button 
+                  variant={currency === 'USD' ? 'default' : 'outline'} 
+                  size="sm" 
+                  className="flex-1 h-10"
+                  onClick={() => setCurrency('USD')}
+                >
+                  USD
+                </Button>
+                <Button 
+                  variant={currency === 'RUB' ? 'default' : 'outline'} 
+                  size="sm" 
+                  className="flex-1 h-10"
+                  onClick={() => setCurrency('RUB')}
+                >
+                  RUB
+                </Button>
+              </div>
             </div>
           </div>
           
           {/* Second Row */}
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-5 gap-3">
             <div>
               <label className="text-sm font-medium mb-1.5 block">Можно с детьми</label>
               <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
-                <SelectTrigger className="h-9 text-sm">
+                <SelectTrigger className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -284,7 +299,7 @@ export default function PropertyPage() {
             <div>
               <label className="text-sm font-medium mb-1.5 block">Можно с животными</label>
               <Select value={petsAllowed} onValueChange={setPetsAllowed}>
-                <SelectTrigger className="h-9 text-sm">
+                <SelectTrigger className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -300,7 +315,7 @@ export default function PropertyPage() {
               <Input 
                 type="number" 
                 placeholder="От"
-                className="h-9 text-sm"
+                className="h-10"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
               />
@@ -311,10 +326,17 @@ export default function PropertyPage() {
               <Input 
                 type="number" 
                 placeholder="До"
-                className="h-9 text-sm"
+                className="h-10"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
               />
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-1.5 block invisible">Найти</label>
+              <Button className="w-full h-10">
+                Найти
+              </Button>
             </div>
           </div>
         </div>
