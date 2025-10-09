@@ -369,6 +369,7 @@ const MapPage: React.FC = () => {
           <YerevanMapLeaflet
             properties={filteredProperties}
             onPropertySelect={setSelectedProperty}
+            keepPopupsOpen={true}
           />
           <button
             onClick={() => setIsMapExpanded(!isMapExpanded)}

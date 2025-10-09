@@ -22,6 +22,7 @@ interface YerevanMapLeafletProps {
   selectedDistrict?: string;
   isPreview?: boolean;
   openOnClick?: boolean;
+  keepPopupsOpen?: boolean;
 }
 
 const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({ 
@@ -29,7 +30,8 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
   onPropertySelect, 
   selectedDistrict,
   isPreview = false,
-  openOnClick = false
+  openOnClick = false,
+  keepPopupsOpen = false
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
@@ -223,19 +225,21 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         }, 100);
       });
       
-      marker.on('mouseover', () => {
-        if (popupTimeout) {
-          clearTimeout(popupTimeout);
-          popupTimeout = null;
-        }
-        marker.openPopup();
-      });
-      
-      marker.on('mouseout', () => {
-        popupTimeout = setTimeout(() => {
-          marker.closePopup();
-        }, 300);
-      });
+      if (!keepPopupsOpen) {
+        marker.on('mouseover', () => {
+          if (popupTimeout) {
+            clearTimeout(popupTimeout);
+            popupTimeout = null;
+          }
+          marker.openPopup();
+        });
+        
+        marker.on('mouseout', () => {
+          popupTimeout = setTimeout(() => {
+            marker.closePopup();
+          }, 300);
+        });
+      }
       
       marker.on('click', (e) => {
         L.DomEvent.stopPropagation(e);
