@@ -133,22 +133,22 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
 
       const imageUrl = property.images && property.images.length > 0 ? property.images[0] : '';
       const popupContent = `
-        <div style="min-width: 280px; font-family: system-ui; cursor: pointer;" class="property-popup" data-property-id="${property.id}">
+        <div style="width: 220px; font-family: system-ui; cursor: pointer;" class="property-popup" data-property-id="${property.id}">
           ${imageUrl ? `
-            <div style="width: 100%; height: 160px; overflow: hidden; border-radius: 8px; margin-bottom: 12px;">
+            <div style="width: 100%; height: 120px; overflow: hidden; border-radius: 6px; margin-bottom: 8px;">
               <img src="${imageUrl}" alt="${property.title}" style="width: 100%; height: 100%; object-fit: cover;" />
             </div>
           ` : ''}
-          <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; line-height: 1.3;">
+          <h4 style="margin: 0 0 6px 0; font-size: 13px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
             ${property.title}
           </h4>
-          <p style="margin: 0 0 8px 0; color: #FF7A00; font-size: 16px; font-weight: 700;">
+          <p style="margin: 0 0 6px 0; color: #FF7A00; font-size: 15px; font-weight: 700;">
             ${formatPrice(property.price, property.currency)}
           </p>
-          <div style="margin: 0 0 8px 0; font-size: 12px; color: #666;">
+          <div style="margin: 0 0 4px 0; font-size: 11px; color: #666;">
             <p style="margin: 0;">${getPropertyTypeLabel(property.property_type)} • ${getTransactionTypeLabel(property.transaction_type)}</p>
           </div>
-          <p style="margin: 0; font-size: 12px; color: #666;">
+          <p style="margin: 0; font-size: 11px; color: #666;">
             📍 ${property.district}
           </p>
         </div>
@@ -159,7 +159,10 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         autoClose: false,
         closeOnClick: false,
         offset: [0, -10],
-        autoPan: false
+        autoPan: true,
+        autoPanPadding: [50, 50],
+        maxWidth: 240,
+        className: 'compact-popup'
       }).setContent(popupContent);
       
       marker.bindPopup(popup);

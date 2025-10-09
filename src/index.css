@@ -110,6 +110,20 @@
 .leaflet-popup-content-wrapper {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 12px 12px 10px;
+}
+
+.compact-popup .leaflet-popup-content-wrapper {
+  max-width: 240px !important;
+}
+
+.compact-popup .leaflet-popup-content {
+  margin: 10px;
+  width: 220px !important;
 }
 
 .leaflet-popup-tip {
