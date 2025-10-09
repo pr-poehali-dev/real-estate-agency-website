@@ -127,7 +127,7 @@ export default function PropertyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F3EE] flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="bg-white px-6 py-4 shadow-sm">
         <div className="max-w-[1800px] mx-auto flex items-center justify-between">
@@ -164,8 +164,8 @@ export default function PropertyPage() {
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left side - Property details */}
-        <div className="w-1/2 overflow-y-auto pt-[72px]">
-          <div className="px-6 pb-6">
+        <div className="w-1/2 overflow-y-auto">
+          <div className="px-6 pb-6 pt-[72px] bg-[#F5F3EE] min-h-full">
             {/* Images */}
             <div>
               {property.images && property.images.length > 0 ? (
