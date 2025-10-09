@@ -180,12 +180,14 @@ export default function PropertyPage() {
       {/* Filters - Full Width */}
       {showFilters && (
         <div className="border-b border-gray-200 px-6 py-4 bg-gray-50">
-          <h3 className="font-bold text-lg mb-4">Фильтры</h3>
-          <div className="grid grid-cols-8 gap-3">
+          <h3 className="font-bold text-lg mb-3">Фильтры</h3>
+          
+          {/* First Row */}
+          <div className="grid grid-cols-5 gap-3 mb-3">
             <div>
-              <label className="text-sm font-medium mb-2 block">Тип сделки</label>
+              <label className="text-sm font-medium mb-1.5 block">Тип сделки</label>
               <Select value={transactionType} onValueChange={setTransactionType}>
-                <SelectTrigger className="h-9">
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -198,9 +200,9 @@ export default function PropertyPage() {
             </div>
             
             <div>
-              <label className="text-sm font-medium mb-2 block">Тип недвижимости</label>
+              <label className="text-sm font-medium mb-1.5 block">Тип недвижимости</label>
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="h-9">
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -212,13 +214,13 @@ export default function PropertyPage() {
             </div>
             
             <div>
-              <label className="text-sm font-medium mb-2 block">Район</label>
+              <label className="text-sm font-medium mb-1.5 block">Район</label>
               <Select value={district} onValueChange={setDistrict}>
-                <SelectTrigger className="h-9">
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Все...</SelectItem>
+                  <SelectItem value="all">Все районы</SelectItem>
                   <SelectItem value="Центр (Кентрон)">Центр</SelectItem>
                   <SelectItem value="Аван">Аван</SelectItem>
                   <SelectItem value="Арабкир">Арабкир</SelectItem>
@@ -231,9 +233,9 @@ export default function PropertyPage() {
             </div>
             
             <div>
-              <label className="text-sm font-medium mb-2 block">Количество комнат</label>
+              <label className="text-sm font-medium mb-1.5 block">Количество комнат</label>
               <Select value={rooms} onValueChange={setRooms}>
-                <SelectTrigger className="h-9">
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -248,37 +250,9 @@ export default function PropertyPage() {
             </div>
             
             <div>
-              <label className="text-sm font-medium mb-2 block">Можно с детьми</label>
-              <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
-                <SelectTrigger className="h-9">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="any">Не важно</SelectItem>
-                  <SelectItem value="yes">Да</SelectItem>
-                  <SelectItem value="no">Нет</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <label className="text-sm font-medium mb-2 block">Можно с животными</label>
-              <Select value={petsAllowed} onValueChange={setPetsAllowed}>
-                <SelectTrigger className="h-9">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="any">Не важно</SelectItem>
-                  <SelectItem value="yes">Да</SelectItem>
-                  <SelectItem value="no">Нет</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <label className="text-sm font-medium mb-2 block">Валюта</label>
+              <label className="text-sm font-medium mb-1.5 block">Валюта</label>
               <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="h-9">
+                <SelectTrigger className="h-9 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -289,28 +263,58 @@ export default function PropertyPage() {
                 </SelectContent>
               </Select>
             </div>
+          </div>
+          
+          {/* Second Row */}
+          <div className="grid grid-cols-4 gap-3">
+            <div>
+              <label className="text-sm font-medium mb-1.5 block">Можно с детьми</label>
+              <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
+                <SelectTrigger className="h-9 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Не важно</SelectItem>
+                  <SelectItem value="yes">Да</SelectItem>
+                  <SelectItem value="no">Нет</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             
-            <div className="flex gap-2">
-              <div className="flex-1">
-                <label className="text-sm font-medium mb-2 block">Мин. цена</label>
-                <Input 
-                  type="number" 
-                  placeholder="От"
-                  className="h-9"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(e.target.value)}
-                />
-              </div>
-              <div className="flex-1">
-                <label className="text-sm font-medium mb-2 block">Макс. цена</label>
-                <Input 
-                  type="number" 
-                  placeholder="До"
-                  className="h-9"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                />
-              </div>
+            <div>
+              <label className="text-sm font-medium mb-1.5 block">Можно с животными</label>
+              <Select value={petsAllowed} onValueChange={setPetsAllowed}>
+                <SelectTrigger className="h-9 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Не важно</SelectItem>
+                  <SelectItem value="yes">Да</SelectItem>
+                  <SelectItem value="no">Нет</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-1.5 block">Мин. цена</label>
+              <Input 
+                type="number" 
+                placeholder="От"
+                className="h-9 text-sm"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-1.5 block">Макс. цена</label>
+              <Input 
+                type="number" 
+                placeholder="До"
+                className="h-9 text-sm"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+              />
             </div>
           </div>
         </div>
