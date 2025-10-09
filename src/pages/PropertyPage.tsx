@@ -164,8 +164,8 @@ export default function PropertyPage() {
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left side - Property details */}
-        <div className="w-1/2 overflow-y-auto">
-          <div className="px-6 pb-6 pt-[72px]">
+        <div className="w-1/2 overflow-y-auto pt-[72px]">
+          <div className="px-6 pb-6">
             {/* Images */}
             <div>
               {property.images && property.images.length > 0 ? (
