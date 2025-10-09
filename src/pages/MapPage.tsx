@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,6 @@ const MapPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
-  const propertyRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   
   const [selectedType, setSelectedType] = useState<string>('');
   const [selectedTransaction, setSelectedTransaction] = useState<string>('');
@@ -105,272 +104,271 @@ const MapPage: React.FC = () => {
     return `${price.toLocaleString()} ${currency}`;
   };
 
-  const getPropertyTypeLabel = (type: string) => {
-    const labels: { [key: string]: string } = {
-      'apartment': 'Квартира',
-      'house': 'Дом',
-      'commercial': 'Коммерция'
-    };
-    return labels[type] || type;
-  };
-
-  const getTransactionTypeLabel = (type: string) => {
-    const labels: { [key: string]: string } = {
-      'rent': 'Долгосрочная аренда',
-      'daily_rent': 'Посуточная аренда',
-      'sale': 'Продажа'
-    };
-    return labels[type] || type;
-  };
-
   useEffect(() => {
     loadProperties();
   }, []);
 
-  useEffect(() => {
-    if (selectedProperty && propertyRefs.current[selectedProperty.id]) {
-      propertyRefs.current[selectedProperty.id]?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
-  }, [selectedProperty]);
-
   return (
-    <div className="h-screen flex flex-col bg-white">
-      <header className="border-b bg-white px-6 py-4 flex items-center justify-between sticky top-0 z-50">
-        <Link to="/" className="flex items-center gap-2 text-gray-900 hover:text-[#FF7A00] transition-colors">
-          <Icon name="ArrowLeft" size={20} />
-          <span className="font-semibold">Назад</span>
-        </Link>
-        <h1 className="text-xl font-bold text-gray-900">Карта недвижимости Еревана</h1>
-        <div className="w-24"></div>
-      </header>
+    <div className="h-screen flex bg-white">
+      {/* Left Sidebar - Filters */}
+      <aside className="w-80 border-r bg-white overflow-y-auto flex-shrink-0">
+        <div className="sticky top-0 bg-white border-b px-6 py-4 z-10">
+          <Link to="/" className="flex items-center gap-2 text-gray-900 hover:text-[#FF7A00] transition-colors mb-4">
+            <Icon name="ArrowLeft" size={20} />
+            <span className="font-semibold">Назад</span>
+          </Link>
+          <h2 className="text-lg font-bold text-gray-900">Фильтры</h2>
+        </div>
 
-      <div className="px-6 py-4 border-b bg-gray-50 overflow-auto">
-        <div className="flex flex-wrap items-center gap-2 max-w-full">
-          <button
-            onClick={() => setSelectedTransaction('rent')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedTransaction === 'rent'
-                ? 'bg-[#FF7A00] text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-[#FF7A00]'
-            }`}
-          >
-            Аренда
-          </button>
-          <button
-            onClick={() => setSelectedTransaction('sale')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedTransaction === 'sale'
-                ? 'bg-[#FF7A00] text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-[#FF7A00]'
-            }`}
-          >
-            Продажа
-          </button>
+        <div className="p-6 space-y-6">
+          {/* Transaction Type */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Тип сделки</label>
+            <div className="space-y-2">
+              <button
+                onClick={() => setSelectedTransaction(selectedTransaction === 'rent' ? '' : 'rent')}
+                className={`w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-left ${
+                  selectedTransaction === 'rent'
+                    ? 'bg-[#FF7A00] text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Аренда
+              </button>
+              <button
+                onClick={() => setSelectedTransaction(selectedTransaction === 'sale' ? '' : 'sale')}
+                className={`w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-left ${
+                  selectedTransaction === 'sale'
+                    ? 'bg-[#FF7A00] text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Продажа
+              </button>
+            </div>
+          </div>
 
-          <div className="h-6 w-px bg-gray-300 mx-2"></div>
-
-          <button
-            onClick={() => setSelectedType('apartment')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedType === 'apartment'
-                ? 'bg-[#FF7A00] text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-[#FF7A00]'
-            }`}
-          >
-            Квартира
-          </button>
-
-          <div className="h-6 w-px bg-gray-300 mx-2"></div>
-
-          <Input
-            type="number"
-            placeholder="Мин цена"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            className="w-32 rounded-full border-gray-300"
-          />
-          <Input
-            type="number"
-            placeholder="Макс цена"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            className="w-32 rounded-full border-gray-300"
-          />
-
-          <div className="h-6 w-px bg-gray-300 mx-2"></div>
-
-          <Select value={rooms} onValueChange={setRooms}>
-            <SelectTrigger className="w-44 rounded-full">
-              <SelectValue placeholder="Количество комнат" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
-              <SelectItem value="1">1 комната</SelectItem>
-              <SelectItem value="2">2 комнаты</SelectItem>
-              <SelectItem value="3">3 комнаты</SelectItem>
-              <SelectItem value="4">4 комнаты</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <MultiSelect
-            options={[
-              { label: 'Телевизор', value: 'tv' },
-              { label: 'Кондиционер', value: 'ac' },
-              { label: 'Интернет', value: 'internet' },
-              { label: 'Холодильник', value: 'fridge' },
-              { label: 'Плита', value: 'stove' },
-              { label: 'Стиральная машина', value: 'washing_machine' },
-              { label: 'Водонагреватель', value: 'water_heater' },
-            ]}
-            selected={amenities}
-            onChange={setAmenities}
-            placeholder="Удобства"
-            className="w-44"
-          />
-
-          <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
-            <SelectTrigger className="w-48 rounded-full">
-              <SelectValue placeholder="Можно с детьми" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
-              <SelectItem value="yes">Да</SelectItem>
-              <SelectItem value="no">Нет</SelectItem>
-              <SelectItem value="negotiable">По договоренности</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={petsAllowed} onValueChange={setPetsAllowed}>
-            <SelectTrigger className="w-52 rounded-full">
-              <SelectValue placeholder="Можно с животными" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
-              <SelectItem value="yes">Да</SelectItem>
-              <SelectItem value="no">Нет</SelectItem>
-              <SelectItem value="negotiable">По договоренности</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {(selectedType || selectedTransaction || minPrice || maxPrice || rooms || amenities.length > 0 || petsAllowed || childrenAllowed || streetSearch) && (
+          {/* Property Type */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Тип недвижимости</label>
             <button
-              onClick={resetFilters}
-              className="px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+              onClick={() => setSelectedType(selectedType === 'apartment' ? '' : 'apartment')}
+              className={`w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-left ${
+                selectedType === 'apartment'
+                  ? 'bg-[#FF7A00] text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             >
-              Очистить
+              Квартира
             </button>
+          </div>
+
+          {/* Price Range */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Цена</label>
+            <div className="space-y-2">
+              <Input
+                type="number"
+                placeholder="Мин цена"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className="w-full"
+              />
+              <Input
+                type="number"
+                placeholder="Макс цена"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          {/* Rooms */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Количество комнат</label>
+            <Select value={rooms} onValueChange={setRooms}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Выберите" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Не важно</SelectItem>
+                <SelectItem value="1">1 комната</SelectItem>
+                <SelectItem value="2">2 комнаты</SelectItem>
+                <SelectItem value="3">3 комнаты</SelectItem>
+                <SelectItem value="4">4+ комнат</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Amenities */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Удобства</label>
+            <MultiSelect
+              options={[
+                { label: 'Телевизор', value: 'tv' },
+                { label: 'Кондиционер', value: 'ac' },
+                { label: 'Интернет', value: 'internet' },
+                { label: 'Холодильник', value: 'fridge' },
+                { label: 'Плита', value: 'stove' },
+                { label: 'Стиральная машина', value: 'washing_machine' },
+                { label: 'Водонагреватель', value: 'water_heater' },
+              ]}
+              selected={amenities}
+              onChange={setAmenities}
+              placeholder="Выберите удобства"
+              className="w-full"
+            />
+          </div>
+
+          {/* Children Allowed */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с детьми</label>
+            <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Не важно" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Не важно</SelectItem>
+                <SelectItem value="yes">Да</SelectItem>
+                <SelectItem value="no">Нет</SelectItem>
+                <SelectItem value="negotiable">По договоренности</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Pets Allowed */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с животными</label>
+            <Select value={petsAllowed} onValueChange={setPetsAllowed}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Не важно" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Не важно</SelectItem>
+                <SelectItem value="yes">Да</SelectItem>
+                <SelectItem value="no">Нет</SelectItem>
+                <SelectItem value="negotiable">По договоренности</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Reset Button */}
+          {(selectedType || selectedTransaction || minPrice || maxPrice || rooms || amenities.length > 0 || petsAllowed || childrenAllowed) && (
+            <Button
+              onClick={resetFilters}
+              variant="outline"
+              className="w-full"
+            >
+              Сбросить фильтры
+            </Button>
           )}
 
-          <div className="ml-auto text-sm text-gray-600">
-            {loading ? 'Загрузка...' : `Найдено: ${filteredProperties.length}`}
+          {/* Results Count */}
+          <div className="text-center text-sm text-gray-600 pt-4 border-t">
+            {loading ? 'Загрузка...' : `Найдено объектов: ${filteredProperties.length}`}
           </div>
         </div>
-      </div>
+      </aside>
 
-      {error && (
-        <div className="mx-6 mt-4 bg-red-50 text-red-600 p-4 rounded-xl flex items-center gap-2">
-          <Icon name="AlertCircle" size={20} />
-          {error}
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={loadProperties}
-            className="ml-auto"
-          >
-            Повторить
-          </Button>
-        </div>
-      )}
+      {/* Right Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="border-b bg-white px-6 py-4">
+          <h1 className="text-2xl font-bold text-gray-900">Карта недвижимости Еревана</h1>
+        </header>
 
-      <div className="flex-1 flex overflow-hidden max-h-[calc(100vh-280px)]">
-        <div className="flex-[2] relative">
+        {error && (
+          <div className="mx-6 mt-4 bg-red-50 text-red-600 p-4 rounded-xl flex items-center gap-2">
+            <Icon name="AlertCircle" size={20} />
+            {error}
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={loadProperties}
+              className="ml-auto"
+            >
+              Повторить
+            </Button>
+          </div>
+        )}
+
+        {/* Map Section */}
+        <div className="h-[400px] bg-gray-100 flex-shrink-0">
           <YerevanMapLeaflet
             properties={filteredProperties}
             onPropertySelect={setSelectedProperty}
           />
         </div>
 
-        <aside className="flex-1 overflow-y-auto border-l bg-white p-4 space-y-3">
+        {/* Property Cards Grid */}
+        <div className="flex-1 overflow-y-auto bg-gray-50 p-6">
           {filteredProperties.length > 0 ? (
-            filteredProperties
-              .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-              .map((property) => (
-              <Link
-                key={property.id}
-                to={`/property/${property.id}`}
-                className="block"
-              >
-                <div
-                  ref={(el) => { propertyRefs.current[property.id] = el; }}
-                  className={`p-4 border rounded-xl cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-[280px] flex flex-col ${
-                    selectedProperty?.id === property.id ? 'bg-orange-50 border-[#FF7A00] shadow-md ring-2 ring-[#FF7A00] ring-opacity-50' : 'hover:border-gray-300'
-                  }`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setSelectedProperty(property);
-                  }}
+            <div className="grid grid-cols-3 gap-6">
+              {filteredProperties
+                .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                .map((property) => (
+                <Link
+                  key={property.id}
+                  to={`/property/${property.id}`}
+                  className="block"
                 >
-                  {property.images && property.images.length > 0 ? (
-                    <img
-                      src={property.images[0]}
-                      alt={property.title}
-                      className="w-full h-32 object-cover rounded-lg mb-3 flex-shrink-0"
-                    />
-                  ) : (
-                    <div className="w-full h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center flex-shrink-0">
-                      <span className="text-gray-400 text-sm">Нет фото</span>
+                  <div
+                    className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col ${
+                      selectedProperty?.id === property.id ? 'ring-2 ring-[#FF7A00]' : ''
+                    }`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedProperty(property);
+                    }}
+                  >
+                    {property.images && property.images.length > 0 ? (
+                      <img
+                        src={property.images[0]}
+                        alt={property.title}
+                        className="w-full h-48 object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-400">Нет фото</span>
+                      </div>
+                    )}
+                    
+                    <div className="p-4 flex flex-col flex-1">
+                      <p className="text-xl font-bold text-[#FF7A00] mb-2">
+                        {formatPrice(property.price, property.currency)}
+                        {property.transaction_type === 'rent' && <span className="text-sm font-normal text-gray-600"> /мес</span>}
+                      </p>
+                      
+                      <p className="text-gray-900 font-medium mb-2 line-clamp-2">
+                        {property.title}
+                      </p>
+                      
+                      <div className="flex items-center gap-3 text-sm text-gray-600 mb-3">
+                        {property.rooms && <span>{property.rooms} комн.</span>}
+                        {property.area && <span>• {property.area} м²</span>}
+                        {property.floor && <span>• {property.floor} эт.</span>}
+                      </div>
+
+                      <div className="flex items-center gap-1 text-xs text-gray-500 mt-auto">
+                        <Icon name="MapPin" size={14} />
+                        <span className="truncate">
+                          {property.street_name ? `${property.street_name} ${property.house_number || ''}` : property.district}
+                        </span>
+                      </div>
                     </div>
-                  )}
-                  
-                  <h3 className="font-semibold text-gray-900 mb-1 leading-tight line-clamp-2">
-                    {property.title}
-                  </h3>
-                  <p className="text-[#FF7A00] font-bold text-lg mb-2">
-                    {formatPrice(property.price, property.currency)}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 text-xs text-gray-600 mb-2">
-                    {property.area && (
-                      <span className="bg-gray-100 px-2 py-1 rounded-full">
-                        {property.area} м²
-                      </span>
-                    )}
-                    {property.rooms && (
-                      <span className="bg-gray-100 px-2 py-1 rounded-full">
-                        {property.rooms} комн.
-                      </span>
-                    )}
-                    {property.floor && (
-                      <span className="bg-gray-100 px-2 py-1 rounded-full">
-                        {property.floor} этаж
-                      </span>
-                    )}
                   </div>
-
-                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-auto line-clamp-1">
-                    <Icon name="MapPin" size={12} />
-                    <span className="truncate">{property.district}</span>
-                    {property.street_name && (
-                      <>
-                        <span>•</span>
-                        <span className="truncate">{property.street_name} {property.house_number}</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </Link>
-            ))
+                </Link>
+              ))}
+            </div>
           ) : (
-            <div className="text-center py-16 text-gray-400">
-              <Icon name="Search" size={48} className="mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium mb-2">Объекты не найдены</p>
-              <p className="text-sm">Попробуйте изменить параметры поиска</p>
+            <div className="text-center py-20 text-gray-400">
+              <Icon name="Search" size={64} className="mx-auto mb-4 opacity-30" />
+              <p className="text-xl font-medium mb-2">Объекты не найдены</p>
+              <p className="text-sm">Попробуйте изменить параметры фильтров</p>
             </div>
           )}
-        </aside>
+        </div>
       </div>
     </div>
   );
