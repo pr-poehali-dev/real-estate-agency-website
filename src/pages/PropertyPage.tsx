@@ -386,7 +386,7 @@ export default function PropertyPage() {
               </div>
             )}
 
-            <div className="flex flex-col gap-3 sticky bottom-0 bg-[#F5F3EE] py-4">
+            <div className="flex flex-col gap-3 bg-[#F5F3EE] py-4">
               <a href="tel:+37495129260">
                 <Button className="w-full h-14 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-xl text-lg font-medium">
                   <Icon name="Phone" size={20} className="mr-2" />
@@ -400,6 +400,25 @@ export default function PropertyPage() {
                 </Button>
               </a>
             </div>
+
+            {/* Карта с объектами */}
+            {filteredProperties.length > 0 && (
+              <div className="bg-white rounded-2xl p-6 mb-4">
+                <h2 className="text-xl font-bold mb-4">Похожие объекты на карте</h2>
+                <div className="h-[400px] rounded-xl overflow-hidden">
+                  <YerevanMapLeaflet
+                    properties={[property, ...filteredProperties.slice(0, 20)]}
+                    onPropertySelect={(selected) => {
+                      if (selected.id !== property.id) {
+                        navigate(`/property/${selected.id}`);
+                      }
+                    }}
+                    isPreview={false}
+                    openOnClick={true}
+                  />
+                </div>
+              </div>
+            )}
             </div>
           </div>
         </div>
