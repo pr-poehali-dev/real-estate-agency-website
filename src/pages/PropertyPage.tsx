@@ -316,6 +316,16 @@ export default function PropertyPage() {
                     </div>
                   </div>
                 )}
+
+                {property.created_at && (
+                  <div className="flex items-center gap-3">
+                    <Icon name="Calendar" size={24} className="text-[#FF7A00]" />
+                    <div>
+                      <p className="text-sm text-gray-600">Дата добавления</p>
+                      <p className="font-semibold">{formatDate(property.created_at)}</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
