@@ -76,6 +76,7 @@ const MapPage: React.FC = () => {
   const [petsAllowed, setPetsAllowed] = useState<string>(initialFilters.petsAllowed);
   const [childrenAllowed, setChildrenAllowed] = useState<string>(initialFilters.childrenAllowed);
   const [streetSearch, setStreetSearch] = useState(initialFilters.streetSearch);
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
 
   const loadProperties = async () => {
     setLoading(true);
@@ -364,11 +365,18 @@ const MapPage: React.FC = () => {
         )}
 
         {/* Map Section - Narrow horizontal strip */}
-        <div className="h-[200px] bg-gray-100 flex-shrink-0 border-b">
+        <div className={`bg-gray-100 flex-shrink-0 border-b relative transition-all duration-300 ${isMapExpanded ? 'h-[calc(100vh-80px)]' : 'h-[200px]'}`}>
           <YerevanMapLeaflet
             properties={filteredProperties}
             onPropertySelect={setSelectedProperty}
           />
+          <button
+            onClick={() => setIsMapExpanded(!isMapExpanded)}
+            className="absolute top-4 right-4 z-[1000] bg-white hover:bg-gray-50 text-gray-700 p-2.5 rounded-lg shadow-lg transition-all hover:shadow-xl"
+            title={isMapExpanded ? 'Свернуть карту' : 'Развернуть карту'}
+          >
+            <Icon name={isMapExpanded ? 'Minimize2' : 'Maximize2'} size={20} />
+          </button>
         </div>
 
         {/* Property Cards Grid - 3x3 with scroll */}
