@@ -131,7 +131,7 @@ export default function PropertyPage() {
       {/* Header */}
       <header className="bg-white px-6 py-4 shadow-sm">
         <div className="max-w-[1800px] mx-auto flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold">WSE.AM</Link>
+          <Link to="/" className="text-2xl font-bold" style={{ color: '#FF7A00' }}>WSE.AM</Link>
           <div className="flex gap-3">
             <Button 
               onClick={() => navigate(-1)}
