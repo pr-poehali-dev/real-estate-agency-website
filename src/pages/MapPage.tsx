@@ -20,6 +20,7 @@ const FILTERS_KEY = 'map_filters';
 interface MapFilters {
   selectedType: string;
   selectedTransaction: string;
+  selectedDistrict: string;
   minPrice: string;
   maxPrice: string;
   currency: string;
@@ -34,6 +35,7 @@ const loadFilters = (): MapFilters => {
   const defaults = {
     selectedType: '',
     selectedTransaction: '',
+    selectedDistrict: '',
     minPrice: '',
     maxPrice: '',
     currency: 'AMD',
@@ -78,6 +80,7 @@ const MapPage: React.FC = () => {
   const initialFilters = loadFilters();
   const [selectedType, setSelectedType] = useState<string>(initialFilters.selectedType);
   const [selectedTransaction, setSelectedTransaction] = useState<string>(initialFilters.selectedTransaction);
+  const [selectedDistrict, setSelectedDistrict] = useState<string>(initialFilters.selectedDistrict);
   const [minPrice, setMinPrice] = useState(initialFilters.minPrice);
   const [maxPrice, setMaxPrice] = useState(initialFilters.maxPrice);
   const [currency, setCurrency] = useState(initialFilters.currency);
@@ -118,6 +121,7 @@ const MapPage: React.FC = () => {
     return allProperties.filter((prop) => {
       if (selectedType && prop.property_type !== selectedType) return false;
       if (selectedTransaction && prop.transaction_type !== selectedTransaction) return false;
+      if (selectedDistrict && selectedDistrict !== 'Все районы' && prop.district !== selectedDistrict) return false;
       
       if (streetSearch.trim()) {
         const searchLower = streetSearch.toLowerCase();
@@ -145,12 +149,13 @@ const MapPage: React.FC = () => {
       
       return true;
     });
-  }, [allProperties, selectedType, selectedTransaction, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
+  }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   useEffect(() => {
     const filters: MapFilters = {
       selectedType,
       selectedTransaction,
+      selectedDistrict,
       minPrice,
       maxPrice,
       currency,
@@ -161,11 +166,12 @@ const MapPage: React.FC = () => {
       streetSearch
     };
     saveFilters(filters);
-  }, [selectedType, selectedTransaction, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
+  }, [selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   const resetFilters = () => {
     setSelectedType('');
     setSelectedTransaction('');
+    setSelectedDistrict('');
     setMinPrice('');
     setMaxPrice('');
     setCurrency('AMD');
@@ -238,35 +244,28 @@ const MapPage: React.FC = () => {
             </Select>
           </div>
 
-          {/* Price Range */}
+          {/* District */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Цена</label>
-            <div className="space-y-2">
-              <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="AMD">AMD (֏)</SelectItem>
-                  <SelectItem value="USD">USD ($)</SelectItem>
-                  <SelectItem value="RUB">RUB (₽)</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                type="number"
-                placeholder="Мин цена"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className="w-full"
-              />
-              <Input
-                type="number"
-                placeholder="Макс цена"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className="w-full"
-              />
-            </div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Район</label>
+            <Select value={selectedDistrict || 'all'} onValueChange={(v) => setSelectedDistrict(v === 'all' ? '' : v)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Все районы" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все районы</SelectItem>
+                <SelectItem value="Аджапняк">Аджапняк</SelectItem>
+                <SelectItem value="Арабкир">Арабкир</SelectItem>
+                <SelectItem value="Аван">Аван</SelectItem>
+                <SelectItem value="Давташен">Давташен</SelectItem>
+                <SelectItem value="Эребуни">Эребуни</SelectItem>
+                <SelectItem value="Кентрон">Кентрон</SelectItem>
+                <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
+                <SelectItem value="Нор Норк">Нор Норк</SelectItem>
+                <SelectItem value="Нубарашен">Нубарашен</SelectItem>
+                <SelectItem value="Шенгавит">Шенгавит</SelectItem>
+                <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Rooms */}
@@ -338,8 +337,39 @@ const MapPage: React.FC = () => {
             </Select>
           </div>
 
+          {/* Price Range */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Цена</label>
+            <div className="space-y-2">
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="AMD">AMD (֏)</SelectItem>
+                  <SelectItem value="USD">USD ($)</SelectItem>
+                  <SelectItem value="RUB">RUB (₽)</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input
+                type="number"
+                placeholder="Мин цена"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className="w-full"
+              />
+              <Input
+                type="number"
+                placeholder="Макс цена"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="w-full"
+              />
+            </div>
+          </div>
+
           {/* Reset Button */}
-          {(selectedType || selectedTransaction || minPrice || maxPrice || rooms || amenities.length > 0 || petsAllowed || childrenAllowed) && (
+          {(selectedType || selectedTransaction || selectedDistrict || minPrice || maxPrice || rooms || amenities.length > 0 || petsAllowed || childrenAllowed) && (
             <Button
               onClick={resetFilters}
               variant="outline"
