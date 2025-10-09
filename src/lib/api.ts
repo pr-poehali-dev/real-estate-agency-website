@@ -17,8 +17,8 @@ async function api<T>(path: string, opts: RequestInit = {}): Promise<T> {
     ...(opts.headers as Record<string, string> || {})
   };
   
-  if (token && !token.startsWith('demo-token-')) {
-    headers['Authorization'] = `Bearer ${token}`;
+  if (token) {
+    headers['X-Auth-Token'] = token;
   }
   
   const url = path;

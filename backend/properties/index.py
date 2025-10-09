@@ -157,8 +157,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             }
         
         elif method == 'POST':
-            auth_header = event.get('headers', {}).get('Authorization', '')
-            if not auth_header.startswith('Bearer '):
+            headers = event.get('headers', {})
+            token = headers.get('X-Auth-Token') or headers.get('x-auth-token', '')
+            
+            if not token:
+                auth_header = headers.get('Authorization', '')
+                if auth_header.startswith('Bearer '):
+                    token = auth_header[7:]
+            
+            if not token:
                 return {
                     'statusCode': 401,
                     'headers': {
@@ -169,7 +176,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            token = auth_header[7:]
             secret_key = os.environ.get('JWT_SECRET', 'default-secret-change-in-production')
             
             try:
@@ -262,8 +268,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             }
         
         elif method == 'PUT':
-            auth_header = event.get('headers', {}).get('Authorization', '')
-            if not auth_header.startswith('Bearer '):
+            headers = event.get('headers', {})
+            token = headers.get('X-Auth-Token') or headers.get('x-auth-token', '')
+            
+            if not token:
+                auth_header = headers.get('Authorization', '')
+                if auth_header.startswith('Bearer '):
+                    token = auth_header[7:]
+            
+            if not token:
                 return {
                     'statusCode': 401,
                     'headers': {
@@ -274,7 +287,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            token = auth_header[7:]
             secret_key = os.environ.get('JWT_SECRET', 'default-secret-change-in-production')
             
             try:
@@ -438,8 +450,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             }
         
         elif method == 'DELETE':
-            auth_header = event.get('headers', {}).get('Authorization', '')
-            if not auth_header.startswith('Bearer '):
+            headers = event.get('headers', {})
+            token = headers.get('X-Auth-Token') or headers.get('x-auth-token', '')
+            
+            if not token:
+                auth_header = headers.get('Authorization', '')
+                if auth_header.startswith('Bearer '):
+                    token = auth_header[7:]
+            
+            if not token:
                 return {
                     'statusCode': 401,
                     'headers': {
@@ -450,7 +469,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            token = auth_header[7:]
             secret_key = os.environ.get('JWT_SECRET', 'default-secret-change-in-production')
             
             try:
