@@ -82,9 +82,14 @@ const AdminPanel: React.FC = () => {
     return localStorage.getItem('admin_features_draft') || '';
   });
 
-  // Автосохранение формы
+  // Автосохранение формы (без изображений, чтобы не переполнять LocalStorage)
   useEffect(() => {
-    localStorage.setItem('admin_form_draft', JSON.stringify(propertyForm));
+    try {
+      const formWithoutImages = { ...propertyForm, images: [] };
+      localStorage.setItem('admin_form_draft', JSON.stringify(formWithoutImages));
+    } catch (e) {
+      console.warn('Failed to save draft:', e);
+    }
   }, [propertyForm]);
 
   useEffect(() => {
