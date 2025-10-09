@@ -82,9 +82,13 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
     mapInstance.current = L.map(mapContainer.current, {
       center: [40.1792, 44.4991],
       zoom: 12,
-      zoomControl: true,
+      zoomControl: false,
       scrollWheelZoom: !isPreview
     });
+
+    L.control.zoom({
+      position: 'topright'
+    }).addTo(mapInstance.current);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
