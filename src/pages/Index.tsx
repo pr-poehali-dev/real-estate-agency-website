@@ -192,9 +192,16 @@ export default function Index() {
                 <div className="flex gap-2 flex-1">
                   <Input
                     type="number"
-                    placeholder="Цена"
+                    placeholder="Цена от"
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
+                    className="h-14 rounded-lg flex-1 min-w-0"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="до"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
                     className="h-14 rounded-lg flex-1 min-w-0"
                   />
                   <Select value={currency} onValueChange={setCurrency}>
