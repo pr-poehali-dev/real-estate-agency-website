@@ -182,16 +182,16 @@ const MapPage: React.FC = () => {
   return (
     <div className="h-screen flex bg-white">
       {/* Left Sidebar - Filters */}
-      <aside className="w-80 border-r bg-white overflow-y-auto flex-shrink-0">
-        <div className="sticky top-0 bg-white border-b px-6 py-4 z-10">
+      <aside className="w-64 border-r bg-white overflow-y-auto flex-shrink-0">
+        <div className="sticky top-0 bg-white border-b px-4 py-3 z-10">
           <Link to="/" className="flex items-center gap-2 text-gray-900 hover:text-[#FF7A00] transition-colors mb-4">
             <Icon name="ArrowLeft" size={20} />
             <span className="font-semibold">Назад</span>
           </Link>
-          <h2 className="text-lg font-bold text-gray-900">Фильтры</h2>
+          <h2 className="text-base font-bold text-gray-900">Фильтры</h2>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-4 space-y-4">
           {/* Transaction Type */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">Тип сделки</label>
