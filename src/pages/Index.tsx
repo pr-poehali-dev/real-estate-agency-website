@@ -169,7 +169,7 @@ export default function Index() {
               {/* Main Row: 3 Filters + Button */}
               <div className="flex flex-col md:flex-row gap-3">
                 <Select value={transactionType} onValueChange={setTransactionType}>
-                  <SelectTrigger className="h-14 rounded-lg md:w-80">
+                  <SelectTrigger className="h-14 rounded-lg md:w-64">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -180,7 +180,7 @@ export default function Index() {
                 </Select>
 
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="h-14 rounded-lg md:w-80">
+                  <SelectTrigger className="h-14 rounded-lg md:w-64">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
