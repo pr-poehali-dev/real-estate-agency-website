@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,6 +15,7 @@ interface Property extends ApiProperty {
 }
 
 export default function Index() {
+  const navigate = useNavigate();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [transactionType, setTransactionType] = useState('rent');
@@ -103,6 +104,23 @@ export default function Index() {
     return `${price.toLocaleString()} ${currency}`;
   };
 
+  const handleSearch = () => {
+    const filters = {
+      selectedTransaction: transactionType === 'rent' ? 'rent' : transactionType === 'sale' ? 'sale' : '',
+      selectedType: propertyType === 'all' ? '' : propertyType,
+      maxPrice: maxPrice,
+      minPrice: '',
+      currency: 'AMD',
+      rooms: '',
+      amenities: [],
+      petsAllowed: '',
+      childrenAllowed: '',
+      streetSearch: ''
+    };
+    localStorage.setItem('map_filters', JSON.stringify(filters));
+    navigate('/map');
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F3EE]">
       {/* Header */}
@@ -157,26 +175,61 @@ export default function Index() {
                 className="h-10 rounded-lg"
               />
 
-              <Link to="/map">
-                <Button className="w-full h-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all">
-                  Найти
-                </Button>
-              </Link>
+              <Button 
+                onClick={handleSearch}
+                className="w-full h-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all"
+              >
+                Найти
+              </Button>
             </div>
           </div>
 
           {/* Transaction Type Buttons */}
           <div className="flex gap-3">
-            <Link to="/map?transaction=rent">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-6 h-9 text-sm font-medium transition-all">
-                АРЕНДА
-              </Button>
-            </Link>
-            <Link to="/map?transaction=sale">
-              <Button className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-6 h-9 text-sm font-medium transition-all">
-                ПРОДАЖА
-              </Button>
-            </Link>
+            <Button 
+              onClick={() => {
+                setTransactionType('rent');
+                const filters = {
+                  selectedTransaction: 'rent',
+                  selectedType: '',
+                  maxPrice: '',
+                  minPrice: '',
+                  currency: 'AMD',
+                  rooms: '',
+                  amenities: [],
+                  petsAllowed: '',
+                  childrenAllowed: '',
+                  streetSearch: ''
+                };
+                localStorage.setItem('map_filters', JSON.stringify(filters));
+                navigate('/map');
+              }}
+              className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-6 h-9 text-sm font-medium transition-all"
+            >
+              АРЕНДА
+            </Button>
+            <Button 
+              onClick={() => {
+                setTransactionType('sale');
+                const filters = {
+                  selectedTransaction: 'sale',
+                  selectedType: '',
+                  maxPrice: '',
+                  minPrice: '',
+                  currency: 'AMD',
+                  rooms: '',
+                  amenities: [],
+                  petsAllowed: '',
+                  childrenAllowed: '',
+                  streetSearch: ''
+                };
+                localStorage.setItem('map_filters', JSON.stringify(filters));
+                navigate('/map');
+              }}
+              className="bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-full px-6 h-9 text-sm font-medium transition-all"
+            >
+              ПРОДАЖА
+            </Button>
           </div>
         </div>
 
