@@ -50,7 +50,12 @@ export default function Index() {
     try {
       const response = await Properties.list();
       const props = (response.properties || []) as Property[];
-      setProperties(props.slice(0, 6));
+      const sortedProps = props.sort((a, b) => {
+        const dateA = new Date(a.created_at || 0).getTime();
+        const dateB = new Date(b.created_at || 0).getTime();
+        return dateB - dateA;
+      });
+      setProperties(sortedProps.slice(0, 6));
     } catch (err) {
       console.error('Error loading properties:', err);
     } finally {
