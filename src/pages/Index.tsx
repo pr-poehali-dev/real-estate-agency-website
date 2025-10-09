@@ -21,7 +21,7 @@ export default function Index() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [transactionType, setTransactionType] = useState('rent');
-  const [propertyType, setPropertyType] = useState('all');
+  const [propertyType, setPropertyType] = useState('apartment');
   const [maxPrice, setMaxPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [currency, setCurrency] = useState('AMD');
@@ -163,64 +163,62 @@ export default function Index() {
           {/* Search Form */}
           <div className="bg-white rounded-xl shadow-md p-6">
             <div className="space-y-4">
-              {/* Main Row: Button + 3 Filters */}
+              {/* Main Row: 3 Filters + Button */}
               <div className="flex flex-col md:flex-row gap-3">
-                <Button 
-                  onClick={handleSearch}
-                  className="h-14 px-8 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all text-base whitespace-nowrap md:w-auto w-full"
-                >
-                  Найти
-                </Button>
+                <Select value={transactionType} onValueChange={setTransactionType}>
+                  <SelectTrigger className="h-14 rounded-lg md:w-80">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rent">Долгосрочная аренда</SelectItem>
+                    <SelectItem value="daily">Посуточная аренда</SelectItem>
+                    <SelectItem value="sale">Продажа</SelectItem>
+                  </SelectContent>
+                </Select>
 
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <Select value={transactionType} onValueChange={setTransactionType}>
-                    <SelectTrigger className="h-14 rounded-lg">
+                <Select value={propertyType} onValueChange={setPropertyType}>
+                  <SelectTrigger className="h-14 rounded-lg md:w-80">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="apartment">Квартира</SelectItem>
+                    <SelectItem value="house">Дом</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div className="flex gap-2 flex-1">
+                  <Input
+                    type="number"
+                    placeholder="Цена"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
+                    className="h-14 rounded-lg flex-1 min-w-0"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="до"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
+                    className="h-14 rounded-lg w-28"
+                  />
+                  <Select value={currency} onValueChange={setCurrency}>
+                    <SelectTrigger className="h-14 rounded-lg w-32">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="rent">Долгосрочная аренда</SelectItem>
-                      <SelectItem value="daily">Посуточная аренда</SelectItem>
-                      <SelectItem value="sale">Продажа</SelectItem>
+                      <SelectItem value="AMD">AMD</SelectItem>
+                      <SelectItem value="USD">USD</SelectItem>
+                      <SelectItem value="RUB">RUB</SelectItem>
                     </SelectContent>
                   </Select>
-
-                  <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTrigger className="h-14 rounded-lg">
-                      <SelectValue placeholder="Тип недвижимости" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="apartment">Квартира</SelectItem>
-                      <SelectItem value="house">Дом</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <div className="flex gap-2">
-                    <Input
-                      type="number"
-                      placeholder="Цена от"
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                      className="h-14 rounded-lg"
-                    />
-                    <Input
-                      type="number"
-                      placeholder="до"
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                      className="h-14 rounded-lg w-24"
-                    />
-                    <Select value={currency} onValueChange={setCurrency}>
-                      <SelectTrigger className="h-14 rounded-lg w-28">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="AMD">AMD</SelectItem>
-                        <SelectItem value="USD">USD</SelectItem>
-                        <SelectItem value="RUB">RUB</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </div>
+
+                <Button 
+                  onClick={handleSearch}
+                  className="h-14 px-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all text-base whitespace-nowrap"
+                >
+                  Найти
+                </Button>
               </div>
 
               {/* Map Button */}
