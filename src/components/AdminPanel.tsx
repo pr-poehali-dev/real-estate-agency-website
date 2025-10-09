@@ -5,6 +5,9 @@ import PropertyForm from './admin/PropertyForm';
 import PropertyList from './admin/PropertyList';
 import { Property } from '@/types/property';
 import { Auth, Properties, User as ApiUser } from '@/lib/api';
+import { migrateDemoToDatabase } from '@/utils/migrateDemoData';
+import { Button } from './ui/button';
+import Icon from './ui/icon';
 
 type AdminUser = ApiUser;
 
@@ -352,6 +355,41 @@ const AdminPanel: React.FC = () => {
     }
   };
 
+  const handleMigrateDemoData = async () => {
+    const token = localStorage.getItem('admin_token');
+    
+    if (!token || token.startsWith('demo-token-')) {
+      setError('Для миграции необходимо войти с реальными учетными данными');
+      return;
+    }
+
+    if (!confirm('Перенести все демо-объявления в реальную базу данных?')) {
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const result = await migrateDemoToDatabase();
+      
+      if (result.success && result.results) {
+        setSuccess(`Миграция завершена! Успешно: ${result.results.success}, Ошибок: ${result.results.failed}`);
+        if (result.results.errors.length > 0) {
+          console.error('Ошибки миграции:', result.results.errors);
+        }
+        setRefetchTrigger(prev => prev + 1);
+      } else {
+        setError(result.message || 'Нет данных для миграции');
+      }
+    } catch (error: any) {
+      setError(error.message || 'Ошибка миграции');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!user) {
     return (
       <LoginForm
@@ -364,10 +402,37 @@ const AdminPanel: React.FC = () => {
     );
   }
 
+  const token = localStorage.getItem('admin_token');
+  const isDemoMode = token?.startsWith('demo-token-');
+  const hasDemoData = demoProperties.length > 0;
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <AdminHeader user={user} onLogout={handleLogout} />
+        
+        {!isDemoMode && hasDemoData && (
+          <div className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <Icon name="Database" size={20} className="text-blue-600" />
+                <div>
+                  <p className="font-medium text-blue-900">Найдены демо-объявления ({demoProperties.length})</p>
+                  <p className="text-sm text-blue-700">Перенесите их в реальную базу данных</p>
+                </div>
+              </div>
+              <Button
+                onClick={handleMigrateDemoData}
+                disabled={loading}
+                variant="default"
+                size="sm"
+              >
+                <Icon name="Upload" size={16} className="mr-2" />
+                Перенести в БД
+              </Button>
+            </div>
+          </div>
+        )}
         
         <PropertyList
           onEdit={handleEditProperty}
