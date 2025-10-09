@@ -368,6 +368,7 @@ const MapPage: React.FC = () => {
           <YerevanMapLeaflet
             properties={filteredProperties}
             onPropertySelect={setSelectedProperty}
+            openOnClick={true}
           />
         </div>
 
