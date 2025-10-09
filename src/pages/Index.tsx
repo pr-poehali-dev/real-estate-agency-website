@@ -158,69 +158,78 @@ export default function Index() {
       {/* Compact Search Section */}
       <section className="relative px-6 py-4 max-w-7xl mx-auto">
         <div className="relative z-10">
-          <h1 className="text-3xl font-black mb-4">Поиск недвижимости в Ереване</h1>
+          <h1 className="text-3xl font-black mb-8">Поиск недвижимости в Ереване</h1>
 
           {/* Search Form */}
-          <div className="bg-white rounded-xl shadow-md p-4">
-            <div className="space-y-3">
-              {/* Main Filters */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Select value={transactionType} onValueChange={setTransactionType}>
-                  <SelectTrigger className="h-12 rounded-lg">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="rent">Долгосрочная аренда</SelectItem>
-                    <SelectItem value="daily">Посуточная аренда</SelectItem>
-                    <SelectItem value="sale">Продажа</SelectItem>
-                  </SelectContent>
-                </Select>
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="space-y-4">
+              {/* Main Row: Button + 3 Filters */}
+              <div className="flex flex-col md:flex-row gap-3">
+                <Button 
+                  onClick={handleSearch}
+                  className="h-14 px-8 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all text-base whitespace-nowrap md:w-auto w-full"
+                >
+                  Найти
+                </Button>
 
-                <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="h-12 rounded-lg">
-                    <SelectValue placeholder="Тип недвижимости" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="apartment">Квартира</SelectItem>
-                    <SelectItem value="house">Дом</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <Select value={transactionType} onValueChange={setTransactionType}>
+                    <SelectTrigger className="h-14 rounded-lg">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="rent">Долгосрочная аренда</SelectItem>
+                      <SelectItem value="daily">Посуточная аренда</SelectItem>
+                      <SelectItem value="sale">Продажа</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={propertyType} onValueChange={setPropertyType}>
+                    <SelectTrigger className="h-14 rounded-lg">
+                      <SelectValue placeholder="Тип недвижимости" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="apartment">Квартира</SelectItem>
+                      <SelectItem value="house">Дом</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <div className="flex gap-2">
+                    <Input
+                      type="number"
+                      placeholder="Цена от"
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                      className="h-14 rounded-lg"
+                    />
+                    <Input
+                      type="number"
+                      placeholder="до"
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      className="h-14 rounded-lg w-24"
+                    />
+                    <Select value={currency} onValueChange={setCurrency}>
+                      <SelectTrigger className="h-14 rounded-lg w-28">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="AMD">AMD</SelectItem>
+                        <SelectItem value="USD">USD</SelectItem>
+                        <SelectItem value="RUB">RUB</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
               </div>
 
-              {/* Price Filter */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                <Input
-                  type="number"
-                  placeholder="Цена от"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(e.target.value)}
-                  className="h-12 rounded-lg"
-                />
-                <Input
-                  type="number"
-                  placeholder="Цена до"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                  className="h-12 rounded-lg"
-                />
-                <Select value={currency} onValueChange={setCurrency}>
-                  <SelectTrigger className="h-12 rounded-lg">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="AMD">AMD</SelectItem>
-                    <SelectItem value="USD">USD</SelectItem>
-                    <SelectItem value="RUB">RUB</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Search Button */}
+              {/* Map Button */}
               <Button 
-                onClick={handleSearch}
-                className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all text-base"
+                variant="outline"
+                className="w-full h-12 rounded-lg border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-medium transition-all"
               >
-                Найти недвижимость
+                <Icon name="Map" size={20} className="mr-2" />
+                Открыть карту
               </Button>
             </div>
           </div>
