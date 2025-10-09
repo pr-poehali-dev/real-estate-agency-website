@@ -202,12 +202,12 @@ const MapPage: React.FC = () => {
           {/* Transaction Type */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">Тип сделки</label>
-            <Select value={selectedTransaction} onValueChange={setSelectedTransaction}>
+            <Select value={selectedTransaction || 'all'} onValueChange={(v) => setSelectedTransaction(v === 'all' ? '' : v)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Все типы сделок" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Все типы сделок</SelectItem>
+                <SelectItem value="all">Все типы сделок</SelectItem>
                 <SelectItem value="rent">Долгосрочная аренда</SelectItem>
                 <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
                 <SelectItem value="sale">Продажа</SelectItem>
@@ -218,12 +218,12 @@ const MapPage: React.FC = () => {
           {/* Property Type */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">Тип недвижимости</label>
-            <Select value={selectedType} onValueChange={setSelectedType}>
+            <Select value={selectedType || 'all'} onValueChange={(v) => setSelectedType(v === 'all' ? '' : v)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Все типы" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Все типы</SelectItem>
+                <SelectItem value="all">Все типы</SelectItem>
                 <SelectItem value="apartment">Квартира</SelectItem>
                 <SelectItem value="house">Дом</SelectItem>
               </SelectContent>
