@@ -37,28 +37,18 @@ interface PropertyListProps {
   onEdit: (property: Property) => void;
   onDelete: (propertyId: number) => void;
   refetchTrigger?: number;
-  demoProperties?: Property[];
 }
 
-const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTrigger, demoProperties }) => {
+const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTrigger }) => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     loadProperties();
-  }, [refetchTrigger, demoProperties]);
+  }, [refetchTrigger]);
 
   const loadProperties = async () => {
-    const token = localStorage.getItem('admin_token');
-    
-    if (token && token.startsWith('demo-token-')) {
-      setProperties(demoProperties || []);
-      setLoading(false);
-      setError('');
-      return;
-    }
-
     setLoading(true);
     setError('');
     try {

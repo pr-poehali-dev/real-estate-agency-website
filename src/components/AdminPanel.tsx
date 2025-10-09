@@ -5,9 +5,6 @@ import PropertyForm from './admin/PropertyForm';
 import PropertyList from './admin/PropertyList';
 import { Property } from '@/types/property';
 import { Auth, Properties, User as ApiUser } from '@/lib/api';
-import { migrateDemoToDatabase } from '@/utils/migrateDemoData';
-import { Button } from './ui/button';
-import Icon from './ui/icon';
 
 type AdminUser = ApiUser;
 
@@ -20,10 +17,7 @@ const AdminPanel: React.FC = () => {
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
-  const [demoProperties, setDemoProperties] = useState<Property[]>(() => {
-    const saved = localStorage.getItem('demo_properties');
-    return saved ? JSON.parse(saved) : [];
-  });
+
 
   const [propertyForm, setPropertyForm] = useState<Property>(() => {
     const saved = localStorage.getItem('admin_form_draft');
@@ -133,22 +127,9 @@ const AdminPanel: React.FC = () => {
     setLoading(true);
     setError('');
 
-    if (loginForm.username === 'admin' && loginForm.password === 'admin123') {
-      const mockUser: AdminUser = {
-        id: 1,
-        username: 'admin',
-        email: 'admin@wse.am',
-        full_name: 'Администратор WSE.AM',
-        role: 'admin'
-      };
-      
-      const mockToken = 'demo-token-' + Date.now();
-      localStorage.setItem('admin_token', mockToken);
-      setUser(mockUser);
-      setLoginForm({ username: '', password: '' });
-      setLoading(false);
-      return;
-    }
+    localStorage.removeItem('demo_properties');
+    localStorage.removeItem('admin_form_draft');
+    localStorage.removeItem('admin_features_draft');
 
     try {
       const data = await Auth.login(loginForm.username, loginForm.password);
@@ -156,7 +137,7 @@ const AdminPanel: React.FC = () => {
       setUser(data.user);
       setLoginForm({ username: '', password: '' });
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Ошибка авторизации. Попробуйте: admin / admin123');
+      setError(error instanceof Error ? error.message : 'Ошибка авторизации');
     } finally {
       setLoading(false);
     }
@@ -212,45 +193,6 @@ const AdminPanel: React.FC = () => {
     if (!token) {
       setError('Необходима авторизация');
       setLoading(false);
-      return;
-    }
-
-    if (token.startsWith('demo-token-')) {
-      const features = featuresText.split('\n').filter(f => f.trim()).map(f => f.trim());
-      const now = new Date().toISOString();
-      
-      let updatedProperties: Property[];
-      if (isEditing && editingProperty?.id) {
-        const updatedProperty: Property = {
-          ...propertyForm,
-          id: editingProperty.id,
-          features,
-          status: 'active',
-          created_at: editingProperty.created_at || now,
-          updated_at: now
-        };
-        updatedProperties = demoProperties.map(p => 
-          p.id === editingProperty.id ? updatedProperty : p
-        );
-        setSuccess(`Объект "${propertyForm.title}" успешно обновлён в демо режиме!`);
-      } else {
-        const newProperty: Property = {
-          ...propertyForm,
-          id: Date.now(),
-          features,
-          status: 'active',
-          created_at: now,
-          updated_at: now
-        };
-        updatedProperties = [...demoProperties, newProperty];
-        setSuccess(`Объект "${propertyForm.title}" успешно добавлен в демо режиме!`);
-      }
-
-      setDemoProperties(updatedProperties);
-      localStorage.setItem('demo_properties', JSON.stringify(updatedProperties));
-      resetForm();
-      setLoading(false);
-      setRefetchTrigger(prev => prev + 1);
       return;
     }
 
@@ -336,16 +278,6 @@ const AdminPanel: React.FC = () => {
       return;
     }
 
-    const token = localStorage.getItem('admin_token');
-    if (token && token.startsWith('demo-token-')) {
-      const updatedProperties = demoProperties.filter(p => p.id !== propertyId);
-      setDemoProperties(updatedProperties);
-      localStorage.setItem('demo_properties', JSON.stringify(updatedProperties));
-      setSuccess(`Объявление #${propertyId} удалено в демо режиме!`);
-      setRefetchTrigger(prev => prev + 1);
-      return;
-    }
-
     try {
       await Properties.remove(propertyId);
       setSuccess('Объявление успешно удалено!');
@@ -355,40 +287,7 @@ const AdminPanel: React.FC = () => {
     }
   };
 
-  const handleMigrateDemoData = async () => {
-    const token = localStorage.getItem('admin_token');
-    
-    if (!token || token.startsWith('demo-token-')) {
-      setError('Для миграции необходимо войти с реальными учетными данными');
-      return;
-    }
 
-    if (!confirm('Перенести все демо-объявления в реальную базу данных?')) {
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-    setSuccess('');
-
-    try {
-      const result = await migrateDemoToDatabase();
-      
-      if (result.success && result.results) {
-        setSuccess(`Миграция завершена! Успешно: ${result.results.success}, Ошибок: ${result.results.failed}`);
-        if (result.results.errors.length > 0) {
-          console.error('Ошибки миграции:', result.results.errors);
-        }
-        setRefetchTrigger(prev => prev + 1);
-      } else {
-        setError(result.message || 'Нет данных для миграции');
-      }
-    } catch (error: any) {
-      setError(error.message || 'Ошибка миграции');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (!user) {
     return (
@@ -402,43 +301,15 @@ const AdminPanel: React.FC = () => {
     );
   }
 
-  const token = localStorage.getItem('admin_token');
-  const isDemoMode = token?.startsWith('demo-token-');
-  const hasDemoData = demoProperties.length > 0;
-
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <AdminHeader user={user} onLogout={handleLogout} />
         
-        {!isDemoMode && hasDemoData && (
-          <div className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <Icon name="Database" size={20} className="text-blue-600" />
-                <div>
-                  <p className="font-medium text-blue-900">Найдены демо-объявления ({demoProperties.length})</p>
-                  <p className="text-sm text-blue-700">Перенесите их в реальную базу данных</p>
-                </div>
-              </div>
-              <Button
-                onClick={handleMigrateDemoData}
-                disabled={loading}
-                variant="default"
-                size="sm"
-              >
-                <Icon name="Upload" size={16} className="mr-2" />
-                Перенести в БД
-              </Button>
-            </div>
-          </div>
-        )}
-        
         <PropertyList
           onEdit={handleEditProperty}
           onDelete={handleDeleteProperty}
           refetchTrigger={refetchTrigger}
-          demoProperties={demoProperties}
         />
         
         <PropertyForm
