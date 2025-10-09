@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import MapPage from "./pages/MapPage";
+import FullMapPage from "./pages/FullMapPage";
 import AdminPage from "./pages/AdminPage";
 import PropertyPage from "./pages/PropertyPage";
 import NotFound from "./pages/NotFound";
@@ -21,6 +22,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/map" element={<MapPage />} />
+          <Route path="/full-map" element={<FullMapPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/property/:id" element={<PropertyPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
