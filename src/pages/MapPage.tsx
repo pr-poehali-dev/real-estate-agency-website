@@ -1,74 +1,18 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MultiSelect } from '@/components/ui/multi-select';
 import Icon from '@/components/ui/icon';
 import { Properties } from '@/lib/api';
 import type { Property as ApiProperty } from '@/lib/api';
+import MapFilters from '@/components/map/MapFilters';
+import MapSection from '@/components/map/MapSection';
+import PropertyGrid from '@/components/map/PropertyGrid';
+import { loadFilters, saveFilters, type MapFilters as MapFiltersType } from '@/lib/mapFiltersStorage';
 
 interface Property extends ApiProperty {
   id: number;
   created_at: string;
   updated_at: string;
 }
-
-const FILTERS_KEY = 'map_filters';
-
-interface MapFilters {
-  selectedType: string;
-  selectedTransaction: string;
-  selectedDistrict: string;
-  minPrice: string;
-  maxPrice: string;
-  currency: string;
-  rooms: string;
-  amenities: string[];
-  petsAllowed: string;
-  childrenAllowed: string;
-  streetSearch: string;
-}
-
-const loadFilters = (): MapFilters => {
-  const defaults = {
-    selectedType: '',
-    selectedTransaction: '',
-    selectedDistrict: '',
-    minPrice: '',
-    maxPrice: '',
-    currency: 'AMD',
-    rooms: '',
-    amenities: [],
-    petsAllowed: '',
-    childrenAllowed: '',
-    streetSearch: ''
-  };
-  
-  try {
-    const saved = localStorage.getItem(FILTERS_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      return {
-        ...defaults,
-        ...parsed,
-        currency: parsed.currency || 'AMD'
-      };
-    }
-  } catch (e) {
-    console.error('Failed to load filters:', e);
-  }
-  return defaults;
-};
-
-const saveFilters = (filters: MapFilters) => {
-  try {
-    localStorage.setItem(FILTERS_KEY, JSON.stringify(filters));
-  } catch (e) {
-    console.error('Failed to save filters:', e);
-  }
-};
 
 const MapPage: React.FC = () => {
   const [allProperties, setAllProperties] = useState<Property[]>([]);
@@ -100,7 +44,6 @@ const MapPage: React.FC = () => {
     if (token && token.startsWith('demo-token-')) {
       const demoData = localStorage.getItem('demo_properties');
       const demoProps = demoData ? JSON.parse(demoData) : [];
-      // Добавляем created_at если его нет
       const propsWithDates = demoProps.map((p: any) => ({
         ...p,
         created_at: p.created_at || new Date().toISOString()
@@ -113,7 +56,6 @@ const MapPage: React.FC = () => {
     try {
       const response = await Properties.list();
       const props = (response.properties || []) as Property[];
-      // Добавляем created_at если его нет
       const propsWithDates = props.map(p => ({
         ...p,
         created_at: p.created_at || new Date().toISOString()
@@ -160,24 +102,20 @@ const MapPage: React.FC = () => {
       return true;
     });
 
-    // Сортируем от новых к старым по дате и времени создания
     return filtered.sort((a, b) => {
-      // Сначала пытаемся сортировать по created_at (дата + время)
       const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
       const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
       
-      // Если даты разные - сортируем по дате
       if (dateA !== dateB) {
-        return dateB - dateA; // от новых к старым
+        return dateB - dateA;
       }
       
-      // Если даты одинаковые - сортируем по ID (больший ID = новее)
       return b.id - a.id;
     });
   }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   useEffect(() => {
-    const filters: MapFilters = {
+    const filters: MapFiltersType = {
       selectedType,
       selectedTransaction,
       selectedDistrict,
@@ -207,10 +145,6 @@ const MapPage: React.FC = () => {
     setStreetSearch('');
   };
 
-  const formatPrice = (price: number, currency: string) => {
-    return `${price.toLocaleString()} ${currency}`;
-  };
-
   useEffect(() => {
     loadProperties();
   }, []);
@@ -226,194 +160,33 @@ const MapPage: React.FC = () => {
 
   return (
     <div className="h-screen flex bg-white">
-      {/* Left Sidebar - Filters */}
-      <aside className="w-64 border-r bg-white overflow-y-auto flex-shrink-0">
-        <div className="sticky top-0 bg-white border-b px-4 py-3 z-10">
-          <Link to="/" className="flex items-center gap-2 text-gray-900 hover:text-[#FF7A00] transition-colors mb-4">
-            <Icon name="ArrowLeft" size={20} />
-            <span className="font-semibold">Назад</span>
-          </Link>
-          <h2 className="text-base font-bold text-gray-900">Фильтры</h2>
-        </div>
+      <MapFilters
+        selectedTransaction={selectedTransaction}
+        setSelectedTransaction={setSelectedTransaction}
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        selectedDistrict={selectedDistrict}
+        setSelectedDistrict={setSelectedDistrict}
+        rooms={rooms}
+        setRooms={setRooms}
+        amenities={amenities}
+        setAmenities={setAmenities}
+        childrenAllowed={childrenAllowed}
+        setChildrenAllowed={setChildrenAllowed}
+        petsAllowed={petsAllowed}
+        setPetsAllowed={setPetsAllowed}
+        currency={currency}
+        setCurrency={setCurrency}
+        minPrice={minPrice}
+        setMinPrice={setMinPrice}
+        maxPrice={maxPrice}
+        setMaxPrice={setMaxPrice}
+        resetFilters={resetFilters}
+        loading={loading}
+        filteredCount={filteredProperties.length}
+      />
 
-        <div className="p-4 space-y-4">
-          {/* Transaction Type */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Тип сделки</label>
-            <Select value={selectedTransaction || 'all'} onValueChange={(v) => setSelectedTransaction(v === 'all' ? '' : v)}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Все типы сделок" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Все типы сделок</SelectItem>
-                <SelectItem value="rent">Долгосрочная аренда</SelectItem>
-                <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
-                <SelectItem value="sale">Продажа</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Property Type */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Тип недвижимости</label>
-            <Select value={selectedType || 'all'} onValueChange={(v) => setSelectedType(v === 'all' ? '' : v)}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Все типы" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Все типы</SelectItem>
-                <SelectItem value="apartment">Квартира</SelectItem>
-                <SelectItem value="house">Дом</SelectItem>
-                <SelectItem value="commercial">Коммерция</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* District */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Район</label>
-            <Select value={selectedDistrict || 'all'} onValueChange={(v) => setSelectedDistrict(v === 'all' ? '' : v)}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Все районы" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Все районы</SelectItem>
-                <SelectItem value="Аджапняк">Аджапняк</SelectItem>
-                <SelectItem value="Арабкир">Арабкир</SelectItem>
-                <SelectItem value="Аван">Аван</SelectItem>
-                <SelectItem value="Давташен">Давташен</SelectItem>
-                <SelectItem value="Эребуни">Эребуни</SelectItem>
-                <SelectItem value="Кентрон">Кентрон</SelectItem>
-                <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
-                <SelectItem value="Нор Норк">Нор Норк</SelectItem>
-                <SelectItem value="Нубарашен">Нубарашен</SelectItem>
-                <SelectItem value="Шенгавит">Шенгавит</SelectItem>
-                <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Rooms */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Количество комнат</label>
-            <Select value={rooms} onValueChange={setRooms}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Выберите" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Не важно</SelectItem>
-                <SelectItem value="1">1 комната</SelectItem>
-                <SelectItem value="2">2 комнаты</SelectItem>
-                <SelectItem value="3">3 комнаты</SelectItem>
-                <SelectItem value="4">4+ комнат</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Amenities */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Удобства</label>
-            <MultiSelect
-              options={[
-                { label: 'Телевизор', value: 'tv' },
-                { label: 'Кондиционер', value: 'ac' },
-                { label: 'Интернет', value: 'internet' },
-                { label: 'Холодильник', value: 'fridge' },
-                { label: 'Плита', value: 'stove' },
-                { label: 'Стиральная машина', value: 'washing_machine' },
-                { label: 'Водонагреватель', value: 'water_heater' },
-              ]}
-              selected={amenities}
-              onChange={setAmenities}
-              placeholder="Выберите удобства"
-              className="w-full"
-            />
-          </div>
-
-          {/* Children Allowed */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с детьми</label>
-            <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Не важно" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Не важно</SelectItem>
-                <SelectItem value="yes">Да</SelectItem>
-                <SelectItem value="no">Нет</SelectItem>
-                <SelectItem value="negotiable">По договоренности</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Pets Allowed */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с животными</label>
-            <Select value={petsAllowed} onValueChange={setPetsAllowed}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Не важно" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Не важно</SelectItem>
-                <SelectItem value="yes">Да</SelectItem>
-                <SelectItem value="no">Нет</SelectItem>
-                <SelectItem value="negotiable">По договоренности</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Price Range */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Цена</label>
-            <div className="space-y-2">
-              <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="AMD">AMD (֏)</SelectItem>
-                  <SelectItem value="USD">USD ($)</SelectItem>
-                  <SelectItem value="RUB">RUB (₽)</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                type="number"
-                placeholder="Мин цена"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className="w-full"
-              />
-              <Input
-                type="number"
-                placeholder="Макс цена"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className="w-full"
-              />
-            </div>
-          </div>
-
-          {/* Reset Button */}
-          {(selectedType || selectedTransaction || selectedDistrict || minPrice || maxPrice || rooms || amenities.length > 0 || petsAllowed || childrenAllowed) && (
-            <Button
-              onClick={resetFilters}
-              variant="outline"
-              className="w-full"
-            >
-              Сбросить фильтры
-            </Button>
-          )}
-
-          {/* Results Count */}
-          <div className="text-center text-sm text-gray-600 pt-4 border-t">
-            {loading ? 'Загрузка...' : `Найдено объектов: ${filteredProperties.length}`}
-          </div>
-        </div>
-      </aside>
-
-      {/* Right Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
         <header className="border-b bg-white px-6 py-4">
           <h1 className="text-2xl font-bold text-gray-900">Карта недвижимости Еревана</h1>
         </header>
@@ -433,83 +206,19 @@ const MapPage: React.FC = () => {
           </div>
         )}
 
-        {/* Map Section - Narrow horizontal strip */}
-        <div className={`bg-gray-100 flex-shrink-0 border-b relative transition-all duration-300 ${isMapExpanded ? 'h-[50vh]' : 'h-[180px]'}`}>
-          <YerevanMapLeaflet
-            properties={filteredProperties}
-            onPropertySelect={setSelectedProperty}
-            keepPopupsOpen={true}
-            zoomPosition="topleft"
-          />
-          <button
-            onClick={() => setIsMapExpanded(!isMapExpanded)}
-            className="absolute top-4 right-4 z-[1000] bg-white hover:bg-gray-50 text-gray-700 p-2.5 rounded-lg shadow-lg transition-all hover:shadow-xl"
-            title={isMapExpanded ? 'Свернуть карту' : 'Развернуть карту'}
-          >
-            <Icon name={isMapExpanded ? 'Minimize2' : 'Maximize2'} size={20} />
-          </button>
-        </div>
+        <MapSection
+          properties={filteredProperties}
+          isExpanded={isMapExpanded}
+          onToggleExpand={() => setIsMapExpanded(!isMapExpanded)}
+          onPropertySelect={setSelectedProperty}
+        />
 
-        {/* Property Cards Grid - 3x3 with scroll */}
         <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
-          {filteredProperties.length > 0 ? (
-            <div className="grid grid-cols-3 gap-4 auto-rows-min">
-              {filteredProperties
-                .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                .map((property) => (
-                  <div
-                    key={property.id}
-                    ref={(el) => { propertyRefs.current[property.id] = el; }}
-                    className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col ${
-                      selectedProperty?.id === property.id ? 'ring-4 ring-[#FF7A00]' : ''
-                    }`}
-                    onClick={() => window.location.href = `/property/${property.id}`}
-                  >
-                    {property.images && property.images.length > 0 ? (
-                      <img
-                        src={property.images[0]}
-                        alt={property.title}
-                        className="w-full h-36 object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-36 bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-400 text-sm">Нет фото</span>
-                      </div>
-                    )}
-                    
-                    <div className="p-3 flex flex-col flex-1">
-                      <p className="text-lg font-bold text-[#FF7A00] mb-1">
-                        {formatPrice(property.price, property.currency)}
-                        {property.transaction_type === 'rent' && <span className="text-xs font-normal text-gray-600"> /мес</span>}
-                      </p>
-                      
-                      <p className="text-gray-900 font-medium mb-2 line-clamp-1 text-sm">
-                        {property.title}
-                      </p>
-                      
-                      <div className="flex items-center gap-2 text-xs text-gray-600 mb-2">
-                        {property.rooms && <span>{property.rooms} комн.</span>}
-                        {property.area && <span>• {property.area} м²</span>}
-                        {property.floor && <span>• {property.floor} эт.</span>}
-                      </div>
-
-                      <div className="flex items-center gap-1 text-xs text-gray-500 mt-auto">
-                        <Icon name="MapPin" size={12} />
-                        <span className="truncate">
-                          {property.street_name ? `${property.street_name} ${property.house_number || ''}` : property.district}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20 text-gray-400">
-              <Icon name="Search" size={64} className="mx-auto mb-4 opacity-30" />
-              <p className="text-xl font-medium mb-2">Объекты не найдены</p>
-              <p className="text-sm">Попробуйте изменить параметры фильтров</p>
-            </div>
-          )}
+          <PropertyGrid
+            properties={filteredProperties}
+            selectedPropertyId={selectedProperty?.id || null}
+            propertyRefs={propertyRefs}
+          />
         </div>
       </div>
     </div>
