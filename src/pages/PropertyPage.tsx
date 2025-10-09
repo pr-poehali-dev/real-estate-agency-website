@@ -40,9 +40,14 @@ export default function PropertyPage() {
     if (token && token.startsWith('demo-token-')) {
       const demoData = localStorage.getItem('demo_properties');
       const demoProps = demoData ? JSON.parse(demoData) : [];
-      const found = demoProps.find((p: Property) => p.id === Number(id));
+      // Добавляем created_at если его нет
+      const propsWithDates = demoProps.map((p: any) => ({
+        ...p,
+        created_at: p.created_at || new Date().toISOString()
+      }));
+      const found = propsWithDates.find((p: Property) => p.id === Number(id));
       setProperty(found || null);
-      setAllProperties(demoProps.filter((p: Property) => p.id !== Number(id)));
+      setAllProperties(propsWithDates.filter((p: Property) => p.id !== Number(id)));
       setLoading(false);
       return;
     }
@@ -50,9 +55,14 @@ export default function PropertyPage() {
     try {
       const response = await Properties.list();
       const props = (response.properties || []) as Property[];
-      const found = props.find(p => p.id === Number(id));
+      // Добавляем created_at если его нет
+      const propsWithDates = props.map(p => ({
+        ...p,
+        created_at: p.created_at || new Date().toISOString()
+      }));
+      const found = propsWithDates.find(p => p.id === Number(id));
       setProperty(found || null);
-      setAllProperties(props.filter(p => p.id !== Number(id)));
+      setAllProperties(propsWithDates.filter(p => p.id !== Number(id)));
     } catch (err) {
       console.error('Error loading property:', err);
       setProperty(null);
@@ -66,6 +76,7 @@ export default function PropertyPage() {
   };
 
   const formatDate = (dateString: string) => {
+    if (!dateString) return '';
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');

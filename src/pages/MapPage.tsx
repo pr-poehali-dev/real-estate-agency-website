@@ -100,7 +100,12 @@ const MapPage: React.FC = () => {
     if (token && token.startsWith('demo-token-')) {
       const demoData = localStorage.getItem('demo_properties');
       const demoProps = demoData ? JSON.parse(demoData) : [];
-      setAllProperties(demoProps);
+      // Добавляем created_at если его нет
+      const propsWithDates = demoProps.map((p: any) => ({
+        ...p,
+        created_at: p.created_at || new Date().toISOString()
+      }));
+      setAllProperties(propsWithDates);
       setLoading(false);
       return;
     }
@@ -108,7 +113,12 @@ const MapPage: React.FC = () => {
     try {
       const response = await Properties.list();
       const props = (response.properties || []) as Property[];
-      setAllProperties(props);
+      // Добавляем created_at если его нет
+      const propsWithDates = props.map(p => ({
+        ...p,
+        created_at: p.created_at || new Date().toISOString()
+      }));
+      setAllProperties(propsWithDates);
     } catch (err: any) {
       console.error('Error loading properties:', err);
       setError(err.message || 'Не удалось загрузить объекты');
