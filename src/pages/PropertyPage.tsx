@@ -453,8 +453,7 @@ export default function PropertyPage() {
           )}
 
           {/* List */}
-          {
-            <div className="px-6 pt-6 pb-6 flex flex-col h-full">
+          <div className="px-6 pt-6 pb-6 flex flex-col h-full">
               <h3 className="font-bold text-xl mb-4">Другие объекты ({filteredProperties.length})</h3>
               
               {filteredProperties.length === 0 ? (
