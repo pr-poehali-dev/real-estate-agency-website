@@ -214,20 +214,27 @@ const AdminPanel: React.FC = () => {
     }
 
     if (token.startsWith('demo-token-')) {
-      const newProperty: Property = {
-        ...propertyForm,
-        id: isEditing && propertyForm.id ? propertyForm.id : Date.now(),
-        features: featuresText.split('\n').filter(f => f.trim()).map(f => f.trim()),
-        status: 'active'
-      };
-
+      const features = featuresText.split('\n').filter(f => f.trim()).map(f => f.trim());
+      
       let updatedProperties: Property[];
-      if (isEditing && propertyForm.id) {
+      if (isEditing && editingProperty?.id) {
+        const updatedProperty: Property = {
+          ...propertyForm,
+          id: editingProperty.id,
+          features,
+          status: 'active'
+        };
         updatedProperties = demoProperties.map(p => 
-          p.id === propertyForm.id ? newProperty : p
+          p.id === editingProperty.id ? updatedProperty : p
         );
         setSuccess(`Объект "${propertyForm.title}" успешно обновлён в демо режиме!`);
       } else {
+        const newProperty: Property = {
+          ...propertyForm,
+          id: Date.now(),
+          features,
+          status: 'active'
+        };
         updatedProperties = [...demoProperties, newProperty];
         setSuccess(`Объект "${propertyForm.title}" успешно добавлен в демо режиме!`);
       }
