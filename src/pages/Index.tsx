@@ -227,7 +227,7 @@ export default function Index() {
                     className="h-14 rounded-lg flex-1 min-w-0"
                   />
                   <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger className="h-14 rounded-lg w-32">
+                    <SelectTrigger className="h-14 rounded-lg w-28">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
