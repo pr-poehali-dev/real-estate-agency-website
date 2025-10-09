@@ -167,10 +167,10 @@ export default function Index() {
           {/* Search Form */}
           <div className="bg-white rounded-xl shadow-md p-6">
             <div className="space-y-4">
-              {/* Main Row: 3 Filters + Button */}
+              {/* First Row: 3 equal filters + price inputs + currency + button */}
               <div className="flex flex-col md:flex-row gap-3">
                 <Select value={transactionType} onValueChange={setTransactionType}>
-                  <SelectTrigger className="h-14 rounded-lg md:w-56">
+                  <SelectTrigger className="h-14 rounded-lg w-full md:w-52">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -181,7 +181,7 @@ export default function Index() {
                 </Select>
 
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="h-14 rounded-lg md:w-56">
+                  <SelectTrigger className="h-14 rounded-lg w-full md:w-52">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -191,7 +191,7 @@ export default function Index() {
                 </Select>
 
                 <Select value={district} onValueChange={setDistrict}>
-                  <SelectTrigger className="h-14 rounded-lg md:w-56">
+                  <SelectTrigger className="h-14 rounded-lg w-full md:w-52">
                     <SelectValue placeholder="Все районы" />
                   </SelectTrigger>
                   <SelectContent>
@@ -210,24 +210,27 @@ export default function Index() {
                     <SelectItem value="qanaqer-zeytun">Канакер-Зейтун</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
 
+              {/* Second Row: Price inputs + currency + search button */}
+              <div className="flex flex-col md:flex-row gap-3">
                 <div className="flex gap-2 flex-1">
                   <Input
                     type="number"
                     placeholder="Цена от"
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
-                    className="h-14 rounded-lg flex-1 min-w-0"
+                    className="h-14 rounded-lg flex-1"
                   />
                   <Input
                     type="number"
                     placeholder="до"
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(e.target.value)}
-                    className="h-14 rounded-lg flex-1 min-w-0"
+                    className="h-14 rounded-lg flex-1"
                   />
                   <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger className="h-14 rounded-lg w-14">
+                    <SelectTrigger className="h-14 rounded-lg w-24">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -250,7 +253,7 @@ export default function Index() {
               <Button 
                 onClick={() => navigate('/map')}
                 variant="outline"
-                className="w-full h-12 rounded-lg border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-medium transition-all"
+                className="w-full h-14 rounded-lg border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-medium transition-all"
               >
                 <Icon name="Map" size={20} className="mr-2" />
                 Открыть карту
