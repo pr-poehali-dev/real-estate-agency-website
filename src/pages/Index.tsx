@@ -187,6 +187,7 @@ export default function Index() {
                   <SelectContent>
                     <SelectItem value="apartment">Квартира</SelectItem>
                     <SelectItem value="house">Дом</SelectItem>
+                    <SelectItem value="commercial">Коммерция</SelectItem>
                   </SelectContent>
                 </Select>
 

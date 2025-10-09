@@ -233,6 +233,7 @@ const MapPage: React.FC = () => {
                 <SelectItem value="all">Все типы</SelectItem>
                 <SelectItem value="apartment">Квартира</SelectItem>
                 <SelectItem value="house">Дом</SelectItem>
+                <SelectItem value="commercial">Коммерция</SelectItem>
               </SelectContent>
             </Select>
           </div>

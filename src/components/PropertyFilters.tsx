@@ -52,6 +52,7 @@ const PropertyFilters: React.FC<FilterProps> = ({
     { value: 'all', label: 'Все типы' },
     { value: 'apartment', label: 'Квартира' },
     { value: 'house', label: 'Дом' },
+    { value: 'commercial', label: 'Коммерция' },
   ];
 
   const transactionTypes = [
