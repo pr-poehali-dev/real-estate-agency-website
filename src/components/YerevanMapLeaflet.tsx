@@ -162,15 +162,34 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       let popupTimeout: NodeJS.Timeout | null = null;
       
       marker.on('popupopen', () => {
-        const popupElement = document.querySelector('.property-popup');
+        const popupElement = document.querySelector(`[data-property-id="${property.id}"]`);
         const leafletPopup = document.querySelector('.leaflet-popup');
         
         if (popupElement) {
-          popupElement.addEventListener('click', () => {
-            if (onPropertySelect) {
-              onPropertySelect(property);
+          let clickCount = 0;
+          let clickTimer: NodeJS.Timeout | null = null;
+          
+          const handleClick = () => {
+            clickCount++;
+            
+            if (clickCount === 1) {
+              clickTimer = setTimeout(() => {
+                if (onPropertySelect) {
+                  onPropertySelect(property);
+                }
+                clickCount = 0;
+              }, 300);
+            } else if (clickCount === 2) {
+              if (clickTimer) {
+                clearTimeout(clickTimer);
+              }
+              window.location.href = `/property/${property.id}`;
+              clickCount = 0;
             }
-          });
+          };
+          
+          popupElement.removeEventListener('click', handleClick);
+          popupElement.addEventListener('click', handleClick);
         }
         
         if (leafletPopup) {
