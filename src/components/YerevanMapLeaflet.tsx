@@ -259,20 +259,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
     <div className="h-full w-full relative">
       <div ref={mapContainer} className="h-full w-full rounded-xl" />
       
-      {!isPreview && (
-        <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-[1000] max-w-sm">
-          <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-2">
-            <Icon name="MapPin" size={20} className="text-[#FF7A00]" />
-            Карта недвижимости Еревана
-          </h3>
-          <p className="text-sm text-gray-600 mb-2">Найдено объектов: {properties.length}</p>
-          {selectedDistrict && (
-            <p className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
-              Район: {selectedDistrict}
-            </p>
-          )}
-        </div>
-      )}
+
 
       <div className="absolute bottom-4 right-4 bg-white rounded-lg shadow-lg p-3 z-[1000]">
         <div className="flex items-center gap-2 text-sm text-gray-600">
