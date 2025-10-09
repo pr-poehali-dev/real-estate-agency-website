@@ -177,6 +177,145 @@ export default function PropertyPage() {
         </div>
       </header>
 
+      {/* Filters - Full Width */}
+      {showFilters && (
+        <div className="border-b border-gray-200 px-6 py-4 bg-gray-50">
+          <h3 className="font-bold text-lg mb-4">Фильтры</h3>
+          <div className="grid grid-cols-8 gap-3">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Тип сделки</label>
+              <Select value={transactionType} onValueChange={setTransactionType}>
+                <SelectTrigger className="h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все</SelectItem>
+                  <SelectItem value="rent">Долгосрочная аренда</SelectItem>
+                  <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
+                  <SelectItem value="sale">Продажа</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-2 block">Тип недвижимости</label>
+              <Select value={propertyType} onValueChange={setPropertyType}>
+                <SelectTrigger className="h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все типы</SelectItem>
+                  <SelectItem value="apartment">Квартира</SelectItem>
+                  <SelectItem value="house">Дом</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-2 block">Район</label>
+              <Select value={district} onValueChange={setDistrict}>
+                <SelectTrigger className="h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все...</SelectItem>
+                  <SelectItem value="Центр (Кентрон)">Центр</SelectItem>
+                  <SelectItem value="Аван">Аван</SelectItem>
+                  <SelectItem value="Арабкир">Арабкир</SelectItem>
+                  <SelectItem value="Давташен">Давташен</SelectItem>
+                  <SelectItem value="Эребуни">Эребуни</SelectItem>
+                  <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
+                  <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-2 block">Количество комнат</label>
+              <Select value={rooms} onValueChange={setRooms}>
+                <SelectTrigger className="h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Выберите</SelectItem>
+                  <SelectItem value="1">1</SelectItem>
+                  <SelectItem value="2">2</SelectItem>
+                  <SelectItem value="3">3</SelectItem>
+                  <SelectItem value="4">4</SelectItem>
+                  <SelectItem value="5">5+</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-2 block">Можно с детьми</label>
+              <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
+                <SelectTrigger className="h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Не важно</SelectItem>
+                  <SelectItem value="yes">Да</SelectItem>
+                  <SelectItem value="no">Нет</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-2 block">Можно с животными</label>
+              <Select value={petsAllowed} onValueChange={setPetsAllowed}>
+                <SelectTrigger className="h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Не важно</SelectItem>
+                  <SelectItem value="yes">Да</SelectItem>
+                  <SelectItem value="no">Нет</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-2 block">Валюта</label>
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger className="h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все</SelectItem>
+                  <SelectItem value="AMD">AMD</SelectItem>
+                  <SelectItem value="USD">USD</SelectItem>
+                  <SelectItem value="RUB">RUB</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <label className="text-sm font-medium mb-2 block">Мин. цена</label>
+                <Input 
+                  type="number" 
+                  placeholder="От"
+                  className="h-9"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                />
+              </div>
+              <div className="flex-1">
+                <label className="text-sm font-medium mb-2 block">Макс. цена</label>
+                <Input 
+                  type="number" 
+                  placeholder="До"
+                  className="h-9"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left side - Property details */}
@@ -421,150 +560,8 @@ export default function PropertyPage() {
           </div>
         </div>
 
-        {/* Right side - List & Map */}
+        {/* Right side - List */}
         <div className="w-1/2 border-l border-gray-200 bg-white flex flex-col">
-          {/* Filters */}
-          {showFilters && (
-            <div className="border-b border-gray-200 p-6 bg-gray-50">
-              <h3 className="font-bold text-lg mb-4">Фильтры</h3>
-              <div className="grid grid-cols-4 gap-4 mb-4">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Тип сделки</label>
-                  <Select value={transactionType} onValueChange={setTransactionType}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Все</SelectItem>
-                      <SelectItem value="rent">Долгосрочная аренда</SelectItem>
-                      <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
-                      <SelectItem value="sale">Продажа</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Тип недвижимости</label>
-                  <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Все типы</SelectItem>
-                      <SelectItem value="apartment">Квартира</SelectItem>
-                      <SelectItem value="house">Дом</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Район</label>
-                  <Select value={district} onValueChange={setDistrict}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Все районы</SelectItem>
-                      <SelectItem value="Центр (Кентрон)">Центр (Кентрон)</SelectItem>
-                      <SelectItem value="Аван">Аван</SelectItem>
-                      <SelectItem value="Арабкир">Арабкир</SelectItem>
-                      <SelectItem value="Давташен">Давташен</SelectItem>
-                      <SelectItem value="Эребуни">Эребуни</SelectItem>
-                      <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
-                      <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
-                      <SelectItem value="Норк-Мараш">Норк-Мараш</SelectItem>
-                      <SelectItem value="Нор Норк">Нор Норк</SelectItem>
-                      <SelectItem value="Шенгавит">Шенгавит</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Количество комнат</label>
-                  <Select value={rooms} onValueChange={setRooms}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Выберите</SelectItem>
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3</SelectItem>
-                      <SelectItem value="4">4</SelectItem>
-                      <SelectItem value="5">5+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-4 gap-4">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Можно с детьми</label>
-                  <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Не важно</SelectItem>
-                      <SelectItem value="yes">Да</SelectItem>
-                      <SelectItem value="no">Нет</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Можно с животными</label>
-                  <Select value={petsAllowed} onValueChange={setPetsAllowed}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Не важно</SelectItem>
-                      <SelectItem value="yes">Да</SelectItem>
-                      <SelectItem value="no">Нет</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Валюта</label>
-                  <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Все</SelectItem>
-                      <SelectItem value="AMD">AMD</SelectItem>
-                      <SelectItem value="USD">USD</SelectItem>
-                      <SelectItem value="RUB">RUB</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <label className="text-sm font-medium mb-2 block">Мин. цена</label>
-                    <Input 
-                      type="number" 
-                      placeholder="От"
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <label className="text-sm font-medium mb-2 block">Макс. цена</label>
-                    <Input 
-                      type="number" 
-                      placeholder="До"
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* List */}
           <div className="px-6 pt-6 pb-6 flex flex-col h-full">
               <h3 className="font-bold text-xl mb-4">Другие объекты ({filteredProperties.length})</h3>
