@@ -220,12 +220,22 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 </div>
                 <div>
                   <Label htmlFor="floor">Этаж</Label>
-                  <Input
-                    id="floor"
-                    type="number"
-                    value={propertyForm.floor || ''}
-                    onChange={(e) => setPropertyForm(prev => ({...prev, floor: e.target.value ? Number(e.target.value) : 0}))}
-                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      id="floor"
+                      type="number"
+                      placeholder="Этаж"
+                      value={propertyForm.floor || ''}
+                      onChange={(e) => setPropertyForm(prev => ({...prev, floor: e.target.value ? Number(e.target.value) : 0}))}
+                    />
+                    <Input
+                      id="total_floors"
+                      type="number"
+                      placeholder="Всего"
+                      value={propertyForm.total_floors || ''}
+                      onChange={(e) => setPropertyForm(prev => ({...prev, total_floors: e.target.value ? Number(e.target.value) : 0}))}
+                    />
+                  </div>
                 </div>
               </div>
 

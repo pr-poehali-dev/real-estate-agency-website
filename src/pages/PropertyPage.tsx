@@ -261,7 +261,9 @@ export default function PropertyPage() {
                     <Icon name="Building" size={24} className="text-[#FF7A00]" />
                     <div>
                       <p className="text-sm text-gray-600">Этаж</p>
-                      <p className="font-semibold">{property.floor}</p>
+                      <p className="font-semibold">
+                        {property.total_floors ? `${property.floor}/${property.total_floors}` : property.floor}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -414,7 +416,7 @@ export default function PropertyPage() {
                           <div className="flex gap-4 text-sm text-gray-600 mb-2">
                             {prop.rooms && <span>{prop.rooms} комн.</span>}
                             {prop.area && <span>{prop.area} м²</span>}
-                            {prop.floor && <span>{prop.floor} этаж</span>}
+                            {prop.floor && prop.total_floors && <span>{prop.floor}/{prop.total_floors} этаж</span>}
                           </div>
                           {prop.address && (
                             <p className="text-sm text-gray-500 mt-auto line-clamp-1">

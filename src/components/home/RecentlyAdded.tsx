@@ -84,7 +84,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                     <div className="flex items-center gap-2 text-xs text-gray-600 mt-auto">
                       {property.rooms && <span>{property.rooms} комн.</span>}
                       {property.area && <span>• {property.area} м²</span>}
-                      {property.floor && <span>• {property.floor} эт.</span>}
+                      {property.floor && property.total_floors && <span>• {property.floor}/{property.total_floors} эт.</span>}
                     </div>
                   </div>
                 </div>
