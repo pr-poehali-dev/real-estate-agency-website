@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Properties } from "@/lib/api";
 import type { Property as ApiProperty } from "@/lib/api";
 import Icon from "@/components/ui/icon";
@@ -161,10 +161,10 @@ export default function Index() {
           <h1 className="text-3xl font-black mb-4">Поиск недвижимости в Ереване</h1>
 
           {/* Search Form */}
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <div className="space-y-4">
-              {/* Row 1: Transaction Type & Property Type */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="bg-white rounded-xl shadow-md p-4">
+            <div className="space-y-3">
+              {/* Row 1: All Filters in one row */}
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
                 <Select value={transactionType} onValueChange={setTransactionType}>
                   <SelectTrigger className="h-10 rounded-lg">
                     <SelectValue />
@@ -177,7 +177,7 @@ export default function Index() {
 
                 <Select value={propertyType} onValueChange={setPropertyType}>
                   <SelectTrigger className="h-10 rounded-lg">
-                    <SelectValue placeholder="Тип недвижимости" />
+                    <SelectValue placeholder="Все типы" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Все типы</SelectItem>
@@ -185,10 +185,76 @@ export default function Index() {
                     <SelectItem value="house">Дом</SelectItem>
                   </SelectContent>
                 </Select>
+
+
+                <Select value={rooms} onValueChange={setRooms}>
+                  <SelectTrigger className="h-10 rounded-lg">
+                    <SelectValue placeholder="Любое" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="any">Любое</SelectItem>
+                    <SelectItem value="1">1 комната</SelectItem>
+                    <SelectItem value="2">2 комнаты</SelectItem>
+                    <SelectItem value="3">3 комнаты</SelectItem>
+                    <SelectItem value="4+">4+ комнат</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Input
+                  type="text"
+                  placeholder="Поиск по улице"
+                  value={streetSearch}
+                  onChange={(e) => setStreetSearch(e.target.value)}
+                  className="h-10 rounded-lg"
+                />
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="h-10 rounded-lg justify-start text-left font-normal">
+                      {amenities.length > 0 ? `Удобства (${amenities.length})` : 'Удобства'}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-64" align="start">
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox 
+                          id="wifi" 
+                          checked={amenities.includes('wifi')}
+                          onCheckedChange={() => toggleAmenity('wifi')}
+                        />
+                        <label htmlFor="wifi" className="text-sm cursor-pointer">WiFi</label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox 
+                          id="parking" 
+                          checked={amenities.includes('parking')}
+                          onCheckedChange={() => toggleAmenity('parking')}
+                        />
+                        <label htmlFor="parking" className="text-sm cursor-pointer">Парковка</label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox 
+                          id="elevator" 
+                          checked={amenities.includes('elevator')}
+                          onCheckedChange={() => toggleAmenity('elevator')}
+                        />
+                        <label htmlFor="elevator" className="text-sm cursor-pointer">Лифт</label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox 
+                          id="balcony" 
+                          checked={amenities.includes('balcony')}
+                          onCheckedChange={() => toggleAmenity('balcony')}
+                        />
+                        <label htmlFor="balcony" className="text-sm cursor-pointer">Балкон</label>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
 
-              {/* Row 2: Price Range */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Row 2: Price and Additional Filters */}
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                 <Input
                   type="number"
                   placeholder="Цена от"
@@ -212,76 +278,11 @@ export default function Index() {
                     <SelectItem value="USD">USD</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
 
-              {/* Row 3: Rooms & Street Search */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Select value={rooms} onValueChange={setRooms}>
-                  <SelectTrigger className="h-10 rounded-lg">
-                    <SelectValue placeholder="Количество комнат" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Любое</SelectItem>
-                    <SelectItem value="1">1 комната</SelectItem>
-                    <SelectItem value="2">2 комнаты</SelectItem>
-                    <SelectItem value="3">3 комнаты</SelectItem>
-                    <SelectItem value="4+">4+ комнат</SelectItem>
-                  </SelectContent>
-                </Select>
 
-                <Input
-                  type="text"
-                  placeholder="Поиск по улице"
-                  value={streetSearch}
-                  onChange={(e) => setStreetSearch(e.target.value)}
-                  className="h-10 rounded-lg"
-                />
-              </div>
-
-              {/* Row 4: Amenities */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Удобства</Label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="wifi" 
-                      checked={amenities.includes('wifi')}
-                      onCheckedChange={() => toggleAmenity('wifi')}
-                    />
-                    <label htmlFor="wifi" className="text-sm cursor-pointer">WiFi</label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="parking" 
-                      checked={amenities.includes('parking')}
-                      onCheckedChange={() => toggleAmenity('parking')}
-                    />
-                    <label htmlFor="parking" className="text-sm cursor-pointer">Парковка</label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="elevator" 
-                      checked={amenities.includes('elevator')}
-                      onCheckedChange={() => toggleAmenity('elevator')}
-                    />
-                    <label htmlFor="elevator" className="text-sm cursor-pointer">Лифт</label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="balcony" 
-                      checked={amenities.includes('balcony')}
-                      onCheckedChange={() => toggleAmenity('balcony')}
-                    />
-                    <label htmlFor="balcony" className="text-sm cursor-pointer">Балкон</label>
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 5: Additional Filters */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <Select value={petsAllowed} onValueChange={setPetsAllowed}>
                   <SelectTrigger className="h-10 rounded-lg">
-                    <SelectValue placeholder="Разрешены ли питомцы" />
+                    <SelectValue placeholder="Не важно" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="any">Не важно</SelectItem>
@@ -292,7 +293,7 @@ export default function Index() {
 
                 <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
                   <SelectTrigger className="h-10 rounded-lg">
-                    <SelectValue placeholder="Разрешены ли дети" />
+                    <SelectValue placeholder="Не важно" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="any">Не важно</SelectItem>
@@ -305,7 +306,7 @@ export default function Index() {
               {/* Search Button */}
               <Button 
                 onClick={handleSearch}
-                className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all text-base"
+                className="w-full h-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all"
               >
                 Найти недвижимость
               </Button>
