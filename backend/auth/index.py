@@ -66,7 +66,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 }
             
             escaped_username = escape_sql_string(username)
-            query = f"SELECT id, username, password_hash, email, full_name, role, is_active FROM admin_users WHERE username = '{escaped_username}'"
+            query = f"SELECT id, username, password_hash, email, full_name, role, is_active FROM t_p37006348_real_estate_agency_w.admin_users WHERE username = '{escaped_username}'"
             cursor.execute(query)
             user = cursor.fetchone()
             
@@ -120,7 +120,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            update_query = f"UPDATE admin_users SET updated_at = CURRENT_TIMESTAMP WHERE id = {user['id']}"
+            update_query = f"UPDATE t_p37006348_real_estate_agency_w.admin_users SET updated_at = CURRENT_TIMESTAMP WHERE id = {user['id']}"
             cursor.execute(update_query)
             conn.commit()
             
@@ -177,7 +177,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 payload = jwt.decode(token, secret_key, algorithms=['HS256'])
                 user_id = payload.get('user_id')
                 
-                query = f"SELECT id, username, email, full_name, role, is_active FROM admin_users WHERE id = {user_id}"
+                query = f"SELECT id, username, email, full_name, role, is_active FROM t_p37006348_real_estate_agency_w.admin_users WHERE id = {user_id}"
                 cursor.execute(query)
                 user = cursor.fetchone()
                 
