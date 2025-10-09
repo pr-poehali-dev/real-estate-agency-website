@@ -167,7 +167,7 @@ export default function PropertyPage() {
         <div className="w-1/2 overflow-y-auto">
           <div className="p-6">
             {/* Images */}
-            <div className="mb-6">
+            <div>
               {property.images && property.images.length > 0 ? (
                 <div className="relative">
                   <img
@@ -221,7 +221,7 @@ export default function PropertyPage() {
             </div>
 
             {/* Details */}
-            <div className="flex items-start justify-between mb-3">
+            <div className="flex items-start justify-between mb-3 mt-6">
               <h1 className="text-3xl font-bold flex-1">{property.title}</h1>
               {property.created_at && (
                 <span className="text-sm text-gray-500 mt-1 flex items-center gap-1">
