@@ -167,7 +167,7 @@ export default function Index() {
           {/* Search Form */}
           <div className="bg-white rounded-xl shadow-md p-6">
             <div className="space-y-4">
-              {/* First Row: 3 equal filters + price inputs + currency + button */}
+              {/* All filters in one row */}
               <div className="flex flex-col md:flex-row gap-3">
                 <Select value={transactionType} onValueChange={setTransactionType}>
                   <SelectTrigger className="h-14 rounded-lg w-full md:w-52">
@@ -210,36 +210,31 @@ export default function Index() {
                     <SelectItem value="qanaqer-zeytun">Канакер-Зейтун</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
 
-              {/* Second Row: Price inputs + currency + search button */}
-              <div className="flex flex-col md:flex-row gap-3">
-                <div className="flex gap-2 flex-1">
-                  <Input
-                    type="number"
-                    placeholder="Цена от"
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                    className="h-14 rounded-lg flex-1"
-                  />
-                  <Input
-                    type="number"
-                    placeholder="до"
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                    className="h-14 rounded-lg flex-1"
-                  />
-                  <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger className="h-14 rounded-lg w-24">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="AMD">AMD</SelectItem>
-                      <SelectItem value="USD">USD</SelectItem>
-                      <SelectItem value="RUB">RUB</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Input
+                  type="number"
+                  placeholder="Цена от"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  className="h-14 rounded-lg w-full md:w-32"
+                />
+                <Input
+                  type="number"
+                  placeholder="до"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                  className="h-14 rounded-lg w-full md:w-32"
+                />
+                <Select value={currency} onValueChange={setCurrency}>
+                  <SelectTrigger className="h-14 rounded-lg w-full md:w-24">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="AMD">AMD</SelectItem>
+                    <SelectItem value="USD">USD</SelectItem>
+                    <SelectItem value="RUB">RUB</SelectItem>
+                  </SelectContent>
+                </Select>
 
                 <Button 
                   onClick={handleSearch}
