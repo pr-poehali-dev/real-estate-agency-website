@@ -197,13 +197,6 @@ export default function Index() {
                     onChange={(e) => setMinPrice(e.target.value)}
                     className="h-14 rounded-lg flex-1 min-w-0"
                   />
-                  <Input
-                    type="number"
-                    placeholder="до"
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                    className="h-14 rounded-lg w-28"
-                  />
                   <Select value={currency} onValueChange={setCurrency}>
                     <SelectTrigger className="h-14 rounded-lg w-32">
                       <SelectValue />
