@@ -156,16 +156,21 @@ export default function Index() {
         </nav>
       </header>
 
-      {/* Compact Search Section */}
-      <section className="relative px-6 py-4 max-w-7xl mx-auto">
-        <div className="relative z-10">
-          <div className="mb-8">
-            <h1 className="text-3xl font-black mb-2">Поиск недвижимости в Ереване</h1>
-            <p className="text-gray-600 text-lg">Найди свой идеальный вариант</p>
+      {/* Hero Search Section */}
+      <section className="relative px-6 py-20 min-h-[500px] flex items-center" style={{
+        backgroundImage: 'url(https://cdn.poehali.dev/projects/73745f0c-4271-4bf6-a60b-4537cc7c5835/files/10d4019f-2510-4dff-9892-8f4b773e4217.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50" />
+        <div className="relative z-10 max-w-7xl mx-auto w-full">
+          <div className="mb-10 text-center animate-in fade-in slide-in-from-bottom duration-700">
+            <h1 className="text-5xl md:text-6xl font-black mb-4 text-white drop-shadow-2xl">Поиск недвижимости в Ереване</h1>
+            <p className="text-white text-xl md:text-2xl drop-shadow-lg">Найди свой идеальный вариант</p>
           </div>
 
           {/* Search Form */}
-          <div className="bg-white rounded-xl shadow-md p-6">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 animate-in fade-in slide-in-from-bottom duration-700 delay-150">
             <div className="space-y-4">
               {/* Main Row: 3 Filters + Button */}
               <div className="flex flex-col md:flex-row gap-3">
@@ -249,9 +254,9 @@ export default function Index() {
               {/* Map Button */}
               <Button 
                 variant="outline"
-                className="w-full h-12 rounded-lg border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-medium transition-all"
+                className="w-full h-12 rounded-lg border-2 bg-gradient-to-r from-orange-50 to-orange-100 border-[#FF7A00] hover:border-[#E66D00] hover:from-orange-100 hover:to-orange-200 font-medium transition-all text-[#FF7A00] hover:text-[#E66D00]"
               >
-                <Icon name="Map" size={20} className="mr-2" />
+                <Icon name="Map" size={22} className="mr-2" />
                 Открыть карту
               </Button>
             </div>
@@ -262,9 +267,9 @@ export default function Index() {
       </section>
 
       {/* Recently Added */}
-      <section className="py-6">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-2xl font-bold mb-4">Недавно добавленные</h2>
+          <h2 className="text-4xl font-bold mb-8 text-center">Недавно добавленные</h2>
         </div>
         
         {loading ? (
@@ -278,10 +283,10 @@ export default function Index() {
           </div>
         ) : (
           <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {properties.slice(0, 3).map((property) => (
-              <Link key={property.id} to={`/property/${property.id}`} className="block aspect-square">
-                <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col">
+              <Link key={property.id} to={`/property/${property.id}`} className="block group">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col">
                   {property.images && property.images.length > 0 ? (
                     <img
                       src={property.images[0]}
@@ -294,19 +299,34 @@ export default function Index() {
                     </div>
                   )}
                   
-                  <div className="p-4 flex flex-col flex-1 h-[40%]">
-                    <p className="text-lg font-bold text-[#FF7A00] mb-1">
+                  <div className="p-6 flex flex-col flex-1 h-[40%]">
+                    <p className="text-2xl font-bold bg-gradient-to-r from-[#FF7A00] to-[#FF9933] bg-clip-text text-transparent mb-2">
                       {formatPrice(property.price, property.currency)}
                     </p>
                     
-                    <p className="text-gray-900 font-medium mb-2 line-clamp-1 text-sm">
+                    <p className="text-gray-900 font-semibold mb-3 line-clamp-1 text-base">
                       {property.street_name || property.address}
                     </p>
                     
-                    <div className="flex items-center gap-2 text-xs text-gray-600 mt-auto">
-                      {property.rooms && <span>{property.rooms} комн.</span>}
-                      {property.area && <span>• {property.area} м²</span>}
-                      {property.floor && <span>• {property.floor} эт.</span>}
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mt-auto">
+                      {property.rooms && (
+                        <span className="flex items-center gap-1">
+                          <Icon name="Bed" size={16} />
+                          {property.rooms}
+                        </span>
+                      )}
+                      {property.area && (
+                        <span className="flex items-center gap-1">
+                          <Icon name="Square" size={16} />
+                          {property.area} м²
+                        </span>
+                      )}
+                      {property.floor && (
+                        <span className="flex items-center gap-1">
+                          <Icon name="Layers" size={16} />
+                          {property.floor} эт.
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
