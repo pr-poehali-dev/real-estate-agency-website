@@ -120,7 +120,20 @@ function getDemoProperties(): Property[] {
 }
 
 function saveDemoProperties(properties: Property[]): void {
-  localStorage.setItem('demo_properties', JSON.stringify(properties));
+  try {
+    const propertiesWithoutImages = properties.map(p => ({
+      ...p,
+      images: p.images?.slice(0, 2) || []
+    }));
+    localStorage.setItem('demo_properties', JSON.stringify(propertiesWithoutImages));
+  } catch (error) {
+    console.error('Failed to save demo properties:', error);
+    const propertiesWithoutImages = properties.map(p => ({
+      ...p,
+      images: []
+    }));
+    localStorage.setItem('demo_properties', JSON.stringify(propertiesWithoutImages));
+  }
 }
 
 export const Properties = {
