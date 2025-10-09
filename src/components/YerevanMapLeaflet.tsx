@@ -21,13 +21,15 @@ interface YerevanMapLeafletProps {
   onPropertySelect?: (property: Property) => void;
   selectedDistrict?: string;
   isPreview?: boolean;
+  openOnClick?: boolean;
 }
 
 const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({ 
   properties, 
   onPropertySelect, 
   selectedDistrict,
-  isPreview = false
+  isPreview = false,
+  openOnClick = false
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
@@ -167,18 +169,40 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
           const leafletPopup = document.querySelector('.leaflet-popup');
           
           if (popupElement) {
-            const handleClick = (e: Event) => {
-              e.preventDefault();
-              e.stopPropagation();
+            if (openOnClick) {
+              const handleClick = (e: Event) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = `/property/${property.id}`;
+              };
+              popupElement.addEventListener('click', handleClick, { once: true });
+            } else {
+              let clickCount = 0;
+              let clickTimer: NodeJS.Timeout | null = null;
               
-              if (onPropertySelect) {
-                onPropertySelect(property);
-              }
+              const handleClick = (e: Event) => {
+                e.preventDefault();
+                e.stopPropagation();
+                clickCount++;
+                
+                if (clickCount === 1) {
+                  clickTimer = setTimeout(() => {
+                    if (onPropertySelect) {
+                      onPropertySelect(property);
+                    }
+                    clickCount = 0;
+                  }, 250);
+                } else if (clickCount === 2) {
+                  if (clickTimer) {
+                    clearTimeout(clickTimer);
+                  }
+                  window.location.href = `/property/${property.id}`;
+                  clickCount = 0;
+                }
+              };
               
-              window.location.href = `/property/${property.id}`;
-            };
-            
-            popupElement.addEventListener('click', handleClick, { once: true });
+              popupElement.addEventListener('click', handleClick);
+            }
           }
           
           if (leafletPopup) {

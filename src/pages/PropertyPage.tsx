@@ -356,6 +356,7 @@ export default function PropertyPage() {
                   }
                 }}
                 isPreview={false}
+                openOnClick={true}
               />
             </div>
           ) : (
