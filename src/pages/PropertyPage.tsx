@@ -21,7 +21,6 @@ export default function PropertyPage() {
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [showMap, setShowMap] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   
   // Filters
@@ -150,9 +149,9 @@ export default function PropertyPage() {
               Фильтры
             </Button>
             <Button 
-              onClick={() => setShowMap(!showMap)}
+              onClick={() => document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' })}
               variant="outline"
-              className={`border-gray-300 text-gray-700 hover:bg-gray-50 ${showMap ? 'bg-gray-100' : ''}`}
+              className="border-gray-300 text-gray-700 hover:bg-gray-50"
             >
               <Icon name="Map" size={20} className="mr-2" />
               Карта
@@ -453,21 +452,8 @@ export default function PropertyPage() {
             </div>
           )}
 
-          {/* Map or List */}
-          {showMap ? (
-            <div className="flex-1 bg-gray-100">
-              <YerevanMapLeaflet
-                properties={[property, ...filteredProperties]}
-                onPropertySelect={(selected) => {
-                  if (selected.id !== property.id) {
-                    navigate(`/property/${selected.id}`);
-                  }
-                }}
-                isPreview={false}
-                openOnClick={true}
-              />
-            </div>
-          ) : (
+          {/* List */}
+          {
             <div className="px-6 pt-6 pb-6 flex flex-col h-full">
               <h3 className="font-bold text-xl mb-4">Другие объекты ({filteredProperties.length})</h3>
               
@@ -517,13 +503,12 @@ export default function PropertyPage() {
                 </div>
               )}
             </div>
-          )}
         </div>
       </div>
 
       {/* Карта с объектами на всю ширину */}
       {filteredProperties.length > 0 && (
-        <div className="bg-white border-t border-gray-200">
+        <div id="map-section" className="bg-white border-t border-gray-200">
           <div className="px-6 py-6">
             <h2 className="text-xl font-bold mb-4">Похожие объекты на карте</h2>
             <div className="h-[500px] rounded-xl overflow-hidden">
