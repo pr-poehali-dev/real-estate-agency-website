@@ -165,7 +165,8 @@ export default function PropertyPage() {
       <div className="flex-1 flex overflow-hidden">
         {/* Left side - Property details */}
         <div className="w-1/2 overflow-y-auto">
-          <div className="px-6 pb-6 pt-[72px] bg-[#F5F3EE] min-h-full">
+          <div className="bg-[#F5F3EE] min-h-full">
+            <div className="px-6 pb-6 pt-[72px]">
             {/* Images */}
             <div>
               {property.images && property.images.length > 0 ? (
@@ -398,6 +399,7 @@ export default function PropertyPage() {
                   Telegram
                 </Button>
               </a>
+            </div>
             </div>
           </div>
         </div>
