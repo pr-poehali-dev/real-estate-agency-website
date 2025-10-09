@@ -158,7 +158,10 @@ export default function Index() {
       {/* Compact Search Section */}
       <section className="relative px-6 py-4 max-w-7xl mx-auto">
         <div className="relative z-10">
-          <h1 className="text-3xl font-black mb-8">Поиск недвижимости в Ереване</h1>
+          <div className="mb-8">
+            <h1 className="text-3xl font-black mb-2">Поиск недвижимости в Ереване</h1>
+            <p className="text-gray-600 text-lg">Найди свой идеальный вариант</p>
+          </div>
 
           {/* Search Form */}
           <div className="bg-white rounded-xl shadow-md p-6">
