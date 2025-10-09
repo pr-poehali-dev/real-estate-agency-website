@@ -150,12 +150,8 @@ const MapPage: React.FC = () => {
       return true;
     });
 
-    // Сортируем от новых к старым
-    return filtered.sort((a, b) => {
-      const dateA = new Date(a.created_at).getTime();
-      const dateB = new Date(b.created_at).getTime();
-      return dateB - dateA; // от новых к старым
-    });
+    // Сортируем от новых к старым по ID (больший ID = новее)
+    return filtered.sort((a, b) => b.id - a.id);
   }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   useEffect(() => {
