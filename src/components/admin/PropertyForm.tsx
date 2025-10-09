@@ -240,13 +240,25 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 />
               </div>
               <div>
-                <Label htmlFor="district">Район</Label>
-                <Input
-                  id="district"
-                  value={propertyForm.district || ''}
-                  onChange={(e) => setPropertyForm(prev => ({...prev, district: e.target.value}))}
-                  placeholder="Центр"
-                />
+                <Label htmlFor="district">Район *</Label>
+                <Select value={propertyForm.district || ''} onValueChange={(value) => setPropertyForm(prev => ({...prev, district: value}))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите район" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Аджапняк">Аджапняк</SelectItem>
+                    <SelectItem value="Арабкир">Арабкир</SelectItem>
+                    <SelectItem value="Аван">Аван</SelectItem>
+                    <SelectItem value="Давташен">Давташен</SelectItem>
+                    <SelectItem value="Эребуни">Эребуни</SelectItem>
+                    <SelectItem value="Кентрон">Кентрон</SelectItem>
+                    <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
+                    <SelectItem value="Нор Норк">Нор Норк</SelectItem>
+                    <SelectItem value="Нубарашен">Нубарашен</SelectItem>
+                    <SelectItem value="Шенгавит">Шенгавит</SelectItem>
+                    <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
@@ -277,7 +289,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 { label: 'Плита', value: 'stove' },
                 { label: 'Стиральная машина', value: 'washing_machine' },
                 { label: 'Водонагреватель', value: 'water_heater' },
-                { label: 'Посудомоечная машина', value: 'dishwasher' },
               ].map((amenity) => {
                 const currentFeatures = featuresText.split('\n').filter(f => f.trim());
                 const isChecked = currentFeatures.includes(amenity.label);
