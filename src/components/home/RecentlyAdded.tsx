@@ -48,7 +48,12 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {properties
-              .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+              .sort((a, b) => {
+                const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+                const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+                if (dateB !== dateA) return dateB - dateA;
+                return b.id - a.id;
+              })
               .slice(0, 3)
               .map((property) => (
               <Link key={property.id} to={`/property/${property.id}`} className="block aspect-square">
