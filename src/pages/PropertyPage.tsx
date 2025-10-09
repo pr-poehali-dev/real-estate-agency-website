@@ -403,9 +403,9 @@ export default function PropertyPage() {
 
             {/* Карта с объектами */}
             {filteredProperties.length > 0 && (
-              <div className="bg-white rounded-2xl p-6 mb-4">
-                <h2 className="text-xl font-bold mb-4">Похожие объекты на карте</h2>
-                <div className="h-[400px] rounded-xl overflow-hidden">
+              <div className="mb-4 -mx-6">
+                <h2 className="text-xl font-bold mb-4 px-6">Похожие объекты на карте</h2>
+                <div className="h-[500px]">
                   <YerevanMapLeaflet
                     properties={[property, ...filteredProperties.slice(0, 20)]}
                     onPropertySelect={(selected) => {
