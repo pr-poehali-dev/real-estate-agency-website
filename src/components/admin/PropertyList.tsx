@@ -85,9 +85,9 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
   };
 
   return (
-    <Card className="mb-8">
+    <Card className="mb-8 animate-scaleIn">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 justify-between">
+        <CardTitle className="flex items-center gap-2 justify-between animate-fadeInUp">
           <div className="flex items-center gap-2">
             <Icon name="List" size={20} />
             Существующие объявления ({properties.length})

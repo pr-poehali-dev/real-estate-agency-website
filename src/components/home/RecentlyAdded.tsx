@@ -32,11 +32,11 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
   return (
     <section className="py-6">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-2xl font-bold mb-4">Недавно добавленные</h2>
+        <h2 className="text-2xl font-bold mb-4 animate-fadeInUp">Недавно добавленные</h2>
       </div>
       
       {loading ? (
-        <div className="text-center py-8 text-gray-500">Загрузка...</div>
+        <div className="text-center py-8 text-gray-500 animate-fadeIn">Загрузка...</div>
       ) : properties.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           <p>Нет добавленных объектов</p>
@@ -55,9 +55,9 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 return b.id - a.id;
               })
               .slice(0, 3)
-              .map((property) => (
+              .map((property, idx) => (
               <Link key={property.id} to={`/property/${property.id}`} className="block aspect-square">
-                <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col">
+                <div className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-2 hover:scale-105 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp delay-${(idx + 1) * 100}`}>
                   {property.images && property.images.length > 0 ? (
                     <img
                       src={property.images[0]}

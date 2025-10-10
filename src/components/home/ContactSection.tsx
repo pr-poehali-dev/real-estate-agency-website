@@ -60,10 +60,10 @@ export default function ContactSection() {
   return (
     <section id="contact" className="px-6 py-16 bg-white">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center animate-in fade-in slide-in-from-bottom duration-700">Свяжитесь с нами</h2>
+        <h2 className="text-4xl font-bold mb-12 text-center animate-fadeInUp">Свяжитесь с нами</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="bg-[#F5F3EE] rounded-2xl p-8 animate-in fade-in slide-in-from-left duration-700 delay-300 hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-[#F5F3EE] rounded-2xl p-8 animate-slideInLeft hover:shadow-xl transition-shadow duration-300">
             <form onSubmit={handleContactSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-2">Имя</label>
@@ -142,7 +142,7 @@ export default function ContactSection() {
             </form>
           </div>
 
-          <div className="space-y-8 animate-in fade-in slide-in-from-right duration-700 delay-300">
+          <div className="space-y-8 animate-fadeInUp delay-200">
             <h3 className="text-2xl font-bold mb-6">Свяжитесь с нами</h3>
             
             <div className="space-y-6">

@@ -62,13 +62,13 @@ const PropertyFilters: React.FC<FilterProps> = ({
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <div className="bg-white rounded-lg shadow-lg p-6 mb-6 animate-scaleIn">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold flex items-center gap-2">
+        <h3 className="text-lg font-semibold flex items-center gap-2 animate-fadeInUp">
           <Icon name="Filter" size={20} />
           Фильтры поиска
         </h3>
-        <Button variant="outline" size="sm" onClick={onReset}>
+        <Button variant="outline" size="sm" onClick={onReset} className="hover:scale-105 transition-transform">
           <Icon name="RotateCcw" size={16} className="mr-2" />
           Сбросить
         </Button>

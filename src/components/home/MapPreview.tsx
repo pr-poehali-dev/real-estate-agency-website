@@ -4,13 +4,13 @@ import Icon from "@/components/ui/icon";
 export default function MapPreview() {
   return (
     <section className="px-6 py-16 max-w-7xl mx-auto">
-      <div className="text-center mb-8 animate-in fade-in slide-in-from-bottom duration-700">
-        <h2 className="text-4xl font-bold mb-4">Найдите на карте</h2>
-        <p className="text-xl text-gray-600">Все объекты недвижимости в Ереване на интерактивной карте</p>
+      <div className="text-center mb-8">
+        <h2 className="text-4xl font-bold mb-4 animate-fadeInUp">Найдите на карте</h2>
+        <p className="text-xl text-gray-600 animate-fadeInUp delay-100">Все объекты недвижимости в Ереване на интерактивной карте</p>
       </div>
       
       <Link to="/full-map" className="block group">
-        <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 animate-in fade-in zoom-in duration-700 delay-300">
+        <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 animate-scaleIn delay-200">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48624.58415456418!2d44.47379!3d40.18111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x406abd39496ad82b%3A0x2e2579e7e2d4621b!2sYerevan%2C%20Armenia!5e0!3m2!1sen!2s!4v1234567890"
             className="w-full h-[500px] pointer-events-none"

@@ -51,11 +51,11 @@ export default function SearchSection({
     <section className="relative px-6 py-4 max-w-7xl mx-auto">
       <div className="relative z-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-black mb-2">Поиск недвижимости в Ереване</h1>
-          <p className="text-gray-600 text-lg">Найди свой идеальный вариант</p>
+          <h1 className="text-3xl font-black mb-2 animate-fadeInUp">Поиск недвижимости в Ереване</h1>
+          <p className="text-gray-600 text-lg animate-fadeInUp delay-100">Найди свой идеальный вариант</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white rounded-xl shadow-md p-6 animate-scaleIn delay-200">
           <div className="space-y-4">
             <div className="flex flex-col md:flex-row gap-3">
               <Select value={transactionType} onValueChange={setTransactionType}>
@@ -128,7 +128,7 @@ export default function SearchSection({
 
               <Button 
                 onClick={onSearch}
-                className="h-14 px-10 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg font-medium transition-all text-base whitespace-nowrap"
+                className="h-14 px-10 bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-105 text-white rounded-lg font-medium transition-all text-base whitespace-nowrap"
               >
                 Найти
               </Button>
@@ -137,7 +137,7 @@ export default function SearchSection({
             <Button 
               onClick={() => navigate('/map')}
               variant="outline"
-              className="w-full h-14 rounded-lg border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-medium transition-all"
+              className="w-full h-14 rounded-lg border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 hover:scale-[1.02] font-medium transition-all"
             >
               <Icon name="Map" size={20} className="mr-2" />
               Открыть карту

@@ -33,11 +33,11 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties, selectedPropert
     <div className="grid grid-cols-3 gap-4 auto-rows-min">
       {properties
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-        .map((property) => (
+        .map((property, idx) => (
           <div
             key={property.id}
             ref={(el) => { propertyRefs.current[property.id] = el; }}
-            className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col ${
+            className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-2 hover:scale-105 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp delay-${Math.min((idx % 6) * 100, 500)} ${
               selectedPropertyId === property.id ? 'ring-4 ring-[#FF7A00]' : ''
             }`}
             onClick={() => window.location.href = `/property/${property.id}`}
