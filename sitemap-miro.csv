@@ -1,0 +1,27 @@
+Level,Page Name,URL,Description,Components
+1,Главная страница,/,Домашняя страница с поиском и недавно добавленными объектами,"Header, SearchSection, RecentlyAdded, MapPreview, ContactSection, Footer"
+2,Карта с сеткой,/map,Страница с картой и сеткой объектов недвижимости,"MapFilters, MapSection, PropertyGrid"
+2,Полная карта,/full-map,Полноэкранная карта всех объектов,YerevanMapLeaflet
+2,Страница объекта,/property/:id,Детальная страница конкретного объекта,"PropertyHeader, PropertyFilters, PropertyDetails, PropertyList, PropertyMap"
+2,Админ-панель,/admin,Панель управления объектами (требует авторизации),"LoginForm, AdminHeader, PropertyList, PropertyForm, ImageUpload, AddressSelector, MapPicker, MapSelectorModal"
+2,Страница 404,*,Страница ошибки для несуществующих URL,NotFound
+
+Component Groups,,,Component List,
+UI Components,,,,"Button, Card, Input, Select, Dialog, Sheet, Tabs, Table, Form, Badge, Avatar, Alert, Toast, Tooltip, Dropdown, Checkbox, Switch, Slider, Calendar, Carousel, Accordion, Breadcrumb, Chart, Command, Context Menu, Drawer, Hover Card, Icon, Label, Menubar, Multi-Select, Navigation Menu, Pagination, Popover, Progress, Radio Group, Resizable, Scroll Area, Separator, Sidebar, Skeleton, Textarea, Toggle, Toggle Group"
+Home Components,,,,"Header, SearchSection, RecentlyAdded, MapPreview, ContactSection, Footer"
+Map Components,,,,"MapFilters, MapSection, PropertyGrid"
+Property Components,,,,"PropertyHeader, PropertyFilters, PropertyDetails, PropertyList, PropertyMap"
+Admin Components,,,,"LoginForm, AdminHeader, PropertyList, PropertyForm, ImageUpload, AddressSelector, MapPicker, MapSelectorModal"
+
+Key Features,,,Description,
+Поиск объектов,,,Фильтрация по типу сделки (аренда/продажа), типу объекта, району, количеству комнат,
+Карта,,,Интерактивная карта Еревана с маркерами объектов на основе Leaflet,
+Управление объектами,,,CRUD операции для объектов недвижимости через админ-панель,
+Загрузка изображений,,,Загрузка фото объектов с предпросмотром,
+Выбор на карте,,,Выбор точного адреса на карте при создании/редактировании объекта,
+Фильтры,,,Расширенная фильтрация: удобства, дети, животные, цена, валюта,
+
+User Flow,,,Steps,
+Поиск объекта,,,1. Главная → Поиск/Фильтры → 2. Просмотр на карте/сетке → 3. Детальная страница объекта → 4. Контакт,
+Добавление объекта,,,1. /admin → 2. Логин → 3. Создать объект → 4. Заполнить форму → 5. Выбрать на карте → 6. Загрузить фото → 7. Сохранить,
+Просмотр на карте,,,1. Главная → 2. Карта (превью/полная) → 3. Клик на маркер → 4. Детальная страница,
