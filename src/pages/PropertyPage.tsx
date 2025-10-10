@@ -21,7 +21,7 @@ export default function PropertyPage() {
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
   
   // Filters
   const [transactionType, setTransactionType] = useState('all');
