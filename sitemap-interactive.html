@@ -575,6 +575,270 @@
                 </div>
             </div>
         </div>
+
+        <div class="section">
+            <h2 class="section-title">🔗 Архитектура и связи компонентов</h2>
+            <div style="background: #f8f9fa; border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h3 style="font-size: 24px; color: #2c3e50; margin-bottom: 10px;">Схема взаимодействия</h3>
+                    <p style="color: #718096; font-size: 14px;">Как компоненты связаны между собой</p>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 40px;">
+                    <!-- Layer 1: Pages -->
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; color: white;">
+                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 15px; text-align: center;">📱 PAGES LAYER (Страницы)</div>
+                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+                            <div style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 8px; font-size: 14px;">Index</div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 8px; font-size: 14px;">MapPage</div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 8px; font-size: 14px;">FullMapPage</div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 8px; font-size: 14px;">PropertyPage</div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 8px; font-size: 14px;">AdminPage</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; color: #718096; font-size: 24px;">⬇️</div>
+
+                    <!-- Layer 2: Feature Components -->
+                    <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 15px; padding: 25px; color: #2c3e50;">
+                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 15px; text-align: center;">🧩 FEATURE COMPONENTS LAYER (Функциональные компоненты)</div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <div style="background: rgba(255,255,255,0.9); padding: 10px 15px; border-radius: 8px; font-size: 13px; border-left: 3px solid #fa709a;">Header, Footer</div>
+                            <div style="background: rgba(255,255,255,0.9); padding: 10px 15px; border-radius: 8px; font-size: 13px; border-left: 3px solid #fa709a;">SearchSection</div>
+                            <div style="background: rgba(255,255,255,0.9); padding: 10px 15px; border-radius: 8px; font-size: 13px; border-left: 3px solid #fa709a;">PropertyList, PropertyGrid</div>
+                            <div style="background: rgba(255,255,255,0.9); padding: 10px 15px; border-radius: 8px; font-size: 13px; border-left: 3px solid #fa709a;">PropertyDetails</div>
+                            <div style="background: rgba(255,255,255,0.9); padding: 10px 15px; border-radius: 8px; font-size: 13px; border-left: 3px solid #fa709a;">MapFilters, PropertyFilters</div>
+                            <div style="background: rgba(255,255,255,0.9); padding: 10px 15px; border-radius: 8px; font-size: 13px; border-left: 3px solid #fa709a;">PropertyForm, LoginForm</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; color: #718096; font-size: 24px;">⬇️</div>
+
+                    <!-- Layer 3: UI Components -->
+                    <div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 15px; padding: 25px; color: #2c3e50;">
+                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 15px; text-align: center;">🎨 UI COMPONENTS LAYER (shadcn/ui)</div>
+                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 8px;">
+                            <div style="background: white; padding: 8px 15px; border-radius: 6px; font-size: 12px; border: 2px solid #a8edea;">Button</div>
+                            <div style="background: white; padding: 8px 15px; border-radius: 6px; font-size: 12px; border: 2px solid #a8edea;">Card</div>
+                            <div style="background: white; padding: 8px 15px; border-radius: 6px; font-size: 12px; border: 2px solid #a8edea;">Input</div>
+                            <div style="background: white; padding: 8px 15px; border-radius: 6px; font-size: 12px; border: 2px solid #a8edea;">Select</div>
+                            <div style="background: white; padding: 8px 15px; border-radius: 6px; font-size: 12px; border: 2px solid #a8edea;">Dialog</div>
+                            <div style="background: white; padding: 8px 15px; border-radius: 6px; font-size: 12px; border: 2px solid #a8edea;">Sheet</div>
+                            <div style="background: white; padding: 8px 15px; border-radius: 6px; font-size: 12px; border: 2px solid #a8edea;">Badge</div>
+                            <div style="background: white; padding: 8px 15px; border-radius: 6px; font-size: 12px; border: 2px solid #a8edea;">+ 42 других</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; color: #718096; font-size: 24px;">⬇️</div>
+
+                    <!-- Layer 4: API & Services -->
+                    <div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); border-radius: 15px; padding: 25px; color: #2c3e50;">
+                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 15px; text-align: center;">⚙️ API & SERVICES LAYER</div>
+                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+                            <div style="background: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;">Auth API</div>
+                            <div style="background: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;">Properties API</div>
+                            <div style="background: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;">Telegram API</div>
+                            <div style="background: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;">Leaflet Maps</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; color: #718096; font-size: 24px;">⬇️</div>
+
+                    <!-- Layer 5: Backend & Database -->
+                    <div style="background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%); border-radius: 15px; padding: 25px; color: white;">
+                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 15px; text-align: center;">🗄️ BACKEND & DATABASE</div>
+                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+                            <div style="background: rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 8px; font-size: 14px;">PostgreSQL DB</div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 8px; font-size: 14px;">Cloud Functions</div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 8px; font-size: 14px;">Image Storage</div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 8px; font-size: 14px;">Telegram Bot</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🌐 API Endpoints и интеграции</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px;">
+                
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 25px; color: white;">
+                    <div style="font-size: 20px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        🔐 Auth API
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">POST /auth</div>
+                        <div style="font-size: 12px; opacity: 0.9;">Авторизация пользователя</div>
+                        <div style="font-size: 11px; margin-top: 5px; font-family: monospace;">Body: {username, password}</div>
+                        <div style="font-size: 11px; font-family: monospace;">Returns: {token, user}</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">GET /auth</div>
+                        <div style="font-size: 12px; opacity: 0.9;">Получить текущего пользователя</div>
+                        <div style="font-size: 11px; margin-top: 5px; font-family: monospace;">Headers: X-Auth-Token</div>
+                        <div style="font-size: 11px; font-family: monospace;">Returns: {user}</div>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 12px; padding: 25px; color: #2c3e50;">
+                    <div style="font-size: 20px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        🏠 Properties API
+                    </div>
+                    <div style="background: rgba(255,255,255,0.7); padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">GET /properties</div>
+                        <div style="font-size: 12px;">Список всех объектов</div>
+                        <div style="font-size: 11px; margin-top: 5px; font-family: monospace;">Returns: {properties[], count}</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.7); padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">POST /properties</div>
+                        <div style="font-size: 12px;">Создать новый объект</div>
+                        <div style="font-size: 11px; margin-top: 5px; font-family: monospace;">Body: Property data</div>
+                        <div style="font-size: 11px; font-family: monospace;">Returns: {property_id}</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.7); padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">PUT /properties?id=X</div>
+                        <div style="font-size: 12px;">Обновить объект</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.7); padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">DELETE /properties?id=X</div>
+                        <div style="font-size: 12px;">Удалить объект</div>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border-radius: 12px; padding: 25px; color: #2c3e50;">
+                    <div style="font-size: 20px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        📱 Telegram API
+                    </div>
+                    <div style="background: rgba(255,255,255,0.7); padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">POST /telegram-submit</div>
+                        <div style="font-size: 12px; margin-bottom: 8px;">Отправка заявки в Telegram</div>
+                        <div style="font-size: 11px; font-family: monospace; line-height: 1.6;">
+                            Body: {<br>
+                            &nbsp;&nbsp;name, <br>
+                            &nbsp;&nbsp;contactMethod,<br>
+                            &nbsp;&nbsp;contact,<br>
+                            &nbsp;&nbsp;service,<br>
+                            &nbsp;&nbsp;message<br>
+                            }
+                        </div>
+                        <div style="font-size: 11px; margin-top: 8px; font-family: monospace;">Returns: {success, message}</div>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%); border-radius: 12px; padding: 25px; color: white;">
+                    <div style="font-size: 20px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        🗺️ Map Integration
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">Leaflet.js</div>
+                        <div style="font-size: 12px; opacity: 0.9;">Интерактивная карта Еревана</div>
+                        <div style="font-size: 11px; margin-top: 5px;">• Маркеры объектов</div>
+                        <div style="font-size: 11px;">• Кластеризация</div>
+                        <div style="font-size: 11px;">• Popups с данными</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">OpenStreetMap Tiles</div>
+                        <div style="font-size: 12px; opacity: 0.9;">Базовые слои карты</div>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%); border-radius: 12px; padding: 25px; color: white;">
+                    <div style="font-size: 20px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        💾 Data Flow
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+                        1️⃣ Frontend запрос → API client
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+                        2️⃣ API client → Cloud Function
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+                        3️⃣ Cloud Function → PostgreSQL
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+                        4️⃣ PostgreSQL → Cloud Function
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; font-size: 13px;">
+                        5️⃣ Cloud Function → Frontend
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; padding: 25px; color: white;">
+                    <div style="font-size: 20px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        🔒 Безопасность
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+                        ✓ JWT токены для аутентификации
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+                        ✓ X-Auth-Token header вместо Authorization
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+                        ✓ CORS для cross-origin запросов
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+                        ✓ Валидация на бэкенде
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; font-size: 13px;">
+                        ✓ Защита админ-панели
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📊 Технологический стек</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                
+                <div style="border: 2px solid #3498db; border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 18px; font-weight: 600; color: #3498db; margin-bottom: 15px;">⚛️ Frontend</div>
+                    <div style="font-size: 14px; color: #555; line-height: 2;">
+                        • React 18<br>
+                        • TypeScript<br>
+                        • Vite<br>
+                        • React Router<br>
+                        • TanStack Query<br>
+                        • Tailwind CSS<br>
+                        • shadcn/ui<br>
+                        • Leaflet.js
+                    </div>
+                </div>
+
+                <div style="border: 2px solid #e74c3c; border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 18px; font-weight: 600; color: #e74c3c; margin-bottom: 15px;">⚙️ Backend</div>
+                    <div style="font-size: 14px; color: #555; line-height: 2;">
+                        • Cloud Functions<br>
+                        • PostgreSQL<br>
+                        • REST API<br>
+                        • JWT Auth<br>
+                        • Image Storage<br>
+                        • Telegram Bot API
+                    </div>
+                </div>
+
+                <div style="border: 2px solid #2ecc71; border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 18px; font-weight: 600; color: #2ecc71; margin-bottom: 15px;">🛠️ Dev Tools</div>
+                    <div style="font-size: 14px; color: #555; line-height: 2;">
+                        • ESLint<br>
+                        • TypeScript strict<br>
+                        • React Hook Form<br>
+                        • Zod validation<br>
+                        • localStorage cache
+                    </div>
+                </div>
+
+                <div style="border: 2px solid #f39c12; border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 18px; font-weight: 600; color: #f39c12; margin-bottom: 15px;">🚀 Deployment</div>
+                    <div style="font-size: 14px; color: #555; line-height: 2;">
+                        • poehali.dev hosting<br>
+                        • Cloud Functions<br>
+                        • PostgreSQL managed<br>
+                        • CDN для статики<br>
+                        • Auto SSL
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
