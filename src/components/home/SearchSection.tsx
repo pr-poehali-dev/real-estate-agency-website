@@ -50,10 +50,10 @@ export default function SearchSection({
   return (
     <section className="relative px-6 py-4 max-w-7xl mx-auto">
       <div 
-        className="absolute inset-0 -top-16 -mx-6 h-[400px] bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 -top-16 -mx-6 h-[400px] bg-cover bg-center bg-no-repeat brightness-110"
         style={{ 
           backgroundImage: 'url(https://cdn.poehali.dev/projects/73745f0c-4271-4bf6-a60b-4537cc7c5835/files/b583506d-b90c-4a00-9b99-500627769850.jpg)',
-          opacity: 0.15
+          opacity: 0.3
         }}
       />
       <div className="relative z-10">
