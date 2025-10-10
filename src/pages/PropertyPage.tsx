@@ -223,11 +223,16 @@ export default function PropertyPage() {
                   <SelectItem value="all">Все районы</SelectItem>
                   <SelectItem value="Центр (Кентрон)">Центр</SelectItem>
                   <SelectItem value="Аван">Аван</SelectItem>
+                  <SelectItem value="Ачапняк">Ачапняк</SelectItem>
                   <SelectItem value="Арабкир">Арабкир</SelectItem>
                   <SelectItem value="Давташен">Давташен</SelectItem>
                   <SelectItem value="Эребуни">Эребуни</SelectItem>
                   <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
                   <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
+                  <SelectItem value="Нор Норк">Нор Норк</SelectItem>
+                  <SelectItem value="Нубарашен">Нубарашен</SelectItem>
+                  <SelectItem value="Шенгавит">Шенгавит</SelectItem>
+                  <SelectItem value="Норк-Мараш">Норк-Мараш</SelectItem>
                 </SelectContent>
               </Select>
             </div>
