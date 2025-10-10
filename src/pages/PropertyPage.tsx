@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Properties } from "@/lib/api";
 import type { Property as ApiProperty } from "@/lib/api";
+import SEO from "@/components/SEO";
 import PropertyHeader from "@/components/property/PropertyHeader";
 import PropertyFilters from "@/components/property/PropertyFilters";
 import PropertyDetails from "@/components/property/PropertyDetails";
@@ -114,8 +115,29 @@ export default function PropertyPage() {
     );
   }
 
+  const getTransactionText = (type: string) => {
+    if (type === 'rent') return 'Аренда';
+    if (type === 'daily') return 'Посуточная аренда';
+    if (type === 'sale') return 'Продажа';
+    return '';
+  };
+
+  const getPropertyImage = () => {
+    if (property?.images && property.images.length > 0) {
+      return property.images[0];
+    }
+    return 'https://cdn.poehali.dev/projects/73745f0c-4271-4bf6-a60b-4537cc7c5835/files/b583506d-b90c-4a00-9b99-500627769850.jpg';
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO 
+        title={`${property?.title || 'Объект'} - ${getTransactionText(property?.transaction_type || '')} в ${property?.district || 'Ереване'} - WSE.AM`}
+        description={`${property?.description || ''} ${property?.rooms ? property.rooms + ' комн.' : ''} ${property?.area ? property.area + ' м²' : ''} в районе ${property?.district || 'Ереван'}.`}
+        keywords={`${property?.transaction_type === 'rent' ? 'аренда' : property?.transaction_type === 'sale' ? 'продажа' : 'посуточная аренда'} ${property?.property_type || 'квартира'} ${property?.district || 'Ереван'}, ${property?.rooms || ''} комнатная квартира`}
+        ogImage={getPropertyImage()}
+        ogType="article"
+      />
       <PropertyHeader 
         onBack={() => navigate(-1)}
         onToggleFilters={() => setShowFilters(!showFilters)}

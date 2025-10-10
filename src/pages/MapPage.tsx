@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Properties } from '@/lib/api';
 import type { Property as ApiProperty } from '@/lib/api';
+import SEO from '@/components/SEO';
 import MapFilters from '@/components/map/MapFilters';
 import MapSection from '@/components/map/MapSection';
 import PropertyGrid from '@/components/map/PropertyGrid';
@@ -160,6 +161,11 @@ const MapPage: React.FC = () => {
 
   return (
     <div className="h-screen flex bg-white">
+      <SEO 
+        title="Карта недвижимости Еревана - WSE.AM"
+        description="Интерактивная карта недвижимости в Ереване. Найди квартиры для аренды и продажи с точными локациями на карте. Удобные фильтры по цене, району и параметрам."
+        keywords="карта недвижимости Ереван, квартиры на карте Ереван, аренда квартир карта, районы Еревана недвижимость"
+      />
       <MapFilters
         selectedTransaction={selectedTransaction}
         setSelectedTransaction={setSelectedTransaction}

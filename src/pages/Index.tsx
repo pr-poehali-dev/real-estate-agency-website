@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Properties } from "@/lib/api";
 import type { Property as ApiProperty } from "@/lib/api";
+import SEO from "@/components/SEO";
 import Header from "@/components/home/Header";
 import SearchSection from "@/components/home/SearchSection";
 import RecentlyAdded from "@/components/home/RecentlyAdded";
@@ -82,6 +83,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO />
       <Header />
       
       <SearchSection
