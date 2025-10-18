@@ -23,6 +23,8 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
   const [currentImageIndex, setCurrentImageIndex] = useState<Record<number, number>>({});
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
   const [currentPage, setCurrentPage] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const formatPrice = (price: number, currency: string) => {
     return {
@@ -142,6 +144,32 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
     };
   }, [properties]);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe) {
+      scroll('right');
+    }
+    if (isRightSwipe) {
+      scroll('left');
+    }
+    
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
   return (
     <section className="py-6 md:py-8">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -186,6 +214,9 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
             ref={scrollContainerRef}
             className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             {sortedProperties.map((property, idx) => {
               const priceData = formatPrice(property.price, property.currency);
@@ -296,27 +327,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
             })}
           </div>
           
-          {sortedProperties.length > 1 && (
-            <div className="flex justify-center gap-2 mt-6">
-              {sortedProperties.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    if (!scrollContainerRef.current) return;
-                    const cardWidth = scrollContainerRef.current.clientWidth * 0.85;
-                    scrollContainerRef.current.scrollTo({
-                      left: idx * cardWidth,
-                      behavior: 'smooth'
-                    });
-                  }}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    idx === currentPage ? 'w-8 bg-[#FF7A00]' : 'w-1.5 bg-gray-300 hover:bg-gray-400'
-                  }`}
-                  aria-label={`Перейти к карточке ${idx + 1}`}
-                />
-              ))}
-            </div>
-          )}
+
         </div>
       )}
     </section>
