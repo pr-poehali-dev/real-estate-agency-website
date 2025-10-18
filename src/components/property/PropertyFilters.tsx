@@ -1,13 +1,6 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Icon from "@/components/ui/icon";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 
 interface PropertyFiltersProps {
   transactionType: string;
@@ -54,20 +47,6 @@ export default function PropertyFilters({
   currency,
   setCurrency
 }: PropertyFiltersProps) {
-  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
-
-  const activeFiltersCount = [
-    transactionType !== 'all',
-    propertyType !== 'all',
-    district,
-    rooms !== 'any',
-    amenities,
-    minPrice,
-    maxPrice,
-    childrenAllowed,
-    petsAllowed,
-  ].filter(Boolean).length;
-
   const resetFilters = () => {
     setTransactionType('all');
     setPropertyType('all');
@@ -82,41 +61,27 @@ export default function PropertyFilters({
   };
 
   return (
-    <div className="border-b border-gray-200 bg-gradient-to-br from-white to-gray-50">
-      <div className="px-3 md:px-6 py-4 md:py-5">
+    <div className="w-full md:w-1/2 border-b md:border-b-0 md:border-r border-gray-200 bg-white">
+      <div className="px-4 md:px-6 py-4 md:py-6">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-r from-[#FF7A00] to-[#FF5500] p-2.5 rounded-lg">
-              <Icon name="SlidersHorizontal" size={18} className="text-white" />
-            </div>
-            <div>
-              <h3 className="font-bold text-base md:text-lg text-gray-900">Фильтры</h3>
-              {activeFiltersCount > 0 && (
-                <p className="text-xs text-gray-500">Активно: {activeFiltersCount}</p>
-              )}
-            </div>
-          </div>
-          {activeFiltersCount > 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={resetFilters}
-              className="text-[#FF7A00] border-[#FF7A00] hover:bg-[#FF7A00] hover:text-white transition-all"
-            >
-              <Icon name="X" size={14} className="mr-1.5" />
-              Сбросить
-            </Button>
-          )}
+          <h3 className="font-bold text-lg md:text-xl">Фильтры</h3>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={resetFilters}
+            className="text-[#FF7A00] hover:text-[#E66D00]"
+          >
+            Сбросить всё
+          </Button>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Icon name="Tag" size={14} className="text-[#FF7A00]" />
-              <label className="text-sm font-semibold text-gray-700">Тип сделки</label>
-            </div>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Тип сделки
+            </label>
             <Select value={transactionType} onValueChange={setTransactionType}>
-              <SelectTrigger className="h-11 border-2 border-gray-200 hover:border-[#FF7A00] focus:border-[#FF7A00] transition-colors">
+              <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -128,13 +93,12 @@ export default function PropertyFilters({
             </Select>
           </div>
           
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Icon name="Home" size={14} className="text-[#FF7A00]" />
-              <label className="text-sm font-semibold text-gray-700">Тип недвижимости</label>
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Тип недвижимости
+            </label>
             <Select value={propertyType} onValueChange={setPropertyType}>
-              <SelectTrigger className="h-11 border-2 border-gray-200 hover:border-[#FF7A00] focus:border-[#FF7A00] transition-colors">
+              <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -145,14 +109,13 @@ export default function PropertyFilters({
             </Select>
           </div>
           
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Icon name="MapPin" size={14} className="text-[#FF7A00]" />
-              <label className="text-sm font-semibold text-gray-700">Район</label>
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Район
+            </label>
             <Select value={district || undefined} onValueChange={setDistrict}>
-              <SelectTrigger className="h-11 border-2 border-gray-200 hover:border-[#FF7A00] focus:border-[#FF7A00] transition-colors">
-                <SelectValue placeholder="Выберите" />
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите район" />
               </SelectTrigger>
               <SelectContent className="max-h-[300px]">
                 <SelectItem value="Центр (Кентрон)">Кентрон</SelectItem>
@@ -170,153 +133,111 @@ export default function PropertyFilters({
               </SelectContent>
             </Select>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mt-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Icon name="DollarSign" size={14} className="text-[#FF7A00]" />
-              <label className="text-sm font-semibold text-gray-700">Валюта</label>
-            </div>
-            <div className="flex gap-2">
-              {(['AMD', 'USD', 'RUB'] as const).map((curr) => (
-                <button
-                  key={curr}
-                  onClick={() => setCurrency(curr)}
-                  className={`flex-1 py-2.5 px-3 rounded-lg font-bold text-sm transition-all ${
-                    currency === curr || (currency === 'all' && curr === 'AMD')
-                      ? 'bg-gradient-to-r from-[#FF7A00] to-[#FF5500] text-white shadow-lg shadow-orange-200 scale-105'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  {curr}
-                </button>
-              ))}
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Валюта
+            </label>
+            <Select value={currency} onValueChange={setCurrency}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="AMD">AMD</SelectItem>
+                <SelectItem value="USD">USD</SelectItem>
+                <SelectItem value="RUB">RUB</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Icon name="TrendingDown" size={14} className="text-[#FF7A00]" />
-              <label className="text-sm font-semibold text-gray-700">Мин. цена</label>
-            </div>
-            <div className="relative">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Цена
+            </label>
+            <div className="grid grid-cols-2 gap-2">
               <Input
                 type="number"
                 placeholder="От"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                className="h-11 border-2 border-gray-200 hover:border-[#FF7A00] focus:border-[#FF7A00] transition-colors pr-16"
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500 font-semibold">
-                {currency === 'all' ? 'AMD' : currency}
-              </span>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Icon name="TrendingUp" size={14} className="text-[#FF7A00]" />
-              <label className="text-sm font-semibold text-gray-700">Макс. цена</label>
-            </div>
-            <div className="relative">
               <Input
                 type="number"
                 placeholder="До"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                className="h-11 border-2 border-gray-200 hover:border-[#FF7A00] focus:border-[#FF7A00] transition-colors pr-16"
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500 font-semibold">
-                {currency === 'all' ? 'AMD' : currency}
-              </span>
             </div>
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Количество комнат
+            </label>
+            <Select value={rooms} onValueChange={setRooms}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Любое</SelectItem>
+                <SelectItem value="1">1 комната</SelectItem>
+                <SelectItem value="2">2 комнаты</SelectItem>
+                <SelectItem value="3">3 комнаты</SelectItem>
+                <SelectItem value="4">4+ комнат</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Удобства
+            </label>
+            <Select value={amenities} onValueChange={setAmenities}>
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите удобство" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Не важно</SelectItem>
+                <SelectItem value="tv">Телевизор</SelectItem>
+                <SelectItem value="ac">Кондиционер</SelectItem>
+                <SelectItem value="internet">Интернет</SelectItem>
+                <SelectItem value="fridge">Холодильник</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Можно с детьми
+            </label>
+            <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
+              <SelectTrigger>
+                <SelectValue placeholder="Не важно" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Не важно</SelectItem>
+                <SelectItem value="yes">Да</SelectItem>
+                <SelectItem value="no">Нет</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Можно с животными
+            </label>
+            <Select value={petsAllowed} onValueChange={setPetsAllowed}>
+              <SelectTrigger>
+                <SelectValue placeholder="Не важно" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Не важно</SelectItem>
+                <SelectItem value="yes">Да</SelectItem>
+                <SelectItem value="no">Нет</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-
-        <Collapsible open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen} className="mt-4">
-          <CollapsibleTrigger asChild>
-            <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors text-sm font-bold text-gray-700">
-              <Icon name={isAdvancedOpen ? 'ChevronUp' : 'ChevronDown'} size={16} />
-              {isAdvancedOpen ? 'Скрыть доп. фильтры' : 'Показать доп. фильтры'}
-            </button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Icon name="Bed" size={14} className="text-[#FF7A00]" />
-                  <label className="text-sm font-semibold text-gray-700">Количество комнат</label>
-                </div>
-                <Select value={rooms} onValueChange={setRooms}>
-                  <SelectTrigger className="h-11 border-2 border-gray-200 hover:border-[#FF7A00] focus:border-[#FF7A00] transition-colors">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Любое</SelectItem>
-                    <SelectItem value="1">1 комната</SelectItem>
-                    <SelectItem value="2">2 комнаты</SelectItem>
-                    <SelectItem value="3">3 комнаты</SelectItem>
-                    <SelectItem value="4">4+ комнат</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Icon name="Sofa" size={14} className="text-[#FF7A00]" />
-                  <label className="text-sm font-semibold text-gray-700">Удобства</label>
-                </div>
-                <Select value={amenities} onValueChange={setAmenities}>
-                  <SelectTrigger className="h-11 border-2 border-gray-200 hover:border-[#FF7A00] focus:border-[#FF7A00] transition-colors">
-                    <SelectValue placeholder="Выберите" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Не важно</SelectItem>
-                    <SelectItem value="tv">Телевизор</SelectItem>
-                    <SelectItem value="ac">Кондиционер</SelectItem>
-                    <SelectItem value="internet">Интернет</SelectItem>
-                    <SelectItem value="fridge">Холодильник</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Icon name="Baby" size={14} className="text-[#FF7A00]" />
-                  <label className="text-sm font-semibold text-gray-700">Можно с детьми</label>
-                </div>
-                <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
-                  <SelectTrigger className="h-11 border-2 border-gray-200 hover:border-[#FF7A00] focus:border-[#FF7A00] transition-colors">
-                    <SelectValue placeholder="Не важно" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Не важно</SelectItem>
-                    <SelectItem value="yes">Да</SelectItem>
-                    <SelectItem value="no">Нет</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Icon name="Dog" size={14} className="text-[#FF7A00]" />
-                  <label className="text-sm font-semibold text-gray-700">Можно с животными</label>
-                </div>
-                <Select value={petsAllowed} onValueChange={setPetsAllowed}>
-                  <SelectTrigger className="h-11 border-2 border-gray-200 hover:border-[#FF7A00] focus:border-[#FF7A00] transition-colors">
-                    <SelectValue placeholder="Не важно" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Не важно</SelectItem>
-                    <SelectItem value="yes">Да</SelectItem>
-                    <SelectItem value="no">Нет</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
       </div>
     </div>
   );
