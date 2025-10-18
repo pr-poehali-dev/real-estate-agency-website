@@ -88,118 +88,130 @@ const MapFilters: React.FC<MapFiltersProps> = ({
         </div>
       </div>
 
-      <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Icon name="Tag" size={16} className="text-gray-500" />
-            <label className="block text-sm font-semibold text-gray-700">Тип сделки</label>
+      <div className="p-3 sm:p-4 space-y-4">
+        {/* Основные фильтры */}
+        <div className="space-y-3">
+          <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wide">Основные</h3>
+          
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Icon name="Tag" size={14} className="text-gray-500" />
+              <label className="block text-sm font-semibold text-gray-700">Тип сделки</label>
+            </div>
+            <Select value={selectedTransaction || 'all'} onValueChange={(v) => setSelectedTransaction(v === 'all' ? '' : v)}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="Все типы сделок" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все типы сделок</SelectItem>
+                <SelectItem value="rent">Долгосрочная аренда</SelectItem>
+                <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
+                <SelectItem value="sale">Продажа</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <Select value={selectedTransaction || 'all'} onValueChange={(v) => setSelectedTransaction(v === 'all' ? '' : v)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Все типы сделок" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Все типы сделок</SelectItem>
-              <SelectItem value="rent">Долгосрочная аренда</SelectItem>
-              <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
-              <SelectItem value="sale">Продажа</SelectItem>
-            </SelectContent>
-          </Select>
+
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Icon name="Home" size={14} className="text-gray-500" />
+              <label className="block text-sm font-semibold text-gray-700">Тип недвижимости</label>
+            </div>
+            <Select value={selectedType || 'all'} onValueChange={(v) => setSelectedType(v === 'all' ? '' : v)}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="Все типы" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все типы</SelectItem>
+                <SelectItem value="apartment">Квартира</SelectItem>
+                <SelectItem value="house">Дом</SelectItem>
+                <SelectItem value="commercial">Коммерция</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Icon name="MapPin" size={14} className="text-gray-500" />
+              <label className="block text-sm font-semibold text-gray-700">Район</label>
+            </div>
+            <Select value={selectedDistrict[0] || 'all'} onValueChange={(v) => setSelectedDistrict(v === 'all' ? [] : [v])}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="Все районы" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все районы</SelectItem>
+                <SelectItem value="Центр (Кентрон)">Кентрон</SelectItem>
+                <SelectItem value="Аван">Аван</SelectItem>
+                <SelectItem value="Ачапняк">Ачапняк</SelectItem>
+                <SelectItem value="Арабкир">Арабкир</SelectItem>
+                <SelectItem value="Давташен">Давташен</SelectItem>
+                <SelectItem value="Эребуни">Эребуни</SelectItem>
+                <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
+                <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
+                <SelectItem value="Нор Норк">Нор Норк</SelectItem>
+                <SelectItem value="Нубарашен">Нубарашен</SelectItem>
+                <SelectItem value="Шенгавит">Шенгавит</SelectItem>
+                <SelectItem value="Норк-Мараш">Норк-Мараш</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Icon name="Home" size={16} className="text-gray-500" />
-            <label className="block text-sm font-semibold text-gray-700">Тип недвижимости</label>
-          </div>
-          <Select value={selectedType || 'all'} onValueChange={(v) => setSelectedType(v === 'all' ? '' : v)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Все типы" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Все типы</SelectItem>
-              <SelectItem value="apartment">Квартира</SelectItem>
-              <SelectItem value="house">Дом</SelectItem>
-              <SelectItem value="commercial">Коммерция</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Разделитель */}
+        <div className="border-t border-gray-200"></div>
 
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Icon name="MapPin" size={16} className="text-gray-500" />
-            <label className="block text-sm font-semibold text-gray-700">Район</label>
+        {/* Дополнительные фильтры */}
+        <div className="space-y-3">
+          <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wide">Дополнительные</h3>
+          
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Icon name="Bed" size={14} className="text-gray-500" />
+              <label className="block text-sm font-semibold text-gray-700">Количество комнат</label>
+            </div>
+            <Select value={rooms} onValueChange={setRooms}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="Выберите" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Не важно</SelectItem>
+                <SelectItem value="1">1 комната</SelectItem>
+                <SelectItem value="2">2 комнаты</SelectItem>
+                <SelectItem value="3">3 комнаты</SelectItem>
+                <SelectItem value="4">4+ комнат</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <Select value={selectedDistrict[0] || 'all'} onValueChange={(v) => setSelectedDistrict(v === 'all' ? [] : [v])}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Все районы" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Все районы</SelectItem>
-              <SelectItem value="Центр (Кентрон)">Кентрон</SelectItem>
-              <SelectItem value="Аван">Аван</SelectItem>
-              <SelectItem value="Ачапняк">Ачапняк</SelectItem>
-              <SelectItem value="Арабкир">Арабкир</SelectItem>
-              <SelectItem value="Давташен">Давташен</SelectItem>
-              <SelectItem value="Эребуни">Эребуни</SelectItem>
-              <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
-              <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
-              <SelectItem value="Нор Норк">Нор Норк</SelectItem>
-              <SelectItem value="Нубарашен">Нубарашен</SelectItem>
-              <SelectItem value="Шенгавит">Шенгавит</SelectItem>
-              <SelectItem value="Норк-Мараш">Норк-Мараш</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
 
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Icon name="Bed" size={16} className="text-gray-500" />
-            <label className="block text-sm font-semibold text-gray-700">Количество комнат</label>
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Icon name="Sofa" size={14} className="text-gray-500" />
+              <label className="block text-sm font-semibold text-gray-700">Удобства</label>
+            </div>
+            <Select value={amenities} onValueChange={setAmenities}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="Выберите удобства" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Не важно</SelectItem>
+                <SelectItem value="tv">Телевизор</SelectItem>
+                <SelectItem value="ac">Кондиционер</SelectItem>
+                <SelectItem value="internet">Интернет</SelectItem>
+                <SelectItem value="fridge">Холодильник</SelectItem>
+                <SelectItem value="stove">Плита</SelectItem>
+                <SelectItem value="microwave">Микроволновка</SelectItem>
+                <SelectItem value="coffee_maker">Кофеварка</SelectItem>
+                <SelectItem value="dishwasher">Посудомоечная машина</SelectItem>
+                <SelectItem value="washing_machine">Стиральная машина</SelectItem>
+                <SelectItem value="dryer">Сушильная машина</SelectItem>
+                <SelectItem value="water_heater">Водонагреватель</SelectItem>
+                <SelectItem value="iron">Утюг</SelectItem>
+                <SelectItem value="hair_dryer">Фен</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <Select value={rooms} onValueChange={setRooms}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Выберите" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
-              <SelectItem value="1">1 комната</SelectItem>
-              <SelectItem value="2">2 комнаты</SelectItem>
-              <SelectItem value="3">3 комнаты</SelectItem>
-              <SelectItem value="4">4+ комнат</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
 
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Icon name="Sofa" size={16} className="text-gray-500" />
-            <label className="block text-sm font-semibold text-gray-700">Удобства</label>
-          </div>
-          <Select value={amenities} onValueChange={setAmenities}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Выберите удобства" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
-              <SelectItem value="tv">Телевизор</SelectItem>
-              <SelectItem value="ac">Кондиционер</SelectItem>
-              <SelectItem value="internet">Интернет</SelectItem>
-              <SelectItem value="fridge">Холодильник</SelectItem>
-              <SelectItem value="stove">Плита</SelectItem>
-              <SelectItem value="microwave">Микроволновка</SelectItem>
-              <SelectItem value="coffee_maker">Кофеварка</SelectItem>
-              <SelectItem value="dishwasher">Посудомоечная машина</SelectItem>
-              <SelectItem value="washing_machine">Стиральная машина</SelectItem>
-              <SelectItem value="dryer">Сушильная машина</SelectItem>
-              <SelectItem value="water_heater">Водонагреватель</SelectItem>
-              <SelectItem value="iron">Утюг</SelectItem>
-              <SelectItem value="hair_dryer">Фен</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
+          <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с детьми</label>
           <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
             <SelectTrigger className="w-full">
