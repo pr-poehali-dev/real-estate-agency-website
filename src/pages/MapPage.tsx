@@ -225,9 +225,9 @@ const MapPage: React.FC = () => {
       </div>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="border-b bg-white px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+        <header className="border-b bg-white px-4 md:px-6 py-3 md:py-4 flex items-center justify-between relative">
           <a href="/" className="text-xl md:text-2xl font-black hover:opacity-80 transition-opacity" style={{ color: '#FF7A00' }}>WSE.AM</a>
-          <h1 className="text-base md:text-2xl font-bold text-gray-900 absolute left-1/2 -translate-x-1/2">Карта недвижимости Еревана</h1>
+          <h1 className="text-base md:text-2xl font-bold text-gray-900 absolute left-[200px] md:left-[280px]">Карта недвижимости Еревана</h1>
           <Button
             variant="outline"
             size="sm"
