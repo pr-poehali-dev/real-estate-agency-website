@@ -34,7 +34,7 @@ export default function SearchSection({
   const navigate = useNavigate();
 
   return (
-    <section className="relative px-6 py-16 mb-12">
+    <section className="relative px-4 md:px-6 py-8 md:py-16 mb-8 md:mb-12">
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
@@ -45,17 +45,17 @@ export default function SearchSection({
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
       
       <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight animate-fadeInUp text-white drop-shadow-lg">Поиск недвижимости в Ереване</h1>
-          <p className="text-white text-xl leading-relaxed animate-fadeInUp delay-100 drop-shadow-md">Найди свой идеальный вариант</p>
+        <div className="mb-6 md:mb-8 text-center">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-3 md:mb-4 leading-tight animate-fadeInUp text-white drop-shadow-lg">Поиск недвижимости в Ереване</h1>
+          <p className="text-white text-lg md:text-xl leading-relaxed animate-fadeInUp delay-100 drop-shadow-md">Найди свой идеальный вариант</p>
         </div>
 
-        <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 animate-scaleIn delay-200">
-          <div className="flex flex-col md:flex-row gap-4 items-end">
-            <div className="space-y-2 flex-1">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-xl border border-white/20 p-4 md:p-8 animate-scaleIn delay-200">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end">
+            <div className="space-y-2 w-full md:flex-1">
               <label className="text-sm text-gray-600 font-medium">Тип сделки</label>
               <Select value={transactionType} onValueChange={setTransactionType}>
-                <SelectTrigger className="h-14 rounded-xl border-gray-200">
+                <SelectTrigger className="h-12 md:h-14 rounded-xl border-gray-200">
                   <SelectValue placeholder="Все типы сделок" />
                 </SelectTrigger>
                 <SelectContent>
@@ -67,10 +67,10 @@ export default function SearchSection({
               </Select>
             </div>
 
-            <div className="space-y-2 flex-1">
+            <div className="space-y-2 w-full md:flex-1">
               <label className="text-sm text-gray-600 font-medium">Тип недвижимости</label>
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="h-14 rounded-xl border-gray-200">
+                <SelectTrigger className="h-12 md:h-14 rounded-xl border-gray-200">
                   <SelectValue placeholder="Все типы" />
                 </SelectTrigger>
                 <SelectContent>
@@ -82,10 +82,10 @@ export default function SearchSection({
               </Select>
             </div>
 
-            <div className="space-y-2 flex-1">
+            <div className="space-y-2 w-full md:flex-1">
               <label className="text-sm text-gray-600 font-medium">Район</label>
               <Select value={district} onValueChange={setDistrict}>
-                <SelectTrigger className="h-14 rounded-xl border-gray-200">
+                <SelectTrigger className="h-12 md:h-14 rounded-xl border-gray-200">
                   <SelectValue placeholder="Все районы" />
                 </SelectTrigger>
                 <SelectContent>
@@ -106,7 +106,7 @@ export default function SearchSection({
               </Select>
             </div>
 
-            <div className="space-y-2 flex-1">
+            <div className="space-y-2 w-full md:flex-1">
               <label className="text-sm text-gray-600 font-medium">Цена</label>
               <div className="flex gap-2">
                 <Input
@@ -114,10 +114,10 @@ export default function SearchSection({
                   placeholder="Цена"
                   value={minPrice}
                   onChange={(e) => setMinPrice(e.target.value)}
-                  className="h-14 rounded-xl border-gray-200 w-24"
+                  className="h-12 md:h-14 rounded-xl border-gray-200 flex-1 md:w-24"
                 />
                 <Select value={currency} onValueChange={setCurrency}>
-                  <SelectTrigger className="h-14 rounded-xl flex-1 border-gray-200 text-sm">
+                  <SelectTrigger className="h-12 md:h-14 rounded-xl w-24 md:flex-1 border-gray-200 text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -129,10 +129,10 @@ export default function SearchSection({
               </div>
             </div>
 
-            <div className="flex-shrink-0">
+            <div className="w-full md:flex-shrink-0 md:w-auto">
               <Button 
                 onClick={onSearch}
-                className="h-14 px-10 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl font-medium transition-all text-base whitespace-nowrap"
+                className="h-12 md:h-14 w-full md:w-auto px-10 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl font-medium transition-all text-base whitespace-nowrap"
               >
                 Найти
               </Button>
