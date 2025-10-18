@@ -34,14 +34,23 @@ export default function SearchSection({
   const navigate = useNavigate();
 
   return (
-    <section className="relative px-6 py-6 max-w-7xl mx-auto">
-      <div className="relative z-10">
-        <div className="mb-6">
-          <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight animate-fadeInUp">Поиск недвижимости в Ереване</h1>
-          <p className="text-gray-600 text-xl leading-relaxed animate-fadeInUp delay-100">Найди свой идеальный вариант</p>
+    <section className="relative px-6 py-16 mb-12">
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(https://cdn.poehali.dev/projects/73745f0c-4271-4bf6-a60b-4537cc7c5835/files/8b45040a-7e58-4a46-8636-12cb7658e3b3.jpg)',
+          filter: 'brightness(0.85)'
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight animate-fadeInUp text-white drop-shadow-lg">Поиск недвижимости в Ереване</h1>
+          <p className="text-white text-xl leading-relaxed animate-fadeInUp delay-100 drop-shadow-md">Найди свой идеальный вариант</p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 animate-scaleIn delay-200">
+        <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 animate-scaleIn delay-200">
           <div className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
