@@ -6,12 +6,13 @@ interface FloatingContactButtonsProps {
 }
 
 export default function FloatingContactButtons({ 
-  phoneNumber = '+37477123456',
-  whatsappNumber = '+37477123456'
+  phoneNumber = '+37495129260',
+  whatsappNumber = '+37495129260'
 }: FloatingContactButtonsProps) {
   
   const handleCall = () => {
-    window.location.href = `tel:${phoneNumber}`;
+    const cleanNumber = whatsappNumber.replace(/[^0-9]/g, '');
+    window.open(`https://wa.me/${cleanNumber}`, '_blank');
   };
 
   const handleWhatsApp = () => {
