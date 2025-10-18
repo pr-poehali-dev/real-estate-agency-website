@@ -170,15 +170,15 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         className: 'custom-marker',
         html: `
           <div style="position: relative;">
-            <svg width="36" height="45" viewBox="0 0 36 45" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
-              <path d="M18 0C8.059 0 0 8.059 0 18c0 9.941 18 27 18 27s18-17.059 18-27C36 8.059 27.941 0 18 0z" fill="${isSelected ? '#FF5500' : '#FF7A00'}"/>
-              <circle cx="18" cy="18" r="9" fill="white"/>
+            <svg width="28" height="35" viewBox="0 0 28 35" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15));">
+              <path d="M14 0C6.268 0 0 6.268 0 14c0 7.732 14 21 14 21s14-13.268 14-21C28 6.268 21.732 0 14 0z" fill="${isSelected ? '#FF5500' : '#FF7A00'}"/>
+              <circle cx="14" cy="14" r="7" fill="white"/>
             </svg>
           </div>
         `,
-        iconSize: [36, 45],
-        iconAnchor: [18, 45],
-        popupAnchor: [0, -45]
+        iconSize: [28, 35],
+        iconAnchor: [14, 35],
+        popupAnchor: [0, -35]
       });
     };
 
