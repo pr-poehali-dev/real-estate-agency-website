@@ -337,8 +337,14 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 { label: 'Интернет', value: 'internet' },
                 { label: 'Холодильник', value: 'fridge' },
                 { label: 'Плита', value: 'stove' },
+                { label: 'Микроволновка', value: 'microwave' },
+                { label: 'Кофеварка', value: 'coffee_maker' },
+                { label: 'Посудомоечная машина', value: 'dishwasher' },
                 { label: 'Стиральная машина', value: 'washing_machine' },
+                { label: 'Сушильная машина', value: 'dryer' },
                 { label: 'Водонагреватель', value: 'water_heater' },
+                { label: 'Утюг', value: 'iron' },
+                { label: 'Фен', value: 'hair_dryer' },
               ].map((amenity) => {
                 const currentFeatures = featuresText.split('\n').filter(f => f.trim());
                 const isChecked = currentFeatures.includes(amenity.label);
