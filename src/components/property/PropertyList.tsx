@@ -36,14 +36,14 @@ export default function PropertyList({ properties }: PropertyListProps) {
   };
 
   return (
-    <div className="w-full md:w-1/2 border-t md:border-t-0 md:border-l border-gray-200 bg-white flex flex-col">
+    <div className="w-full md:w-1/2 border-t md:border-t-0 md:border-l border-gray-200 bg-white flex flex-col overflow-hidden">
       <div className="px-4 md:px-6 pt-4 md:pt-6 pb-6 flex flex-col h-full">
         <h3 className="font-bold text-lg md:text-xl mb-4">Другие объекты ({properties.length})</h3>
         
         {properties.length === 0 ? (
           <p className="text-gray-500 text-center py-12">Нет объектов с такими параметрами</p>
         ) : (
-          <div className="overflow-y-auto pr-2 space-y-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+          <div className="overflow-y-auto overflow-x-hidden pr-2 space-y-4 flex-1">
             {properties.map((prop) => (
               <Link 
                 key={prop.id} 
