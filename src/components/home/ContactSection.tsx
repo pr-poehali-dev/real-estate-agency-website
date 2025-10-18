@@ -204,7 +204,7 @@ export default function ContactSection() {
                 </div>
                 <div className="flex justify-between">
                   <span>Сб:</span>
-                  <span className="font-medium">10:00 - 16:00</span>
+                  <span className="font-medium">Выходной</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Вс:</span>

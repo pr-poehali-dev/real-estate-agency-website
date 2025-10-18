@@ -167,7 +167,7 @@ export default function PropertyPage() {
         />
       )}
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         <PropertyDetails property={property} />
         <PropertyList properties={filteredProperties} />
       </div>

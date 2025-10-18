@@ -44,7 +44,7 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
   return (
     <div className="w-full md:w-1/2 overflow-y-auto md:pt-6">
       <div className="bg-[#F5F3EE] min-h-full">
-        <div className="px-4 md:px-6 pb-6 pt-4 md:pt-[48px]">
+        <div className="px-3 md:px-6 pb-6 pt-3 md:pt-[48px]">
           <div>
             {property.images && property.images.length > 0 ? (
               <div className="relative">
