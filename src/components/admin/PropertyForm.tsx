@@ -84,20 +84,22 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
+      <CardHeader className="p-4 md:p-6">
+        <CardTitle className="flex items-center justify-between text-base md:text-lg">
           <div className="flex items-center gap-2">
-            <Icon name={isEditing ? "Edit" : "Plus"} size={20} />
-            {isEditing ? "Редактировать объект недвижимости" : "Добавить объект недвижимости"}
+            <Icon name={isEditing ? "Edit" : "Plus"} size={20} className="hidden sm:block" />
+            <span className="text-sm sm:text-base">
+              {isEditing ? "Редактировать объект" : "Добавить объект"}
+            </span>
           </div>
           {isEditing && onCancel && (
-            <Button type="button" variant="ghost" onClick={onCancel}>
+            <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
               <Icon name="X" size={16} />
             </Button>
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 md:p-6">
         <form onSubmit={onSubmit} className="space-y-6">
           {error && (
             <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
