@@ -42,6 +42,8 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const markersMapRef = useRef<Map<number, L.Marker>>(new Map());
+  const hasInitialFit = useRef(false);
 
   const formatPrice = (price: number, currency: string) => {
     return `${price.toLocaleString()} ${currency}`;
@@ -163,26 +165,35 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
   useEffect(() => {
     if (!mapInstance.current) return;
 
-    markersRef.current.forEach(marker => marker.remove());
-    markersRef.current = [];
-
     const createMarkerIcon = (property: Property, isSelected: boolean) => {
       return L.divIcon({
         className: 'custom-marker',
         html: `
-          <div style="position: relative; transition: transform 0.2s;">
-            <svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); transform: scale(${isSelected ? '1.2' : '1'});">
-              <path d="M20 0C8.954 0 0 8.954 0 20c0 11.046 20 30 20 30s20-18.954 20-30C40 8.954 31.046 0 20 0z" fill="${isSelected ? '#FF5500' : '#FF7A00'}"/>
-              <circle cx="20" cy="20" r="10" fill="white"/>
-              <text x="20" y="26" text-anchor="middle" font-size="10" font-weight="bold" fill="#FF7A00">${formatPrice(property.price, property.currency).split(' ')[0].substring(0, 3)}k</text>
+          <div style="position: relative;">
+            <svg width="36" height="45" viewBox="0 0 36 45" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+              <path d="M18 0C8.059 0 0 8.059 0 18c0 9.941 18 27 18 27s18-17.059 18-27C36 8.059 27.941 0 18 0z" fill="${isSelected ? '#FF5500' : '#FF7A00'}"/>
+              <circle cx="18" cy="18" r="9" fill="white"/>
             </svg>
           </div>
         `,
-        iconSize: [40, 50],
-        iconAnchor: [20, 50],
-        popupAnchor: [0, -50]
+        iconSize: [36, 45],
+        iconAnchor: [18, 45],
+        popupAnchor: [0, -45]
       });
     };
+
+    const currentPropertyIds = new Set(properties.map(p => p.id));
+    const existingIds = new Set(markersMapRef.current.keys());
+
+    existingIds.forEach(id => {
+      if (!currentPropertyIds.has(id)) {
+        const marker = markersMapRef.current.get(id);
+        if (marker) {
+          marker.remove();
+          markersMapRef.current.delete(id);
+        }
+      }
+    });
 
     properties.forEach((property) => {
       if (!property.latitude || !property.longitude) {
@@ -193,7 +204,10 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       const lng = Number(property.longitude);
       const isSelected = selectedProperty?.id === property.id;
 
-      const marker = L.marker([lat, lng], { icon: createMarkerIcon(property, isSelected) });
+      let marker = markersMapRef.current.get(property.id);
+
+      if (!marker) {
+        marker = L.marker([lat, lng], { icon: createMarkerIcon(property, isSelected) });
 
       const imageUrl = property.images && property.images.length > 0 ? property.images[0] : '';
       const popupContent = `
@@ -313,22 +327,26 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         });
       }
       
-      marker.on('click', (e) => {
-        L.DomEvent.stopPropagation(e);
-        marker.openPopup();
-      });
+        marker.on('click', (e) => {
+          L.DomEvent.stopPropagation(e);
+          marker!.openPopup();
+        });
 
-      marker.addTo(mapInstance.current!);
-      markersRef.current.push(marker);
+        marker.addTo(mapInstance.current!);
+        markersMapRef.current.set(property.id, marker);
+      } else {
+        marker.setIcon(createMarkerIcon(property, isSelected));
+      }
     });
 
     const propertiesWithCoords = properties.filter(p => p.latitude && p.longitude);
     
-    if (propertiesWithCoords.length > 0 && !isPreview) {
+    if (propertiesWithCoords.length > 0 && !isPreview && !hasInitialFit.current) {
       const bounds = L.latLngBounds(
         propertiesWithCoords.map(p => [Number(p.latitude), Number(p.longitude)] as [number, number])
       );
-      mapInstance.current.fitBounds(bounds, { padding: [50, 50] });
+      mapInstance.current.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+      hasInitialFit.current = true;
     }
   }, [properties, selectedProperty, onPropertySelect, isPreview, keepPopupsOpen, openOnClick]);
 

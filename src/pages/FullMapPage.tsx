@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import YerevanMapLeaflet from '@/components/YerevanMapLeaflet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,7 +27,7 @@ const FullMapPage: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState('');
   const [transactionFilter, setTransactionFilter] = useState('');
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+
   const propertyRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   const loadProperties = async () => {
@@ -77,16 +77,7 @@ const FullMapPage: React.FC = () => {
     return matchesSearch && matchesPrice && matchesType && matchesTransaction;
   });
 
-  useEffect(() => {
-    const lat = searchParams.get('lat');
-    const lng = searchParams.get('lng');
-    const zoom = searchParams.get('zoom');
-    if (lat && lng && zoom) {
-      window.dispatchEvent(new CustomEvent('map-restore-position', {
-        detail: { lat: parseFloat(lat), lng: parseFloat(lng), zoom: parseInt(zoom) }
-      }));
-    }
-  }, [searchParams]);
+
 
   useEffect(() => {
     loadProperties();
@@ -344,9 +335,6 @@ const FullMapPage: React.FC = () => {
           properties={filteredProperties}
           selectedProperty={selectedProperty}
           onPropertySelect={handlePropertySelect}
-          onMapMove={(center, zoom) => {
-            setSearchParams({ lat: center.lat.toFixed(6), lng: center.lng.toFixed(6), zoom: zoom.toString() }, { replace: true });
-          }}
           openOnClick={true}
         />
       </div>
