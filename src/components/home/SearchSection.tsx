@@ -110,6 +110,13 @@ export default function SearchSection({
               <div className="space-y-2">
                 <label className="text-sm text-gray-600 font-medium">Цена</label>
                 <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder="Цена"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
+                    className="h-14 rounded-xl border-gray-200 flex-1"
+                  />
                   <Select value={currency} onValueChange={setCurrency}>
                     <SelectTrigger className="h-14 rounded-xl w-32 border-gray-200">
                       <SelectValue />
@@ -120,13 +127,6 @@ export default function SearchSection({
                       <SelectItem value="RUB">RUB</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input
-                    type="number"
-                    placeholder="Цена"
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                    className="h-14 rounded-xl border-gray-200 flex-1"
-                  />
                 </div>
               </div>
 
