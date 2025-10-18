@@ -22,6 +22,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<Record<number, number>>({});
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
+  const [currentPage, setCurrentPage] = useState(0);
 
   const formatPrice = (price: number, currency: string) => {
     return {
@@ -65,6 +66,11 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
     const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
     setCanScrollLeft(scrollLeft > 0);
     setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    
+    // Вычисляем текущую страницу на основе позиции прокрутки
+    const cardWidth = clientWidth * 0.85; // ширина одной карточки + отступы
+    const page = Math.round(scrollLeft / cardWidth);
+    setCurrentPage(page);
   };
 
   const scroll = (direction: 'left' | 'right') => {
@@ -290,14 +296,23 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
             })}
           </div>
           
-          {sortedProperties.length > 3 && (
+          {sortedProperties.length > 1 && (
             <div className="flex justify-center gap-2 mt-6">
-              {Array.from({ length: Math.ceil(sortedProperties.length / 3) }).map((_, idx) => (
-                <div 
-                  key={idx} 
+              {sortedProperties.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    if (!scrollContainerRef.current) return;
+                    const cardWidth = scrollContainerRef.current.clientWidth * 0.85;
+                    scrollContainerRef.current.scrollTo({
+                      left: idx * cardWidth,
+                      behavior: 'smooth'
+                    });
+                  }}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    idx === 0 ? 'w-8 bg-[#FF7A00]' : 'w-1.5 bg-gray-300'
+                    idx === currentPage ? 'w-8 bg-[#FF7A00]' : 'w-1.5 bg-gray-300 hover:bg-gray-400'
                   }`}
+                  aria-label={`Перейти к карточке ${idx + 1}`}
                 />
               ))}
             </div>
