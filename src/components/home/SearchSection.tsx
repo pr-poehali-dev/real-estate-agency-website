@@ -17,11 +17,6 @@ interface SearchSectionProps {
   setMaxPrice: (value: string) => void;
   currency: string;
   setCurrency: (value: string) => void;
-  rooms: string;
-  amenities: string[];
-  petsAllowed: string;
-  childrenAllowed: string;
-  streetSearch: string;
   onSearch: () => void;
 }
 
@@ -38,11 +33,6 @@ export default function SearchSection({
   setMaxPrice,
   currency,
   setCurrency,
-  rooms,
-  amenities,
-  petsAllowed,
-  childrenAllowed,
-  streetSearch,
   onSearch
 }: SearchSectionProps) {
   const navigate = useNavigate();

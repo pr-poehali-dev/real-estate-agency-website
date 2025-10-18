@@ -21,17 +21,12 @@ export default function Index() {
   const navigate = useNavigate();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [transactionType, setTransactionType] = useState('rent');
-  const [propertyType, setPropertyType] = useState('apartment');
+  const [transactionType, setTransactionType] = useState('all');
+  const [propertyType, setPropertyType] = useState('all');
   const [maxPrice, setMaxPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [currency, setCurrency] = useState('AMD');
-  const [district, setDistrict] = useState<string>('');
-  const [rooms, setRooms] = useState('any');
-  const [amenities, setAmenities] = useState<string>('');
-  const [petsAllowed, setPetsAllowed] = useState<string>('');
-  const [childrenAllowed, setChildrenAllowed] = useState<string>('');
-  const [streetSearch, setStreetSearch] = useState('');
+  const [district, setDistrict] = useState<string>('all');
 
   useEffect(() => {
     loadProperties();
@@ -75,16 +70,12 @@ export default function Index() {
 
   const handleSearch = () => {
     const filters = {
-      selectedTransaction: transactionType === 'rent' ? 'rent' : transactionType === 'sale' ? 'sale' : '',
+      selectedTransaction: transactionType === 'all' ? '' : transactionType,
       selectedType: propertyType === 'all' ? '' : propertyType,
+      selectedDistrict: district === 'all' ? '' : district,
       maxPrice: maxPrice,
       minPrice: minPrice,
-      currency: currency,
-      rooms: rooms === 'any' ? '' : rooms,
-      amenities: amenities,
-      petsAllowed: petsAllowed === 'any' ? '' : petsAllowed,
-      childrenAllowed: childrenAllowed === 'any' ? '' : childrenAllowed,
-      streetSearch: streetSearch
+      currency: currency
     };
     localStorage.setItem('map_filters', JSON.stringify(filters));
     navigate('/map');
@@ -108,11 +99,6 @@ export default function Index() {
         setMaxPrice={setMaxPrice}
         currency={currency}
         setCurrency={setCurrency}
-        rooms={rooms}
-        amenities={amenities}
-        petsAllowed={petsAllowed}
-        childrenAllowed={childrenAllowed}
-        streetSearch={streetSearch}
         onSearch={handleSearch}
       />
 
