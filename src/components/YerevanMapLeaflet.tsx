@@ -92,10 +92,10 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       position: zoomPosition
     }).addTo(mapInstance.current);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 19
+    L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=ru', {
+      attribution: '© Google Maps',
+      maxZoom: 20,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     }).addTo(mapInstance.current);
 
     return () => {
