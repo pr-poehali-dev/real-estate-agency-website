@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Icon from '../ui/icon';
 import { Properties } from '@/lib/api';
@@ -43,6 +45,12 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  // Фильтры
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterTransaction, setFilterTransaction] = useState('all');
+  const [filterDistrict, setFilterDistrict] = useState('all');
 
   useEffect(() => {
     loadProperties();
@@ -84,13 +92,58 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
     }
   };
 
+  // Фильтрация объектов
+  const filteredProperties = useMemo(() => {
+    return properties.filter(property => {
+      // Поиск по словам
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const searchFields = [
+          property.title,
+          property.description,
+          property.district,
+          property.street_name,
+          property.address,
+        ].filter(Boolean).join(' ').toLowerCase();
+        
+        if (!searchFields.includes(query)) return false;
+      }
+
+      // Фильтр по типу недвижимости
+      if (filterType !== 'all' && property.property_type !== filterType) return false;
+
+      // Фильтр по типу сделки
+      if (filterTransaction !== 'all' && property.transaction_type !== filterTransaction) return false;
+
+      // Фильтр по району
+      if (filterDistrict !== 'all' && property.district !== filterDistrict) return false;
+
+      return true;
+    });
+  }, [properties, searchQuery, filterType, filterTransaction, filterDistrict]);
+
+  // Получить уникальные районы
+  const districts = useMemo(() => {
+    const uniqueDistricts = Array.from(new Set(properties.map(p => p.district))).sort();
+    return uniqueDistricts;
+  }, [properties]);
+
+  const resetFilters = () => {
+    setSearchQuery('');
+    setFilterType('all');
+    setFilterTransaction('all');
+    setFilterDistrict('all');
+  };
+
+  const hasActiveFilters = searchQuery || filterType !== 'all' || filterTransaction !== 'all' || filterDistrict !== 'all';
+
   return (
     <Card className="mb-6 md:mb-8 animate-scaleIn">
       <CardHeader className="p-4 md:p-6">
         <CardTitle className="flex items-center gap-2 justify-between animate-fadeInUp text-base md:text-lg">
           <div className="flex items-center gap-2">
             <Icon name="List" size={20} className="hidden sm:block" />
-            <span className="text-sm sm:text-base">Существующие объявления ({properties.length})</span>
+            <span className="text-sm sm:text-base">Существующие объявления ({filteredProperties.length})</span>
           </div>
           <Button
             type="button"
@@ -102,7 +155,74 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
             <Icon name="RefreshCw" size={16} className={loading ? 'animate-spin' : ''} />
           </Button>
         </CardTitle>
+
+        {/* Фильтры */}
+        <div className="mt-4 space-y-3">
+          {/* Поиск */}
+          <div className="relative">
+            <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Поиск по названию, описанию, адресу..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+
+          {/* Фильтры в строку */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <Select value={filterType} onValueChange={setFilterType}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Тип недвижимости" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все типы</SelectItem>
+                <SelectItem value="apartment">Квартира</SelectItem>
+                <SelectItem value="house">Дом</SelectItem>
+                <SelectItem value="commercial">Коммерческая</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={filterTransaction} onValueChange={setFilterTransaction}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Тип сделки" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все сделки</SelectItem>
+                <SelectItem value="rent">Долгосрочная аренда</SelectItem>
+                <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
+                <SelectItem value="sale">Продажа</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={filterDistrict} onValueChange={setFilterDistrict}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Район" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все районы</SelectItem>
+                {districts.map(district => (
+                  <SelectItem key={district} value={district}>{district}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {hasActiveFilters && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={resetFilters}
+              className="w-full sm:w-auto"
+            >
+              <Icon name="X" size={14} className="mr-1" />
+              Сбросить фильтры
+            </Button>
+          )}
+        </div>
       </CardHeader>
+
       <CardContent className="p-4 md:p-6">
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 flex items-center gap-2 text-sm">
@@ -119,86 +239,110 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
             <Icon name="Loader2" size={32} className="mx-auto mb-2 animate-spin" />
             <p className="text-sm">Загрузка объектов...</p>
           </div>
-        ) : properties.length === 0 ? (
+        ) : filteredProperties.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             <Icon name="Home" size={32} className="mx-auto mb-2 opacity-50" />
-            <p className="text-sm">Нет добавленных объектов</p>
+            <p className="text-sm">
+              {hasActiveFilters ? 'Нет объектов по заданным фильтрам' : 'Нет добавленных объектов'}
+            </p>
           </div>
         ) : (
-          <div className="space-y-3 md:space-y-4 max-h-96 overflow-y-auto">
-            {properties.map((property) => (
-              <div key={property.id} className="border rounded-lg p-3 md:p-4 bg-gray-50">
-                <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
-                  <div className="flex-1 w-full">
-                    <div className="flex items-start gap-2 mb-2 flex-wrap">
-                      <h4 className="font-semibold text-base md:text-lg flex-1 min-w-0">{property.title}</h4>
-                      <div className="flex gap-1 flex-wrap">
-                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded whitespace-nowrap">
-                          {getPropertyTypeLabel(property.property_type)}
-                        </span>
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded whitespace-nowrap">
-                          {getTransactionTypeLabel(property.transaction_type)}
-                        </span>
-                      </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+            {filteredProperties.map((property) => (
+              <div
+                key={property.id}
+                className="border rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow duration-200"
+              >
+                {/* Изображение */}
+                <div className="relative h-40 bg-gray-200">
+                  {property.images && property.images.length > 0 ? (
+                    <img
+                      src={property.images[0]}
+                      alt={property.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Icon name="Home" size={48} className="text-gray-400" />
+                    </div>
+                  )}
+                  
+                  {/* Бейджи */}
+                  <div className="absolute top-2 left-2 flex flex-wrap gap-1">
+                    <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded shadow">
+                      {getPropertyTypeLabel(property.property_type)}
+                    </span>
+                    <span className="text-xs bg-green-500 text-white px-2 py-1 rounded shadow">
+                      {getTransactionTypeLabel(property.transaction_type)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Контент */}
+                <div className="p-3">
+                  <h4 className="font-semibold text-sm md:text-base mb-2 line-clamp-1">
+                    {property.title}
+                  </h4>
+
+                  <div className="space-y-1 text-xs text-gray-600 mb-3">
+                    <div className="flex items-center gap-1">
+                      <Icon name="MapPin" size={12} />
+                      <span className="truncate">{property.district}</span>
                     </div>
                     
-                    <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 text-xs md:text-sm text-gray-600 mb-3">
+                    {property.street_name && (
                       <div className="flex items-center gap-1">
-                        <Icon name="MapPin" size={14} />
-                        <span className="truncate">{property.district}</span>
+                        <Icon name="Home" size={12} />
+                        <span className="truncate">{property.street_name} {property.house_number}</span>
                       </div>
-                      {property.street_name && (
-                        <div className="flex items-center gap-1">
-                          <Icon name="Home" size={14} />
-                          <span className="truncate">{property.street_name} {property.house_number}</span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-1">
-                        <span className="font-bold whitespace-nowrap">{formatPrice(property.price, property.currency)}</span>
-                      </div>
+                    )}
+
+                    <div className="flex items-center gap-3 flex-wrap">
                       {property.rooms && (
                         <div className="flex items-center gap-1">
-                          <Icon name="Bed" size={14} />
-                          <span>{property.rooms} комн{property.area ? `, ${property.area} м²` : ''}</span>
+                          <Icon name="Bed" size={12} />
+                          <span>{property.rooms} комн</span>
+                        </div>
+                      )}
+                      {property.area && (
+                        <div className="flex items-center gap-1">
+                          <Icon name="Maximize" size={12} />
+                          <span>{property.area} м²</span>
                         </div>
                       )}
                       {property.floor && (
                         <div className="flex items-center gap-1">
-                          <Icon name="Building" size={14} />
-                          <span>{property.floor}{property.total_floors ? `/${property.total_floors}` : ''} эт</span>
+                          <Icon name="Building" size={12} />
+                          <span>{property.floor}/{property.total_floors || '?'} эт</span>
                         </div>
                       )}
                     </div>
-
-                    {property.description && (
-                      <p className="text-xs md:text-sm text-gray-600 line-clamp-2 mb-3">
-                        {property.description}
-                      </p>
-                    )}
                   </div>
-                  
-                  <div className="flex sm:flex-col flex-row gap-2 w-full sm:w-auto sm:ml-4">
+
+                  <div className="text-sm md:text-base font-bold text-[#FF7A00] mb-3">
+                    {formatPrice(property.price, property.currency)}
+                  </div>
+
+                  {/* Кнопки действий */}
+                  <div className="flex gap-2">
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
                       onClick={() => onEdit(property)}
-                      className="flex-1 sm:flex-none text-xs md:text-sm"
+                      className="flex-1 text-xs"
                     >
                       <Icon name="Edit" size={14} className="mr-1" />
-                      <span className="hidden xs:inline">Изменить</span>
-                      <span className="xs:hidden">Изм</span>
+                      Изменить
                     </Button>
                     <Button
                       type="button"
                       variant="destructive"
                       size="sm"
                       onClick={() => onDelete(property.id)}
-                      className="flex-1 sm:flex-none text-xs md:text-sm"
+                      className="text-xs"
                     >
-                      <Icon name="Trash2" size={14} className="mr-1" />
-                      <span className="hidden xs:inline">Удалить</span>
-                      <span className="xs:hidden">Уд</span>
+                      <Icon name="Trash2" size={14} />
                     </Button>
                   </div>
                 </div>
