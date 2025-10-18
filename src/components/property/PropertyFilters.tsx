@@ -23,6 +23,7 @@ interface PropertyFiltersProps {
   setMaxPrice: (value: string) => void;
   currency: string;
   setCurrency: (value: string) => void;
+  onApplyFilters?: () => void;
 }
 
 export default function PropertyFilters({
@@ -45,7 +46,8 @@ export default function PropertyFilters({
   maxPrice,
   setMaxPrice,
   currency,
-  setCurrency
+  setCurrency,
+  onApplyFilters
 }: PropertyFiltersProps) {
   return (
     <div className="border-b border-gray-200 px-3 md:px-6 py-3 md:py-4 bg-gray-50">
@@ -212,7 +214,10 @@ export default function PropertyFilters({
         </div>
         
         <div className="flex items-end">
-          <Button className="h-10 w-full bg-white hover:bg-gray-100 text-black border border-gray-300">
+          <Button 
+            onClick={onApplyFilters}
+            className="h-10 w-full bg-[#FF7A00] hover:bg-[#E66D00] text-white border-0"
+          >
             Найти
           </Button>
         </div>

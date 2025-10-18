@@ -130,25 +130,53 @@ export default function PropertyPage() {
     }
   };
 
+  const [appliedFilters, setAppliedFilters] = useState({
+    transactionType,
+    propertyType,
+    district,
+    rooms,
+    amenities,
+    petsAllowed,
+    childrenAllowed,
+    minPrice,
+    maxPrice,
+    currency
+  });
+
+  const applyFilters = () => {
+    setAppliedFilters({
+      transactionType,
+      propertyType,
+      district,
+      rooms,
+      amenities,
+      petsAllowed,
+      childrenAllowed,
+      minPrice,
+      maxPrice,
+      currency
+    });
+  };
+
   const filteredProperties = allProperties.filter(prop => {
-    if (transactionType !== 'all' && prop.transaction_type !== transactionType) return false;
-    if (propertyType !== 'all' && prop.property_type !== propertyType) return false;
-    if (district && district !== 'all' && prop.district !== district) return false;
-    if (rooms !== 'any' && prop.rooms !== Number(rooms)) return false;
+    if (appliedFilters.transactionType !== 'all' && prop.transaction_type !== appliedFilters.transactionType) return false;
+    if (appliedFilters.propertyType !== 'all' && prop.property_type !== appliedFilters.propertyType) return false;
+    if (appliedFilters.district && appliedFilters.district !== 'all' && prop.district !== appliedFilters.district) return false;
+    if (appliedFilters.rooms !== 'any' && prop.rooms !== Number(appliedFilters.rooms)) return false;
     
-    if (childrenAllowed && childrenAllowed !== 'any') {
-      if (prop.children_allowed !== childrenAllowed) return false;
+    if (appliedFilters.childrenAllowed && appliedFilters.childrenAllowed !== 'any') {
+      if (prop.children_allowed !== appliedFilters.childrenAllowed) return false;
     }
     
-    if (petsAllowed && petsAllowed !== 'any') {
-      if (prop.pets_allowed !== petsAllowed) return false;
+    if (appliedFilters.petsAllowed && appliedFilters.petsAllowed !== 'any') {
+      if (prop.pets_allowed !== appliedFilters.petsAllowed) return false;
     }
-    if (currency !== 'all' && prop.currency !== currency) return false;
-    if (minPrice && prop.price < Number(minPrice)) return false;
-    if (maxPrice && prop.price > Number(maxPrice)) return false;
-    if (amenities && amenities !== 'any') {
+    if (appliedFilters.currency !== 'all' && appliedFilters.currency !== 'AMD' && prop.currency !== appliedFilters.currency) return false;
+    if (appliedFilters.minPrice && prop.price < Number(appliedFilters.minPrice)) return false;
+    if (appliedFilters.maxPrice && prop.price > Number(appliedFilters.maxPrice)) return false;
+    if (appliedFilters.amenities && appliedFilters.amenities !== 'any') {
       const propAmenities = prop.amenities || [];
-      if (!propAmenities.includes(amenities)) return false;
+      if (!propAmenities.includes(appliedFilters.amenities)) return false;
     }
     return true;
   });
@@ -227,6 +255,7 @@ export default function PropertyPage() {
           setMaxPrice={setMaxPrice}
           currency={currency}
           setCurrency={setCurrency}
+          onApplyFilters={applyFilters}
         />
       )}
 
