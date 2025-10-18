@@ -36,6 +36,7 @@ const MapPage: React.FC = () => {
   const [childrenAllowed, setChildrenAllowed] = useState<string>(initialFilters.childrenAllowed);
   const [streetSearch, setStreetSearch] = useState(initialFilters.streetSearch);
   const [isMapExpanded, setIsMapExpanded] = useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const loadProperties = async () => {
     setLoading(true);
@@ -159,41 +160,64 @@ const MapPage: React.FC = () => {
   }, [selectedProperty]);
 
   return (
-    <div className="h-screen flex bg-white">
+    <div className="h-screen flex bg-white relative">
       <SEO 
         title="Карта недвижимости Еревана - WSE.AM"
         description="Интерактивная карта недвижимости в Ереване. Найди квартиры для аренды и продажи с точными локациями на карте. Удобные фильтры по цене, району и параметрам."
         keywords="карта недвижимости Ереван, квартиры на карте Ереван, аренда квартир карта, районы Еревана недвижимость"
       />
-      <MapFilters
-        selectedTransaction={selectedTransaction}
-        setSelectedTransaction={setSelectedTransaction}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        selectedDistrict={selectedDistrict}
-        setSelectedDistrict={setSelectedDistrict}
-        rooms={rooms}
-        setRooms={setRooms}
-        amenities={amenities}
-        setAmenities={setAmenities}
-        childrenAllowed={childrenAllowed}
-        setChildrenAllowed={setChildrenAllowed}
-        petsAllowed={petsAllowed}
-        setPetsAllowed={setPetsAllowed}
-        currency={currency}
-        setCurrency={setCurrency}
-        minPrice={minPrice}
-        setMinPrice={setMinPrice}
-        maxPrice={maxPrice}
-        setMaxPrice={setMaxPrice}
-        resetFilters={resetFilters}
-        loading={loading}
-        filteredCount={filteredProperties.length}
-      />
+      
+      {isFiltersOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden" 
+          onClick={() => setIsFiltersOpen(false)}
+        />
+      )}
+      
+      <div className={`
+        fixed md:static inset-y-0 left-0 z-50 
+        transform transition-transform duration-300 ease-in-out
+        ${isFiltersOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
+        <MapFilters
+          selectedTransaction={selectedTransaction}
+          setSelectedTransaction={setSelectedTransaction}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          selectedDistrict={selectedDistrict}
+          setSelectedDistrict={setSelectedDistrict}
+          rooms={rooms}
+          setRooms={setRooms}
+          amenities={amenities}
+          setAmenities={setAmenities}
+          childrenAllowed={childrenAllowed}
+          setChildrenAllowed={setChildrenAllowed}
+          petsAllowed={petsAllowed}
+          setPetsAllowed={setPetsAllowed}
+          currency={currency}
+          setCurrency={setCurrency}
+          minPrice={minPrice}
+          setMinPrice={setMinPrice}
+          maxPrice={maxPrice}
+          setMaxPrice={setMaxPrice}
+          resetFilters={resetFilters}
+          loading={loading}
+          filteredCount={filteredProperties.length}
+          onClose={() => setIsFiltersOpen(false)}
+        />
+      </div>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="border-b bg-white px-6 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">Карта недвижимости Еревана</h1>
+        <header className="border-b bg-white px-4 md:px-6 py-3 md:py-4 flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsFiltersOpen(true)}
+            className="md:hidden"
+          >
+            <Icon name="SlidersHorizontal" size={20} />
+          </Button>
+          <h1 className="text-lg md:text-2xl font-bold text-gray-900">Карта недвижимости Еревана</h1>
         </header>
 
         {error && (

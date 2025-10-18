@@ -30,6 +30,7 @@ interface MapFiltersProps {
   resetFilters: () => void;
   loading: boolean;
   filteredCount: number;
+  onClose?: () => void;
 }
 
 const MapFilters: React.FC<MapFiltersProps> = ({
@@ -55,17 +56,28 @@ const MapFilters: React.FC<MapFiltersProps> = ({
   setMaxPrice,
   resetFilters,
   loading,
-  filteredCount
+  filteredCount,
+  onClose
 }) => {
   const hasActiveFilters = selectedType || selectedTransaction || selectedDistrict || minPrice || maxPrice || rooms || amenities.length > 0 || petsAllowed || childrenAllowed;
 
   return (
-    <aside className="w-64 border-r bg-white overflow-y-auto flex-shrink-0">
+    <aside className="w-64 md:w-64 border-r bg-white overflow-y-auto flex-shrink-0 h-full">
       <div className="sticky top-0 bg-white border-b px-4 py-3 z-10">
-        <Link to="/" className="flex items-center gap-2 text-gray-900 hover:text-[#FF7A00] transition-colors mb-4">
-          <Icon name="ArrowLeft" size={20} />
-          <span className="font-semibold">Назад</span>
-        </Link>
+        <div className="flex items-center justify-between mb-4">
+          <Link to="/" className="flex items-center gap-2 text-gray-900 hover:text-[#FF7A00] transition-colors">
+            <Icon name="ArrowLeft" size={20} />
+            <span className="font-semibold">Назад</span>
+          </Link>
+          {onClose && (
+            <button 
+              onClick={onClose}
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <Icon name="X" size={20} />
+            </button>
+          )}
+        </div>
         <h2 className="text-base font-bold text-gray-900">Фильтры</h2>
       </div>
 
@@ -235,6 +247,15 @@ const MapFilters: React.FC<MapFiltersProps> = ({
         <div className="text-center text-sm text-gray-600 pt-4 border-t">
           {loading ? 'Загрузка...' : `Найдено объектов: ${filteredCount}`}
         </div>
+
+        {onClose && (
+          <Button
+            onClick={onClose}
+            className="w-full mt-4 bg-[#FF7A00] hover:bg-[#E66D00] md:hidden"
+          >
+            Показать на карте
+          </Button>
+        )}
       </div>
     </aside>
   );
