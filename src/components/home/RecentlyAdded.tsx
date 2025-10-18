@@ -1,4 +1,7 @@
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import Icon from "@/components/ui/icon";
 import type { Property as ApiProperty } from "@/lib/api";
 
 interface Property extends ApiProperty {
@@ -13,6 +16,10 @@ interface RecentlyAddedProps {
 }
 
 export default function RecentlyAdded({ properties, loading }: RecentlyAddedProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
   const formatPrice = (price: number, currency: string) => {
     return `${price.toLocaleString()} ${currency}`;
   };
@@ -26,18 +33,89 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
     if (diffDays === 0) return 'Сегодня';
     if (diffDays === 1) return 'Вчера';
     if (diffDays < 7) return `${diffDays} дн. назад`;
-    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+    
+    const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+    return `${date.getDate()} ${months[date.getMonth()]}.`;
   };
+
+  // Сортировка по дате (новые первыми)
+  const sortedProperties = [...properties].sort((a, b) => {
+    const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+    const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+    if (dateB !== dateA) return dateB - dateA;
+    return b.id - a.id;
+  });
+
+  const checkScrollButtons = () => {
+    if (!scrollContainerRef.current) return;
+    
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (!scrollContainerRef.current) return;
+    
+    const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
+    const targetScroll = direction === 'left' 
+      ? scrollContainerRef.current.scrollLeft - scrollAmount
+      : scrollContainerRef.current.scrollLeft + scrollAmount;
+    
+    scrollContainerRef.current.scrollTo({
+      left: targetScroll,
+      behavior: 'smooth'
+    });
+  };
+
+  useEffect(() => {
+    checkScrollButtons();
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScrollButtons);
+      window.addEventListener('resize', checkScrollButtons);
+      return () => {
+        container.removeEventListener('scroll', checkScrollButtons);
+        window.removeEventListener('resize', checkScrollButtons);
+      };
+    }
+  }, [properties]);
 
   return (
     <section className="py-6">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-2xl font-bold mb-4 animate-fadeInUp">Недавно добавленные</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold animate-fadeInUp">Недавно добавленные</h2>
+          
+          {/* Кнопки прокрутки для десктопа */}
+          {sortedProperties.length > 3 && (
+            <div className="hidden md:flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => scroll('left')}
+                disabled={!canScrollLeft}
+                className="rounded-full w-10 h-10 p-0"
+              >
+                <Icon name="ChevronLeft" size={20} />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => scroll('right')}
+                disabled={!canScrollRight}
+                className="rounded-full w-10 h-10 p-0"
+              >
+                <Icon name="ChevronRight" size={20} />
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
       
       {loading ? (
         <div className="text-center py-8 text-gray-500 animate-fadeIn">Загрузка...</div>
-      ) : properties.length === 0 ? (
+      ) : sortedProperties.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           <p>Нет добавленных объектов</p>
           <Link to="/admin" className="text-[#FF7A00] hover:underline mt-2 inline-block">
@@ -45,32 +123,59 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
           </Link>
         </div>
       ) : (
-        <div className="max-w-7xl mx-auto px-3 md:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            {properties
-              .sort((a, b) => {
-                const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-                const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-                if (dateB !== dateA) return dateB - dateA;
-                return b.id - a.id;
-              })
-              .slice(0, 3)
-              .map((property, idx) => (
-              <Link key={property.id} to={`/property/${property.id}`} className="block aspect-square">
-                <div className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-2 hover:scale-105 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp delay-${(idx + 1) * 100}`}>
+        <div className="relative max-w-7xl mx-auto px-3 md:px-6">
+          {/* Кнопки прокрутки для мобильного (поверх контента) */}
+          {sortedProperties.length > 1 && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => scroll('left')}
+                disabled={!canScrollLeft}
+                className="md:hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg"
+              >
+                <Icon name="ChevronLeft" size={20} />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => scroll('right')}
+                disabled={!canScrollRight}
+                className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg"
+              >
+                <Icon name="ChevronRight" size={20} />
+              </Button>
+            </>
+          )}
+
+          {/* Контейнер с прокруткой */}
+          <div 
+            ref={scrollContainerRef}
+            className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory scrollbar-hide pb-2"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {sortedProperties.map((property, idx) => (
+              <Link 
+                key={property.id} 
+                to={`/property/${property.id}`} 
+                className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-auto snap-center md:snap-align-none"
+              >
+                <div className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-2 hover:scale-105 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp`}
+                  style={{ animationDelay: `${idx * 100}ms` }}
+                >
                   {property.images && property.images.length > 0 ? (
                     <img
                       src={property.images[0]}
                       alt={property.title}
-                      className="w-full h-[60%] object-cover flex-shrink-0"
+                      className="w-full aspect-[4/3] object-cover flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-full h-[60%] bg-gray-200 flex items-center justify-center flex-shrink-0">
+                    <div className="w-full aspect-[4/3] bg-gray-200 flex items-center justify-center flex-shrink-0">
                       <span className="text-gray-400 text-sm">Нет фото</span>
                     </div>
                   )}
                   
-                  <div className="p-4 flex flex-col flex-1 h-[40%]">
+                  <div className="p-4 flex flex-col flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-lg font-bold text-[#FF7A00]">
                         {formatPrice(property.price, property.currency)}
