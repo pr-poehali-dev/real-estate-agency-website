@@ -18,7 +18,9 @@ interface Property {
 
 interface YerevanMapLeafletProps {
   properties: Property[];
+  selectedProperty?: Property | null;
   onPropertySelect?: (property: Property) => void;
+  onMapMove?: (center: L.LatLng, zoom: number) => void;
   selectedDistrict?: string;
   isPreview?: boolean;
   openOnClick?: boolean;
@@ -27,8 +29,10 @@ interface YerevanMapLeafletProps {
 }
 
 const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({ 
-  properties, 
-  onPropertySelect, 
+  properties,
+  selectedProperty,
+  onPropertySelect,
+  onMapMove,
   selectedDistrict,
   isPreview = false,
   openOnClick = false,
@@ -120,13 +124,41 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
 
     L.control.layers(baseMaps, {}, { position: 'topright' }).addTo(mapInstance.current);
 
+    if (onMapMove) {
+      mapInstance.current.on('moveend', () => {
+        if (mapInstance.current) {
+          const center = mapInstance.current.getCenter();
+          const zoom = mapInstance.current.getZoom();
+          onMapMove(center, zoom);
+        }
+      });
+    }
+
+    const handleLocateUser = () => {
+      if (mapInstance.current) {
+        mapInstance.current.locate({ setView: true, maxZoom: 16 });
+      }
+    };
+
+    const handleRestorePosition = (event: CustomEvent) => {
+      if (mapInstance.current && event.detail) {
+        const { lat, lng, zoom } = event.detail;
+        mapInstance.current.setView([lat, lng], zoom);
+      }
+    };
+
+    window.addEventListener('map-locate-user', handleLocateUser as any);
+    window.addEventListener('map-restore-position', handleRestorePosition as any);
+
     return () => {
+      window.removeEventListener('map-locate-user', handleLocateUser as any);
+      window.removeEventListener('map-restore-position', handleRestorePosition as any);
       if (mapInstance.current) {
         mapInstance.current.remove();
         mapInstance.current = null;
       }
     };
-  }, [isPreview, zoomPosition]);
+  }, [isPreview, zoomPosition, onMapMove]);
 
   useEffect(() => {
     if (!mapInstance.current) return;
@@ -134,21 +166,23 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    const customIcon = L.divIcon({
-      className: 'custom-marker',
-      html: `
-        <div style="position: relative;">
-          <svg width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 0C7.163 0 0 7.163 0 16c0 8.837 16 24 16 24s16-15.163 16-24C32 7.163 24.837 0 16 0z" fill="#FF7A00"/>
-            <circle cx="16" cy="16" r="8" fill="white"/>
-            <path d="M13 13h6v6h-6z" fill="#FF7A00"/>
-          </svg>
-        </div>
-      `,
-      iconSize: [32, 40],
-      iconAnchor: [16, 40],
-      popupAnchor: [0, -40]
-    });
+    const createMarkerIcon = (property: Property, isSelected: boolean) => {
+      return L.divIcon({
+        className: 'custom-marker',
+        html: `
+          <div style="position: relative; transition: transform 0.2s;">
+            <svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); transform: scale(${isSelected ? '1.2' : '1'});">
+              <path d="M20 0C8.954 0 0 8.954 0 20c0 11.046 20 30 20 30s20-18.954 20-30C40 8.954 31.046 0 20 0z" fill="${isSelected ? '#FF5500' : '#FF7A00'}"/>
+              <circle cx="20" cy="20" r="10" fill="white"/>
+              <text x="20" y="26" text-anchor="middle" font-size="10" font-weight="bold" fill="#FF7A00">${formatPrice(property.price, property.currency).split(' ')[0].substring(0, 3)}k</text>
+            </svg>
+          </div>
+        `,
+        iconSize: [40, 50],
+        iconAnchor: [20, 50],
+        popupAnchor: [0, -50]
+      });
+    };
 
     properties.forEach((property) => {
       if (!property.latitude || !property.longitude) {
@@ -157,8 +191,9 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       
       const lat = Number(property.latitude);
       const lng = Number(property.longitude);
+      const isSelected = selectedProperty?.id === property.id;
 
-      const marker = L.marker([lat, lng], { icon: customIcon });
+      const marker = L.marker([lat, lng], { icon: createMarkerIcon(property, isSelected) });
 
       const imageUrl = property.images && property.images.length > 0 ? property.images[0] : '';
       const popupContent = `
@@ -295,7 +330,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       );
       mapInstance.current.fitBounds(bounds, { padding: [50, 50] });
     }
-  }, [properties, onPropertySelect, isPreview]);
+  }, [properties, selectedProperty, onPropertySelect, isPreview, keepPopupsOpen, openOnClick]);
 
   return (
     <div className="h-full w-full relative">
