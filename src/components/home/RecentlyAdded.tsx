@@ -108,7 +108,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 size="sm"
                 onClick={() => scroll('left')}
                 disabled={!canScrollLeft}
-                className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg disabled:opacity-50"
+                className="absolute left-2 md:left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg disabled:opacity-50 hover:bg-gray-50"
               >
                 <Icon name="ChevronLeft" size={20} />
               </Button>
@@ -117,7 +117,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 size="sm"
                 onClick={() => scroll('right')}
                 disabled={!canScrollRight}
-                className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg disabled:opacity-50"
+                className="absolute right-2 md:right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg disabled:opacity-50 hover:bg-gray-50"
               >
                 <Icon name="ChevronRight" size={20} />
               </Button>
