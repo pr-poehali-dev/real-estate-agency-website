@@ -115,10 +115,10 @@ export default function SearchSection({
                     placeholder="Цена"
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
-                    className="h-14 rounded-xl border-gray-200 flex-1"
+                    className="h-14 rounded-xl border-gray-200 w-20"
                   />
                   <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger className="h-14 rounded-xl w-32 border-gray-200">
+                    <SelectTrigger className="h-14 rounded-xl flex-1 border-gray-200">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
