@@ -241,19 +241,6 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
             </div>
           </div>
 
-          {property.features && property.features.length > 0 && (
-            <div className="bg-white rounded-2xl p-4 md:p-6 mb-4">
-              <h2 className="text-lg md:text-xl font-bold mb-4">Особенности</h2>
-              <div className="flex flex-wrap gap-2">
-                {property.features.map((feature, idx) => (
-                  <span key={idx} className="px-3 py-1 bg-orange-50 text-[#FF7A00] rounded-full text-sm">
-                    {feature}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
           {property.address && (
             <div className="bg-white rounded-2xl p-4 md:p-6 mb-4">
               <h2 className="text-lg md:text-xl font-bold mb-3">Адрес</h2>
@@ -275,6 +262,54 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
               <p className="text-gray-700 whitespace-pre-wrap">{property.description}</p>
             </div>
           )}
+
+          {property.features && property.features.length > 0 && (() => {
+            const amenitiesMap: { [key: string]: { icon: string, label: string } } = {
+              'Телевизор': { icon: 'Tv', label: 'Телевизор' },
+              'Кондиционер': { icon: 'Wind', label: 'Кондиционер' },
+              'Интернет': { icon: 'Wifi', label: 'Интернет' },
+              'Холодильник': { icon: 'Box', label: 'Холодильник' },
+              'Плита': { icon: 'Flame', label: 'Плита' },
+              'Микроволновка': { icon: 'Waves', label: 'Микроволновка' },
+              'Кофеварка': { icon: 'Coffee', label: 'Кофеварка' },
+              'Посудомоечная машина': { icon: 'Sparkles', label: 'Посудомоечная машина' },
+              'Стиральная машина': { icon: 'Loader', label: 'Стиральная машина' },
+              'Сушильная машина': { icon: 'Fan', label: 'Сушильная машина' },
+              'Водонагреватель': { icon: 'Droplets', label: 'Водонагреватель' },
+              'Утюг': { icon: 'Shirt', label: 'Утюг' },
+              'Фен': { icon: 'AirVent', label: 'Фен' }
+            };
+
+            const knownAmenities = property.features.filter(f => amenitiesMap[f]);
+            const otherFeatures = property.features.filter(f => !amenitiesMap[f]);
+
+            if (knownAmenities.length === 0 && otherFeatures.length === 0) return null;
+
+            return (
+              <div className="bg-white rounded-2xl p-4 md:p-6 mb-4">
+                <h2 className="text-lg md:text-xl font-bold mb-4">Удобства</h2>
+                {knownAmenities.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
+                    {knownAmenities.map((amenity, idx) => (
+                      <div key={idx} className="flex items-center gap-2">
+                        <Icon name={amenitiesMap[amenity].icon} size={20} className="text-[#FF7A00]" />
+                        <span className="text-sm">{amenitiesMap[amenity].label}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {otherFeatures.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {otherFeatures.map((feature, idx) => (
+                      <span key={idx} className="px-3 py-1 bg-orange-50 text-[#FF7A00] rounded-full text-sm">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           <div className="flex flex-col gap-3 bg-[#F5F3EE] py-4 sticky bottom-0 md:relative">
             <a href="tel:+37495129260">
