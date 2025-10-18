@@ -6,9 +6,9 @@ export interface MapFilters {
   maxPrice: string;
   currency: string;
   rooms: string;
-  amenities: string[];
-  petsAllowed: string[];
-  childrenAllowed: string[];
+  amenities: string;
+  petsAllowed: string;
+  childrenAllowed: string;
   streetSearch: string;
 }
 
@@ -23,9 +23,9 @@ export const loadFilters = (): MapFilters => {
     maxPrice: '',
     currency: 'AMD',
     rooms: '',
-    amenities: [],
-    petsAllowed: [],
-    childrenAllowed: [],
+    amenities: '',
+    petsAllowed: '',
+    childrenAllowed: '',
     streetSearch: ''
   };
   
@@ -38,9 +38,9 @@ export const loadFilters = (): MapFilters => {
         ...parsed,
         currency: parsed.currency || 'AMD',
         selectedDistrict: Array.isArray(parsed.selectedDistrict) ? parsed.selectedDistrict : [],
-        petsAllowed: Array.isArray(parsed.petsAllowed) ? parsed.petsAllowed : [],
-        childrenAllowed: Array.isArray(parsed.childrenAllowed) ? parsed.childrenAllowed : [],
-        amenities: Array.isArray(parsed.amenities) ? parsed.amenities : []
+        petsAllowed: typeof parsed.petsAllowed === 'string' ? parsed.petsAllowed : '',
+        childrenAllowed: typeof parsed.childrenAllowed === 'string' ? parsed.childrenAllowed : '',
+        amenities: typeof parsed.amenities === 'string' ? parsed.amenities : ''
       };
     }
   } catch (e) {

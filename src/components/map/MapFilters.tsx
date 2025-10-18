@@ -15,12 +15,12 @@ interface MapFiltersProps {
   setSelectedDistrict: (value: string[]) => void;
   rooms: string;
   setRooms: (value: string) => void;
-  amenities: string[];
-  setAmenities: (value: string[]) => void;
-  childrenAllowed: string[];
-  setChildrenAllowed: (value: string[]) => void;
-  petsAllowed: string[];
-  setPetsAllowed: (value: string[]) => void;
+  amenities: string;
+  setAmenities: (value: string) => void;
+  childrenAllowed: string;
+  setChildrenAllowed: (value: string) => void;
+  petsAllowed: string;
+  setPetsAllowed: (value: string) => void;
   currency: string;
   setCurrency: (value: string) => void;
   minPrice: string;
@@ -154,59 +154,57 @@ const MapFilters: React.FC<MapFiltersProps> = ({
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">Удобства</label>
-          <MultiSelect
-            options={[
-              { label: 'Телевизор', value: 'tv' },
-              { label: 'Кондиционер', value: 'ac' },
-              { label: 'Интернет', value: 'internet' },
-              { label: 'Холодильник', value: 'fridge' },
-              { label: 'Плита', value: 'stove' },
-              { label: 'Микроволновка', value: 'microwave' },
-              { label: 'Кофеварка', value: 'coffee_maker' },
-              { label: 'Посудомоечная машина', value: 'dishwasher' },
-              { label: 'Стиральная машина', value: 'washing_machine' },
-              { label: 'Сушильная машина', value: 'dryer' },
-              { label: 'Водонагреватель', value: 'water_heater' },
-              { label: 'Утюг', value: 'iron' },
-              { label: 'Фен', value: 'hair_dryer' },
-            ]}
-            selected={amenities}
-            onChange={setAmenities}
-            placeholder="Выберите удобства"
-            className="w-full"
-          />
+          <Select value={amenities} onValueChange={setAmenities}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Выберите удобства" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="tv">Телевизор</SelectItem>
+              <SelectItem value="ac">Кондиционер</SelectItem>
+              <SelectItem value="internet">Интернет</SelectItem>
+              <SelectItem value="fridge">Холодильник</SelectItem>
+              <SelectItem value="stove">Плита</SelectItem>
+              <SelectItem value="microwave">Микроволновка</SelectItem>
+              <SelectItem value="coffee_maker">Кофеварка</SelectItem>
+              <SelectItem value="dishwasher">Посудомоечная машина</SelectItem>
+              <SelectItem value="washing_machine">Стиральная машина</SelectItem>
+              <SelectItem value="dryer">Сушильная машина</SelectItem>
+              <SelectItem value="water_heater">Водонагреватель</SelectItem>
+              <SelectItem value="iron">Утюг</SelectItem>
+              <SelectItem value="hair_dryer">Фен</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с детьми</label>
-          <MultiSelect
-            options={[
-              { label: 'Да', value: 'yes' },
-              { label: 'Нет', value: 'no' },
-              { label: 'По договоренности', value: 'negotiable' },
-            ]}
-            selected={childrenAllowed}
-            onChange={setChildrenAllowed}
-            placeholder="Выберите"
-            className="w-full"
-            showSearch={false}
-          />
+          <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Выберите" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="yes">Да</SelectItem>
+              <SelectItem value="no">Нет</SelectItem>
+              <SelectItem value="negotiable">По договоренности</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с животными</label>
-          <MultiSelect
-            options={[
-              { label: 'Да', value: 'yes' },
-              { label: 'Нет', value: 'no' },
-              { label: 'По договоренности', value: 'negotiable' },
-            ]}
-            selected={petsAllowed}
-            onChange={setPetsAllowed}
-            placeholder="Выберите"
-            className="w-full"
-            showSearch={false}
-          />
+          <Select value={petsAllowed} onValueChange={setPetsAllowed}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Выберите" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="yes">Да</SelectItem>
+              <SelectItem value="no">Нет</SelectItem>
+              <SelectItem value="negotiable">По договоренности</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div>

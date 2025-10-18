@@ -31,9 +31,9 @@ const MapPage: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState(initialFilters.maxPrice);
   const [currency, setCurrency] = useState(initialFilters.currency);
   const [rooms, setRooms] = useState<string>(initialFilters.rooms);
-  const [amenities, setAmenities] = useState<string[]>(initialFilters.amenities);
-  const [petsAllowed, setPetsAllowed] = useState<string[]>(Array.isArray(initialFilters.petsAllowed) ? initialFilters.petsAllowed : []);
-  const [childrenAllowed, setChildrenAllowed] = useState<string[]>(Array.isArray(initialFilters.childrenAllowed) ? initialFilters.childrenAllowed : []);
+  const [amenities, setAmenities] = useState<string>(typeof initialFilters.amenities === 'string' ? initialFilters.amenities : '');
+  const [petsAllowed, setPetsAllowed] = useState<string>(typeof initialFilters.petsAllowed === 'string' ? initialFilters.petsAllowed : '');
+  const [childrenAllowed, setChildrenAllowed] = useState<string>(typeof initialFilters.childrenAllowed === 'string' ? initialFilters.childrenAllowed : '');
   const [streetSearch, setStreetSearch] = useState(initialFilters.streetSearch);
   const [isMapExpanded, setIsMapExpanded] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -91,20 +91,17 @@ const MapPage: React.FC = () => {
       
       if (rooms && rooms !== 'any' && prop.rooms !== Number(rooms)) return false;
       
-      if (amenities.length > 0) {
+      if (amenities && amenities !== 'any') {
         const propAmenities = prop.amenities || [];
-        const hasAllAmenities = amenities.every(a => propAmenities.includes(a));
-        if (!hasAllAmenities) return false;
+        if (!propAmenities.includes(amenities)) return false;
       }
       
-      if (petsAllowed.length > 0) {
-        const matches = petsAllowed.includes(prop.pets_allowed || 'negotiable');
-        if (!matches) return false;
+      if (petsAllowed && petsAllowed !== 'any') {
+        if (prop.pets_allowed !== petsAllowed) return false;
       }
       
-      if (childrenAllowed.length > 0) {
-        const matches = childrenAllowed.includes(prop.children_allowed || 'negotiable');
-        if (!matches) return false;
+      if (childrenAllowed && childrenAllowed !== 'any') {
+        if (prop.children_allowed !== childrenAllowed) return false;
       }
       
       return true;
@@ -147,9 +144,9 @@ const MapPage: React.FC = () => {
     setMaxPrice('');
     setCurrency('AMD');
     setRooms('');
-    setAmenities([]);
-    setPetsAllowed([]);
-    setChildrenAllowed([]);
+    setAmenities('');
+    setPetsAllowed('');
+    setChildrenAllowed('');
     setStreetSearch('');
   };
 
