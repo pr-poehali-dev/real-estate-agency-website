@@ -21,6 +21,7 @@ const MapPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [sortBy, setSortBy] = useState<'date' | 'price_asc' | 'price_desc'>('date');
   const propertyRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   
   const initialFilters = loadFilters();
@@ -108,16 +109,22 @@ const MapPage: React.FC = () => {
     });
 
     return filtered.sort((a, b) => {
-      const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-      const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-      
-      if (dateA !== dateB) {
-        return dateB - dateA;
+      if (sortBy === 'price_asc') {
+        return a.price - b.price;
+      } else if (sortBy === 'price_desc') {
+        return b.price - a.price;
+      } else {
+        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+        
+        if (dateA !== dateB) {
+          return dateB - dateA;
+        }
+        
+        return b.id - a.id;
       }
-      
-      return b.id - a.id;
     });
-  }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
+  }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, streetSearch, sortBy]);
 
   useEffect(() => {
     const filters: MapFiltersType = {
@@ -268,11 +275,30 @@ const MapPage: React.FC = () => {
         />
 
         <div className="flex-1 overflow-y-auto bg-gray-50 p-3 sm:p-4">
-          <PropertyGrid
-            properties={filteredProperties}
-            selectedPropertyId={selectedProperty?.id || null}
-            propertyRefs={propertyRefs}
-          />
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+                Найдено: <span className="text-[#FF7A00]">{filteredProperties.length}</span>
+              </h2>
+              <div className="flex items-center gap-2">
+                <Icon name="ArrowDownUp" size={16} className="text-gray-500" />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  className="text-sm font-semibold border-2 border-gray-200 rounded-lg px-3 py-2 bg-white hover:border-[#FF7A00] focus:border-[#FF7A00] focus:outline-none transition-colors"
+                >
+                  <option value="date">Сначала новые</option>
+                  <option value="price_asc">Сначала дешевые</option>
+                  <option value="price_desc">Сначала дорогие</option>
+                </select>
+              </div>
+            </div>
+            <PropertyGrid
+              properties={filteredProperties}
+              selectedPropertyId={selectedProperty?.id || null}
+              propertyRefs={propertyRefs}
+            />
+          </div>
         </div>
       </div>
       

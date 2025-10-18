@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from '@/components/ui/icon';
+import FavoriteButton from '@/components/FavoriteButton';
 import type { Property as ApiProperty } from '@/lib/api';
 
 interface Property extends ApiProperty {
@@ -50,23 +51,31 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties, selectedPropert
             }`}
             onClick={() => window.location.href = `/property/${property.id}`}
           >
-            <div className="relative">
+            <div className="relative overflow-hidden">
               {property.images && property.images.length > 0 ? (
                 <img
                   src={property.images[0]}
                   alt={property.title}
-                  className="w-full h-44 sm:h-36 object-cover"
+                  className="w-full h-44 sm:h-36 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
               ) : (
-                <div className="w-full h-44 sm:h-36 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-400 text-sm">Нет фото</span>
+                <div className="w-full h-44 sm:h-36 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                  <Icon name="Image" size={32} className="text-gray-400" />
                 </div>
               )}
-              {property.created_at && isNew(property.created_at) && (
-                <div className="absolute top-2 left-2 bg-[#FF7A00] text-white text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-md">
-                  Новое
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <div className="absolute top-2 left-2 right-2 flex items-start justify-between">
+                {property.created_at && isNew(property.created_at) && (
+                  <div className="bg-[#FF7A00] text-white text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-md">
+                    ✨ Новое
+                  </div>
+                )}
+                <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <FavoriteButton propertyId={property.id} />
                 </div>
-              )}
+              </div>
+              
               {property.images && property.images.length > 1 && (
                 <div className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
                   <Icon name="Image" size={12} />
@@ -76,9 +85,9 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties, selectedPropert
             </div>
             
             <div className="p-3 sm:p-3 flex flex-col flex-1">
-              <p className="text-base sm:text-lg font-bold text-[#FF7A00] mb-1">
+              <p className="text-lg sm:text-xl font-extrabold bg-gradient-to-r from-[#FF7A00] to-[#FF5500] bg-clip-text text-transparent mb-1">
                 {formatPrice(property.price, property.currency)}
-                {property.transaction_type === 'rent' && <span className="text-xs font-normal text-gray-600"> /мес</span>}
+                {property.transaction_type === 'rent' && <span className="text-xs font-semibold text-gray-600"> /мес</span>}
               </p>
               
               <p className="text-gray-900 font-medium mb-2 line-clamp-2 sm:line-clamp-1 text-sm">
