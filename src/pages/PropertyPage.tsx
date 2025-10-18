@@ -23,22 +23,76 @@ export default function PropertyPage() {
   const [property, setProperty] = useState<Property | null>(null);
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
-  
-  const [transactionType, setTransactionType] = useState('all');
-  const [propertyType, setPropertyType] = useState('all');
-  const [district, setDistrict] = useState<string[]>([]);
-  const [rooms, setRooms] = useState('any');
-  const [amenities, setAmenities] = useState<string[]>([]);
-  const [petsAllowed, setPetsAllowed] = useState<string[]>([]);
-  const [childrenAllowed, setChildrenAllowed] = useState<string[]>([]);
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [currency, setCurrency] = useState('all');
+  const loadFiltersFromStorage = () => {
+    try {
+      const saved = localStorage.getItem('property_filters');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          showFilters: parsed.showFilters || false,
+          transactionType: parsed.transactionType || 'all',
+          propertyType: parsed.propertyType || 'all',
+          district: parsed.district || '',
+          rooms: parsed.rooms || 'any',
+          amenities: parsed.amenities || '',
+          petsAllowed: parsed.petsAllowed || '',
+          childrenAllowed: parsed.childrenAllowed || '',
+          minPrice: parsed.minPrice || '',
+          maxPrice: parsed.maxPrice || '',
+          currency: parsed.currency || 'all'
+        };
+      }
+    } catch (e) {
+      console.error('Failed to load filters:', e);
+    }
+    return {
+      showFilters: false,
+      transactionType: 'all',
+      propertyType: 'all',
+      district: '',
+      rooms: 'any',
+      amenities: '',
+      petsAllowed: '',
+      childrenAllowed: '',
+      minPrice: '',
+      maxPrice: '',
+      currency: 'all'
+    };
+  };
+
+  const savedFilters = loadFiltersFromStorage();
+  const [showFilters, setShowFilters] = useState(savedFilters.showFilters);
+  const [transactionType, setTransactionType] = useState(savedFilters.transactionType);
+  const [propertyType, setPropertyType] = useState(savedFilters.propertyType);
+  const [district, setDistrict] = useState<string>(savedFilters.district);
+  const [rooms, setRooms] = useState(savedFilters.rooms);
+  const [amenities, setAmenities] = useState<string>(savedFilters.amenities);
+  const [petsAllowed, setPetsAllowed] = useState<string>(savedFilters.petsAllowed);
+  const [childrenAllowed, setChildrenAllowed] = useState<string>(savedFilters.childrenAllowed);
+  const [minPrice, setMinPrice] = useState(savedFilters.minPrice);
+  const [maxPrice, setMaxPrice] = useState(savedFilters.maxPrice);
+  const [currency, setCurrency] = useState(savedFilters.currency);
 
   useEffect(() => {
     loadProperty();
   }, [id]);
+
+  useEffect(() => {
+    const filters = {
+      showFilters,
+      transactionType,
+      propertyType,
+      district,
+      rooms,
+      amenities,
+      petsAllowed,
+      childrenAllowed,
+      minPrice,
+      maxPrice,
+      currency
+    };
+    localStorage.setItem('property_filters', JSON.stringify(filters));
+  }, [showFilters, transactionType, propertyType, district, rooms, amenities, petsAllowed, childrenAllowed, minPrice, maxPrice, currency]);
 
   const loadProperty = async () => {
     setLoading(true);
@@ -79,24 +133,22 @@ export default function PropertyPage() {
   const filteredProperties = allProperties.filter(prop => {
     if (transactionType !== 'all' && prop.transaction_type !== transactionType) return false;
     if (propertyType !== 'all' && prop.property_type !== propertyType) return false;
-    if (district.length > 0 && !district.includes(prop.district || '')) return false;
+    if (district && district !== 'all' && prop.district !== district) return false;
     if (rooms !== 'any' && prop.rooms !== Number(rooms)) return false;
     
-    if (childrenAllowed.length > 0) {
-      const matches = childrenAllowed.includes(prop.children_allowed || 'negotiable');
-      if (!matches) return false;
+    if (childrenAllowed && childrenAllowed !== 'any') {
+      if (prop.children_allowed !== childrenAllowed) return false;
     }
     
-    if (petsAllowed.length > 0) {
-      const matches = petsAllowed.includes(prop.pets_allowed || 'negotiable');
-      if (!matches) return false;
+    if (petsAllowed && petsAllowed !== 'any') {
+      if (prop.pets_allowed !== petsAllowed) return false;
     }
     if (currency !== 'all' && prop.currency !== currency) return false;
     if (minPrice && prop.price < Number(minPrice)) return false;
     if (maxPrice && prop.price > Number(maxPrice)) return false;
-    if (amenities.length > 0) {
+    if (amenities && amenities !== 'any') {
       const propAmenities = prop.amenities || [];
-      if (!amenities.every(a => propAmenities.includes(a))) return false;
+      if (!propAmenities.includes(amenities)) return false;
     }
     return true;
   });
