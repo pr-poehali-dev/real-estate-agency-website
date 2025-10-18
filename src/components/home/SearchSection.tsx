@@ -130,11 +130,11 @@ export default function SearchSection({
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 flex-shrink-0">
                 <label className="text-sm text-gray-600 font-medium opacity-0">Поиск</label>
                 <Button 
                   onClick={onSearch}
-                  className="h-14 w-full bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl font-medium transition-all text-base"
+                  className="h-14 px-8 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl font-medium transition-all text-base whitespace-nowrap"
                 >
                   Найти
                 </Button>
