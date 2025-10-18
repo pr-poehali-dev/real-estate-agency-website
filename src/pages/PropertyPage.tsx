@@ -39,7 +39,7 @@ export default function PropertyPage() {
           childrenAllowed: parsed.childrenAllowed || '',
           minPrice: parsed.minPrice || '',
           maxPrice: parsed.maxPrice || '',
-          currency: parsed.currency || 'all'
+          currency: parsed.currency || 'AMD'
         };
       }
     } catch (e) {
@@ -56,7 +56,7 @@ export default function PropertyPage() {
       childrenAllowed: '',
       minPrice: '',
       maxPrice: '',
-      currency: 'all'
+      currency: 'AMD'
     };
   };
 
