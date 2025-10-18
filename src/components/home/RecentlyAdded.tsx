@@ -45,8 +45,8 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
           </Link>
         </div>
       ) : (
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="max-w-7xl mx-auto px-3 md:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {properties
               .sort((a, b) => {
                 const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;

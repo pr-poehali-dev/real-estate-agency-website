@@ -188,42 +188,88 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
                   </div>
                 </div>
               )}
+
+              {property.district && (
+                <div className="flex items-center gap-3">
+                  <Icon name="MapPin" size={24} className="text-[#FF7A00]" />
+                  <div>
+                    <p className="text-sm text-gray-600">Район</p>
+                    <p className="font-semibold">{property.district}</p>
+                  </div>
+                </div>
+              )}
+
+              {(property.street_name || property.house_number) && (
+                <div className="flex items-center gap-3">
+                  <Icon name="Map" size={24} className="text-[#FF7A00]" />
+                  <div>
+                    <p className="text-sm text-gray-600">Улица и дом</p>
+                    <p className="font-semibold">
+                      {property.street_name && property.house_number 
+                        ? `${property.street_name}, ${property.house_number}`
+                        : property.street_name || property.house_number}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {property.bedrooms && (
+                <div className="flex items-center gap-3">
+                  <Icon name="Bed" size={24} className="text-[#FF7A00]" />
+                  <div>
+                    <p className="text-sm text-gray-600">Спален</p>
+                    <p className="font-semibold">{property.bedrooms}</p>
+                  </div>
+                </div>
+              )}
+
+              {property.bathrooms && (
+                <div className="flex items-center gap-3">
+                  <Icon name="Bath" size={24} className="text-[#FF7A00]" />
+                  <div>
+                    <p className="text-sm text-gray-600">Санузлов</p>
+                    <p className="font-semibold">{property.bathrooms}</p>
+                  </div>
+                </div>
+              )}
+
+              {property.year_built && (
+                <div className="flex items-center gap-3">
+                  <Icon name="Hammer" size={24} className="text-[#FF7A00]" />
+                  <div>
+                    <p className="text-sm text-gray-600">Год постройки</p>
+                    <p className="font-semibold">{property.year_built}</p>
+                  </div>
+                </div>
+              )}
+
+              {property.pets_allowed && property.pets_allowed !== 'any' && (
+                <div className="flex items-center gap-3">
+                  <Icon name="Dog" size={24} className="text-[#FF7A00]" />
+                  <div>
+                    <p className="text-sm text-gray-600">Можно с животными</p>
+                    <p className="font-semibold">
+                      {property.pets_allowed === 'yes' ? 'Да' : 
+                       property.pets_allowed === 'no' ? 'Нет' : 'По договоренности'}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {property.children_allowed && property.children_allowed !== 'any' && (
+                <div className="flex items-center gap-3">
+                  <Icon name="Baby" size={24} className="text-[#FF7A00]" />
+                  <div>
+                    <p className="text-sm text-gray-600">Можно с детьми</p>
+                    <p className="font-semibold">
+                      {property.children_allowed === 'yes' ? 'Да' : 
+                       property.children_allowed === 'no' ? 'Нет' : 'По договоренности'}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-
-          {(property.pets_allowed && property.pets_allowed !== 'any') || 
-           (property.children_allowed && property.children_allowed !== 'any') ? (
-            <div className="bg-white rounded-2xl p-4 md:p-6 mb-4">
-              <h2 className="text-lg md:text-xl font-bold mb-4">Дополнительные условия</h2>
-              <div className="grid grid-cols-2 gap-3 md:gap-4">
-                {property.pets_allowed && property.pets_allowed !== 'any' && (
-                  <div className="flex items-center gap-3">
-                    <Icon name="Dog" size={24} className="text-[#FF7A00]" />
-                    <div>
-                      <p className="text-sm text-gray-600">Можно с животными</p>
-                      <p className="font-semibold">
-                        {property.pets_allowed === 'yes' ? 'Да' : 
-                         property.pets_allowed === 'no' ? 'Нет' : 'По договоренности'}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {property.children_allowed && property.children_allowed !== 'any' && (
-                  <div className="flex items-center gap-3">
-                    <Icon name="Baby" size={24} className="text-[#FF7A00]" />
-                    <div>
-                      <p className="text-sm text-gray-600">Можно с детьми</p>
-                      <p className="font-semibold">
-                        {property.children_allowed === 'yes' ? 'Да' : 
-                         property.children_allowed === 'no' ? 'Нет' : 'По договоренности'}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : null}
 
           {property.features && property.features.length > 0 && (
             <div className="bg-white rounded-2xl p-4 md:p-6 mb-4">
