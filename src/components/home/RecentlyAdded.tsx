@@ -19,9 +19,14 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const [currentImageIndex, setCurrentImageIndex] = useState<Record<number, number>>({});
 
   const formatPrice = (price: number, currency: string) => {
-    return `${price.toLocaleString()} ${currency}`;
+    return {
+      value: price.toLocaleString(),
+      currency: currency
+    };
   };
 
   const formatDate = (dateString: string) => {
@@ -38,7 +43,14 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
     return `${date.getDate()} ${months[date.getMonth()]}.`;
   };
 
-  // Сортировка по дате (новые первыми)
+  const isNew = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays < 3;
+  };
+
   const sortedProperties = [...properties].sort((a, b) => {
     const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
     const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
@@ -61,7 +73,6 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
     const scrollAmount = clientWidth * 0.8;
     
     if (direction === 'left') {
-      // Если в начале списка, прокручиваем в конец
       if (scrollLeft <= 0) {
         scrollContainerRef.current.scrollTo({
           left: scrollWidth - clientWidth,
@@ -74,7 +85,6 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
         });
       }
     } else {
-      // Если в конце списка, прокручиваем в начало
       if (scrollLeft >= scrollWidth - clientWidth - 10) {
         scrollContainerRef.current.scrollTo({
           left: 0,
@@ -87,6 +97,26 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
         });
       }
     }
+  };
+
+  const toggleFavorite = (e: React.MouseEvent, id: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(id)) {
+        newFavorites.delete(id);
+      } else {
+        newFavorites.add(id);
+      }
+      return newFavorites;
+    });
+  };
+
+  const handleCall = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open('tel:+37495129260', '_self');
   };
 
   useEffect(() => {
@@ -121,81 +151,167 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
         </div>
       ) : (
         <div className="relative max-w-7xl mx-auto px-3 md:px-6">
-          {/* Кнопки прокрутки по бокам от карточек */}
           {sortedProperties.length > 3 && (
             <>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('left')}
-                className="absolute left-2 md:left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-12 h-12 p-0 bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white border-gray-200"
+                className="absolute left-2 md:left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-14 h-14 p-0 bg-white/95 backdrop-blur-sm shadow-lg hover:bg-white hover:shadow-xl border-gray-200 transition-all hover:scale-110"
               >
-                <Icon name="ChevronLeft" size={20} />
+                <Icon name="ChevronLeft" size={24} />
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('right')}
-                className="absolute right-2 md:right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-12 h-12 p-0 bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white border-gray-200"
+                className="absolute right-2 md:right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-14 h-14 p-0 bg-white/95 backdrop-blur-sm shadow-lg hover:bg-white hover:shadow-xl border-gray-200 transition-all hover:scale-110"
               >
-                <Icon name="ChevronRight" size={20} />
+                <Icon name="ChevronRight" size={24} />
               </Button>
             </>
           )}
 
-          {/* Контейнер с прокруткой */}
           <div 
             ref={scrollContainerRef}
             className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {sortedProperties.map((property, idx) => (
-              <Link 
-                key={property.id} 
-                to={`/property/${property.id}`} 
-                className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-[calc(33.333%-16px)] snap-center"
-              >
-                <div className={`bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp`}
-                  style={{ animationDelay: `${idx * 100}ms` }}
+            {sortedProperties.map((property, idx) => {
+              const priceData = formatPrice(property.price, property.currency);
+              const imageCount = property.images?.length || 0;
+              const currentIndex = currentImageIndex[property.id] || 0;
+              
+              return (
+                <Link 
+                  key={property.id} 
+                  to={`/property/${property.id}`} 
+                  className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-[calc(33.333%-16px)] snap-center group"
                 >
-                  {property.images && property.images.length > 0 ? (
-                    <img
-                      src={property.images[0]}
-                      alt={property.title}
-                      className="w-full aspect-[4/3] object-cover flex-shrink-0"
-                    />
-                  ) : (
-                    <div className="w-full aspect-[4/3] bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <span className="text-gray-400 text-sm">Нет фото</span>
-                    </div>
-                  )}
-                  
-                  <div className="p-6 flex flex-col flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="text-lg font-bold text-[#FF7A00]">
-                        {formatPrice(property.price, property.currency)}
-                      </p>
-                      {property.created_at && (
-                        <span className="text-xs text-gray-500">
-                          {formatDate(property.created_at)}
-                        </span>
+                  <div className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-xl hover:border-[#FF7A00]/30 hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp`}
+                    style={{ animationDelay: `${idx * 100}ms` }}
+                  >
+                    <div className="relative overflow-hidden">
+                      {property.images && property.images.length > 0 ? (
+                        <>
+                          <div className="relative">
+                            <img
+                              src={property.images[currentIndex]}
+                              alt={property.title}
+                              className="w-full aspect-[16/11] object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          </div>
+                          
+                          {imageCount > 1 && (
+                            <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full flex items-center gap-1">
+                              <Icon name="Image" size={12} />
+                              <span>{currentIndex + 1}/{imageCount}</span>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div className="w-full aspect-[16/11] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                          <Icon name="Image" size={32} className="text-gray-400" />
+                        </div>
+                      )}
+                      
+                      <button
+                        onClick={(e) => toggleFavorite(e, property.id)}
+                        className="absolute top-3 right-3 w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-all duration-200 z-10"
+                      >
+                        <Icon 
+                          name="Heart" 
+                          size={18} 
+                          className={favorites.has(property.id) ? "fill-red-500 text-red-500" : "text-gray-600"}
+                        />
+                      </button>
+                      
+                      {property.created_at && isNew(property.created_at) && (
+                        <div className="absolute top-3 left-3 bg-[#FF7A00] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
+                          Новое
+                        </div>
+                      )}
+                      
+                      {property.transaction_type && (
+                        <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm text-gray-900 text-xs font-medium px-3 py-1.5 rounded-full shadow-sm border border-gray-200">
+                          {property.transaction_type === 'sale' ? 'Продажа' : 
+                           property.transaction_type === 'rent' ? 'Аренда' : 'Посуточно'}
+                        </div>
                       )}
                     </div>
                     
-                    <p className="text-gray-900 font-medium mb-2 line-clamp-1 text-sm">
-                      {property.street_name || property.address}
-                    </p>
-                    
-                    <div className="flex items-center gap-2 text-xs text-gray-600 mt-auto">
-                      {property.rooms && <span>{property.rooms} комн.</span>}
-                      {property.area && <span>• {property.area} м²</span>}
-                      {property.floor && property.total_floors && <span>• {property.floor}/{property.total_floors} эт.</span>}
+                    <div className="p-5 flex flex-col flex-1">
+                      <div className="mb-3">
+                        <div className="flex items-baseline gap-1.5 mb-1">
+                          <p className="text-2xl font-bold text-gray-900">
+                            {priceData.value}
+                          </p>
+                          <span className="text-sm font-medium text-gray-500">
+                            {priceData.currency}
+                          </span>
+                        </div>
+                        {property.created_at && (
+                          <span className="text-xs text-gray-400">
+                            {formatDate(property.created_at)}
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-start gap-1.5 mb-3">
+                        <Icon name="MapPin" size={14} className="text-gray-400 mt-0.5 flex-shrink-0" />
+                        <p className="text-sm text-gray-700 font-medium line-clamp-2 leading-snug">
+                          {property.street_name || property.address}
+                        </p>
+                      </div>
+                      
+                      <div className="flex items-center gap-3 text-sm text-gray-600 mt-auto pt-3 border-t border-gray-100">
+                        {property.rooms && (
+                          <div className="flex items-center gap-1">
+                            <Icon name="Bed" size={16} className="text-gray-400" />
+                            <span>{property.rooms}</span>
+                          </div>
+                        )}
+                        {property.area && (
+                          <div className="flex items-center gap-1">
+                            <Icon name="Maximize2" size={16} className="text-gray-400" />
+                            <span>{property.area} м²</span>
+                          </div>
+                        )}
+                        {property.floor && property.total_floors && (
+                          <div className="flex items-center gap-1">
+                            <Icon name="Building2" size={16} className="text-gray-400" />
+                            <span>{property.floor}/{property.total_floors}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <button
+                        onClick={handleCall}
+                        className="mt-4 w-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-semibold py-2.5 rounded-xl hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
+                      >
+                        <Icon name="Phone" size={18} />
+                        <span>Позвонить</span>
+                      </button>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
+          
+          {sortedProperties.length > 3 && (
+            <div className="flex justify-center gap-2 mt-6">
+              {Array.from({ length: Math.ceil(sortedProperties.length / 3) }).map((_, idx) => (
+                <div 
+                  key={idx} 
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === 0 ? 'w-8 bg-[#FF7A00]' : 'w-1.5 bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </section>
