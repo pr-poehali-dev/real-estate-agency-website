@@ -89,7 +89,7 @@ export default function PropertyFilters({
               <SelectValue placeholder="Все районы" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Все районы</SelectItem>
+              <SelectItem value="all">Выберите</SelectItem>
               <SelectItem value="Центр (Кентрон)">Кентрон</SelectItem>
               <SelectItem value="Аван">Аван</SelectItem>
               <SelectItem value="Ачапняк">Ачапняк</SelectItem>
@@ -162,7 +162,7 @@ export default function PropertyFilters({
               <SelectValue placeholder="Выберите" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="any">Выберите</SelectItem>
               <SelectItem value="Телевизор">Телевизор</SelectItem>
               <SelectItem value="Кондиционер">Кондиционер</SelectItem>
               <SelectItem value="Интернет">Интернет</SelectItem>
@@ -187,7 +187,7 @@ export default function PropertyFilters({
               <SelectValue placeholder="Выберите" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="any">Выберите</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
               <SelectItem value="negotiable">По договоренности</SelectItem>
@@ -202,7 +202,7 @@ export default function PropertyFilters({
               <SelectValue placeholder="Выберите" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="any">Выберите</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
               <SelectItem value="negotiable">По договоренности</SelectItem>
