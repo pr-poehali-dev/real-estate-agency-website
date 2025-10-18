@@ -213,7 +213,7 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
                 </div>
               )}
 
-              {property.bedrooms && (
+              {(property.bedrooms !== undefined && property.bedrooms !== null) && (
                 <div className="flex items-center gap-3">
                   <Icon name="Bed" size={24} className="text-[#FF7A00]" />
                   <div>
@@ -223,7 +223,7 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
                 </div>
               )}
 
-              {property.bathrooms && (
+              {(property.bathrooms !== undefined && property.bathrooms !== null) && (
                 <div className="flex items-center gap-3">
                   <Icon name="Bath" size={24} className="text-[#FF7A00]" />
                   <div>
@@ -233,7 +233,7 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
                 </div>
               )}
 
-              {property.year_built && (
+              {(property.year_built !== undefined && property.year_built !== null && property.year_built > 0) && (
                 <div className="flex items-center gap-3">
                   <Icon name="Hammer" size={24} className="text-[#FF7A00]" />
                   <div>
