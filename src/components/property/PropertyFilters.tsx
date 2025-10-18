@@ -49,26 +49,10 @@ export default function PropertyFilters({
   setCurrency,
   onApplyFilters
 }: PropertyFiltersProps) {
-  const activeFiltersCount = [
-    transactionType !== 'all',
-    propertyType !== 'all',
-    district,
-    rooms !== 'any',
-    amenities,
-    childrenAllowed,
-    petsAllowed,
-    minPrice,
-    maxPrice,
-    currency !== 'AMD'
-  ].filter(Boolean).length;
-
   return (
     <div className="border-b border-gray-200 px-3 md:px-6 py-3 md:py-4 bg-gray-50">
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3">
         <h3 className="font-bold text-base md:text-lg">Фильтры</h3>
-        {activeFiltersCount > 0 && (
-          <span className="text-[#FF7A00] font-bold text-lg">{activeFiltersCount}</span>
-        )}
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-3">
