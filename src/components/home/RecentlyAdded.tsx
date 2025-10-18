@@ -19,7 +19,6 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
   const [currentImageIndex, setCurrentImageIndex] = useState<Record<number, number>>({});
 
   const formatPrice = (price: number, currency: string) => {
@@ -99,25 +98,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
     }
   };
 
-  const toggleFavorite = (e: React.MouseEvent, id: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(id)) {
-        newFavorites.delete(id);
-      } else {
-        newFavorites.add(id);
-      }
-      return newFavorites;
-    });
-  };
 
-  const handleCall = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.open('tel:+37495129260', '_self');
-  };
 
   useEffect(() => {
     checkScrollButtons();
@@ -157,17 +138,17 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('left')}
-                className="absolute left-2 md:left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-14 h-14 p-0 bg-white/95 backdrop-blur-sm shadow-lg hover:bg-white hover:shadow-xl border-gray-200 transition-all hover:scale-110"
+                className="absolute left-2 md:left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white/95 backdrop-blur-sm shadow-md hover:bg-white hover:shadow-lg border-gray-200 transition-all"
               >
-                <Icon name="ChevronLeft" size={24} />
+                <Icon name="ChevronLeft" size={18} />
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('right')}
-                className="absolute right-2 md:right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-14 h-14 p-0 bg-white/95 backdrop-blur-sm shadow-lg hover:bg-white hover:shadow-xl border-gray-200 transition-all hover:scale-110"
+                className="absolute right-2 md:right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white/95 backdrop-blur-sm shadow-md hover:bg-white hover:shadow-lg border-gray-200 transition-all"
               >
-                <Icon name="ChevronRight" size={24} />
+                <Icon name="ChevronRight" size={18} />
               </Button>
             </>
           )}
@@ -216,16 +197,6 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                         </div>
                       )}
                       
-                      <button
-                        onClick={(e) => toggleFavorite(e, property.id)}
-                        className="absolute top-3 right-3 w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-all duration-200 z-10"
-                      >
-                        <Icon 
-                          name="Heart" 
-                          size={18} 
-                          className={favorites.has(property.id) ? "fill-red-500 text-red-500" : "text-gray-600"}
-                        />
-                      </button>
                       
                       {property.created_at && isNew(property.created_at) && (
                         <div className="absolute top-3 left-3 bg-[#FF7A00] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
@@ -286,13 +257,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                         )}
                       </div>
                       
-                      <button
-                        onClick={handleCall}
-                        className="mt-4 w-full bg-gradient-to-r from-[#FF7A00] to-[#FF6B00] text-white font-semibold py-2.5 rounded-xl hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
-                      >
-                        <Icon name="Phone" size={18} />
-                        <span>Позвонить</span>
-                      </button>
+
                     </div>
                   </div>
                 </Link>
