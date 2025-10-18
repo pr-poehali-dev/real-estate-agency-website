@@ -84,12 +84,11 @@ export default function PropertyFilters({
         
         <div>
           <label className="text-sm font-medium mb-1.5 block">Район</label>
-          <Select value={district} onValueChange={setDistrict}>
+          <Select value={district || undefined} onValueChange={setDistrict}>
             <SelectTrigger className="h-10">
-              <SelectValue placeholder="Все районы" />
+              <SelectValue placeholder="Выберите" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Выберите</SelectItem>
               <SelectItem value="Центр (Кентрон)">Кентрон</SelectItem>
               <SelectItem value="Аван">Аван</SelectItem>
               <SelectItem value="Ачапняк">Ачапняк</SelectItem>
@@ -157,12 +156,11 @@ export default function PropertyFilters({
       <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
         <div>
           <label className="text-sm font-medium mb-1.5 block">Удобства</label>
-          <Select value={amenities} onValueChange={setAmenities}>
+          <Select value={amenities || undefined} onValueChange={setAmenities}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Выберите" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Выберите</SelectItem>
               <SelectItem value="Телевизор">Телевизор</SelectItem>
               <SelectItem value="Кондиционер">Кондиционер</SelectItem>
               <SelectItem value="Интернет">Интернет</SelectItem>
@@ -182,12 +180,11 @@ export default function PropertyFilters({
         
         <div>
           <label className="text-sm font-medium mb-1.5 block">Можно с детьми</label>
-          <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
+          <Select value={childrenAllowed || undefined} onValueChange={setChildrenAllowed}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Выберите" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Выберите</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
               <SelectItem value="negotiable">По договоренности</SelectItem>
@@ -197,12 +194,11 @@ export default function PropertyFilters({
         
         <div>
           <label className="text-sm font-medium mb-1.5 block">Можно с животными</label>
-          <Select value={petsAllowed} onValueChange={setPetsAllowed}>
+          <Select value={petsAllowed || undefined} onValueChange={setPetsAllowed}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Выберите" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Выберите</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
               <SelectItem value="negotiable">По договоренности</SelectItem>
