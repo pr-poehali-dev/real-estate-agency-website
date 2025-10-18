@@ -76,11 +76,11 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="px-6 py-12 bg-gray-50">
+    <section id="contact" className="px-6 py-8 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold mb-10 text-center leading-tight animate-fadeInUp">Свяжитесь с нами</h2>
+        <h2 className="text-4xl font-bold mb-8 text-center leading-tight animate-fadeInUp">Свяжитесь с нами</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-white rounded-3xl p-10 animate-slideInLeft shadow-sm border border-gray-100">
             <form onSubmit={handleContactSubmit} className="space-y-5">
               <div>

@@ -48,9 +48,9 @@ export default function SearchSection({
   const navigate = useNavigate();
 
   return (
-    <section className="relative px-6 py-12 max-w-7xl mx-auto">
+    <section className="relative px-6 py-6 max-w-7xl mx-auto">
       <div className="relative z-10">
-        <div className="mb-8">
+        <div className="mb-6">
           <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight animate-fadeInUp">Поиск недвижимости в Ереване</h1>
           <p className="text-gray-600 text-xl leading-relaxed animate-fadeInUp delay-100">Найди свой идеальный вариант</p>
         </div>

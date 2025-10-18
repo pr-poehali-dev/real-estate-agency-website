@@ -3,8 +3,8 @@ import Icon from "@/components/ui/icon";
 
 export default function MapPreview() {
   return (
-    <section className="px-6 py-12 max-w-7xl mx-auto">
-      <div className="text-center mb-8">
+    <section className="px-6 py-8 max-w-7xl mx-auto">
+      <div className="text-center mb-6">
         <h2 className="text-4xl font-bold mb-6 leading-tight animate-fadeInUp">Найдите на карте</h2>
         <p className="text-xl text-gray-600 leading-relaxed animate-fadeInUp delay-100">Все объекты недвижимости в Ереване на интерактивной карте</p>
       </div>

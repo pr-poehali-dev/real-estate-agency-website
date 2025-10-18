@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Header() {
   return (
-    <header className="px-6 py-6 flex items-center justify-between max-w-7xl mx-auto">
+    <header className="px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
       <Link to="/" className="text-3xl font-black cursor-pointer hover:text-[#E66D00] transition-colors animate-fadeInUp" style={{ color: '#FF7A00' }}>WSE.AM</Link>
       <nav className="hidden md:flex items-center gap-10 animate-fadeInUp delay-100">
         <Link to="/map" className="text-gray-600 hover:text-gray-900 transition-colors">Карта</Link>
