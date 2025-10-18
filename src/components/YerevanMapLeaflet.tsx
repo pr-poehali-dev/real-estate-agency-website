@@ -92,19 +92,18 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       position: zoomPosition
     }).addTo(mapInstance.current);
 
-    const streetLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=ru', {
+    const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19
+    });
+
+    const satelliteLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
       attribution: '© Google Maps',
       maxZoom: 20,
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     });
 
-    const satelliteLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}&hl=ru', {
-      attribution: '© Google Maps',
-      maxZoom: 20,
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    });
-
-    const hybridLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}&hl=ru', {
+    const hybridLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
       attribution: '© Google Maps',
       maxZoom: 20,
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
