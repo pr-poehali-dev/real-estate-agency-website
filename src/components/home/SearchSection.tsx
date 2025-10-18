@@ -51,94 +51,91 @@ export default function SearchSection({
         </div>
 
         <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 animate-scaleIn delay-200">
-          <div className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm text-gray-600 font-medium">Тип сделки</label>
-                <Select value={transactionType} onValueChange={setTransactionType}>
-                  <SelectTrigger className="h-14 rounded-xl border-gray-200">
-                    <SelectValue placeholder="Все типы сделок" />
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+            <div className="space-y-2">
+              <label className="text-sm text-gray-600 font-medium">Тип сделки</label>
+              <Select value={transactionType} onValueChange={setTransactionType}>
+                <SelectTrigger className="h-14 rounded-xl border-gray-200">
+                  <SelectValue placeholder="Все типы сделок" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все типы сделок</SelectItem>
+                  <SelectItem value="rent">Долгосрочная аренда</SelectItem>
+                  <SelectItem value="daily">Посуточная аренда</SelectItem>
+                  <SelectItem value="sale">Продажа</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm text-gray-600 font-medium">Тип недвижимости</label>
+              <Select value={propertyType} onValueChange={setPropertyType}>
+                <SelectTrigger className="h-14 rounded-xl border-gray-200">
+                  <SelectValue placeholder="Все типы" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все типы</SelectItem>
+                  <SelectItem value="apartment">Квартира</SelectItem>
+                  <SelectItem value="house">Дом</SelectItem>
+                  <SelectItem value="commercial">Коммерция</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm text-gray-600 font-medium">Район</label>
+              <Select value={district} onValueChange={setDistrict}>
+                <SelectTrigger className="h-14 rounded-xl border-gray-200">
+                  <SelectValue placeholder="Все районы" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все районы</SelectItem>
+                  <SelectItem value="ajapnyak">Ачапняк</SelectItem>
+                  <SelectItem value="arabkir">Арабкир</SelectItem>
+                  <SelectItem value="avan">Аван</SelectItem>
+                  <SelectItem value="davtashen">Давташен</SelectItem>
+                  <SelectItem value="erebuni">Эребуни</SelectItem>
+                  <SelectItem value="kentron">Кентрон</SelectItem>
+                  <SelectItem value="malatia-sebastia">Малатия-Себастия</SelectItem>
+                  <SelectItem value="nor-nork">Нор Норк</SelectItem>
+                  <SelectItem value="nubarashen">Нубарашен</SelectItem>
+                  <SelectItem value="shengavit">Шенгавит</SelectItem>
+                  <SelectItem value="kanaker-zeytun">Канакер-Зейтун</SelectItem>
+                  <SelectItem value="qanaqer-zeytun">Канакер-Зейтун</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm text-gray-600 font-medium">Цена</label>
+              <div className="flex gap-2">
+                <Input
+                  type="number"
+                  placeholder="Цена"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  className="h-14 rounded-xl border-gray-200 w-28"
+                />
+                <Select value={currency} onValueChange={setCurrency}>
+                  <SelectTrigger className="h-14 rounded-xl flex-1 border-gray-200">
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Все типы сделок</SelectItem>
-                    <SelectItem value="rent">Долгосрочная аренда</SelectItem>
-                    <SelectItem value="daily">Посуточная аренда</SelectItem>
-                    <SelectItem value="sale">Продажа</SelectItem>
+                    <SelectItem value="AMD">AMD (֏)</SelectItem>
+                    <SelectItem value="USD">USD</SelectItem>
+                    <SelectItem value="RUB">RUB</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <label className="text-sm text-gray-600 font-medium">Тип недвижимости</label>
-                <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="h-14 rounded-xl border-gray-200">
-                    <SelectValue placeholder="Все типы" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Все типы</SelectItem>
-                    <SelectItem value="apartment">Квартира</SelectItem>
-                    <SelectItem value="house">Дом</SelectItem>
-                    <SelectItem value="commercial">Коммерция</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-gray-600 font-medium">Район</label>
-                <Select value={district} onValueChange={setDistrict}>
-                  <SelectTrigger className="h-14 rounded-xl border-gray-200">
-                    <SelectValue placeholder="Все районы" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Все районы</SelectItem>
-                    <SelectItem value="ajapnyak">Ачапняк</SelectItem>
-                    <SelectItem value="arabkir">Арабкир</SelectItem>
-                    <SelectItem value="avan">Аван</SelectItem>
-                    <SelectItem value="davtashen">Давташен</SelectItem>
-                    <SelectItem value="erebuni">Эребуни</SelectItem>
-                    <SelectItem value="kentron">Кентрон</SelectItem>
-                    <SelectItem value="malatia-sebastia">Малатия-Себастия</SelectItem>
-                    <SelectItem value="nor-nork">Нор Норк</SelectItem>
-                    <SelectItem value="nubarashen">Нубарашен</SelectItem>
-                    <SelectItem value="shengavit">Шенгавит</SelectItem>
-                    <SelectItem value="kanaker-zeytun">Канакер-Зейтун</SelectItem>
-                    <SelectItem value="qanaqer-zeytun">Канакер-Зейтун</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-gray-600 font-medium">Цена</label>
-                <div className="flex gap-2">
-                  <Input
-                    type="number"
-                    placeholder="Цена"
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                    className="h-14 rounded-xl border-gray-200 w-28"
-                  />
-                  <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger className="h-14 rounded-xl flex-1 border-gray-200">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="AMD">AMD (֏)</SelectItem>
-                      <SelectItem value="USD">USD</SelectItem>
-                      <SelectItem value="RUB">RUB</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2 flex-shrink-0">
-                <label className="text-sm text-gray-600 font-medium opacity-0">Поиск</label>
-                <Button 
-                  onClick={onSearch}
-                  className="h-14 px-8 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl font-medium transition-all text-base whitespace-nowrap"
-                >
-                  Найти
-                </Button>
-              </div>
+            <div className="flex-shrink-0">
+              <Button 
+                onClick={onSearch}
+                className="h-14 px-8 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl font-medium transition-all text-base whitespace-nowrap"
+              >
+                Найти
+              </Button>
             </div>
           </div>
         </div>
