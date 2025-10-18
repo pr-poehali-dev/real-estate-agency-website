@@ -44,7 +44,14 @@ export default function Index() {
     if (token && token.startsWith('demo-token-')) {
       const demoData = localStorage.getItem('demo_properties');
       const demoProps = demoData ? JSON.parse(demoData) : [];
-      setProperties(demoProps.slice(0, 6));
+      // Сортировка по дате для демо-режима
+      const sortedDemoProps = demoProps.sort((a: Property, b: Property) => {
+        const dateA = new Date(a.created_at || 0).getTime();
+        const dateB = new Date(b.created_at || 0).getTime();
+        if (dateB !== dateA) return dateB - dateA;
+        return b.id - a.id;
+      });
+      setProperties(sortedDemoProps.slice(0, 6));
       setLoading(false);
       return;
     }
@@ -55,7 +62,8 @@ export default function Index() {
       const sortedProps = props.sort((a, b) => {
         const dateA = new Date(a.created_at || 0).getTime();
         const dateB = new Date(b.created_at || 0).getTime();
-        return dateB - dateA;
+        if (dateB !== dateA) return dateB - dateA;
+        return b.id - a.id;
       });
       setProperties(sortedProps.slice(0, 6));
     } catch (err) {

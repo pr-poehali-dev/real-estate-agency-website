@@ -92,9 +92,9 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
     }
   };
 
-  // Фильтрация объектов
+  // Фильтрация и сортировка объектов
   const filteredProperties = useMemo(() => {
-    return properties.filter(property => {
+    const filtered = properties.filter(property => {
       // Поиск по словам
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -119,6 +119,14 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
       if (filterDistrict !== 'all' && property.district !== filterDistrict) return false;
 
       return true;
+    });
+
+    // Сортировка по дате (самые новые первыми)
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.created_at || 0).getTime();
+      const dateB = new Date(b.created_at || 0).getTime();
+      if (dateB !== dateA) return dateB - dateA;
+      return b.id - a.id;
     });
   }, [properties, searchQuery, filterType, filterTransaction, filterDistrict]);
 
