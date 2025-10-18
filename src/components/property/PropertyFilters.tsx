@@ -8,16 +8,16 @@ interface PropertyFiltersProps {
   setTransactionType: (value: string) => void;
   propertyType: string;
   setPropertyType: (value: string) => void;
-  district: string[];
-  setDistrict: (value: string[]) => void;
+  district: string;
+  setDistrict: (value: string) => void;
   rooms: string;
   setRooms: (value: string) => void;
-  amenities: string[];
-  setAmenities: (value: string[]) => void;
-  childrenAllowed: string[];
-  setChildrenAllowed: (value: string[]) => void;
-  petsAllowed: string[];
-  setPetsAllowed: (value: string[]) => void;
+  amenities: string;
+  setAmenities: (value: string) => void;
+  childrenAllowed: string;
+  setChildrenAllowed: (value: string) => void;
+  petsAllowed: string;
+  setPetsAllowed: (value: string) => void;
   minPrice: string;
   setMinPrice: (value: string) => void;
   maxPrice: string;
@@ -84,27 +84,26 @@ export default function PropertyFilters({
         
         <div>
           <label className="text-sm font-medium mb-1.5 block">Район</label>
-          <MultiSelect
-            options={[
-              { label: 'Центр', value: 'Центр (Кентрон)' },
-              { label: 'Аван', value: 'Аван' },
-              { label: 'Ачапняк', value: 'Ачапняк' },
-              { label: 'Арабкир', value: 'Арабкир' },
-              { label: 'Давташен', value: 'Давташен' },
-              { label: 'Эребуни', value: 'Эребуни' },
-              { label: 'Канакер-Зейтун', value: 'Канакер-Зейтун' },
-              { label: 'Малатия-Себастия', value: 'Малатия-Себастия' },
-              { label: 'Нор Норк', value: 'Нор Норк' },
-              { label: 'Нубарашен', value: 'Нубарашен' },
-              { label: 'Шенгавит', value: 'Шенгавит' },
-              { label: 'Норк-Мараш', value: 'Норк-Мараш' },
-            ]}
-            selected={district}
-            onChange={setDistrict}
-            placeholder="Все районы"
-            className="h-10"
-            showSearch={false}
-          />
+          <Select value={district} onValueChange={setDistrict}>
+            <SelectTrigger className="h-10">
+              <SelectValue placeholder="Все районы" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Все районы</SelectItem>
+              <SelectItem value="Центр (Кентрон)">Кентрон</SelectItem>
+              <SelectItem value="Аван">Аван</SelectItem>
+              <SelectItem value="Ачапняк">Ачапняк</SelectItem>
+              <SelectItem value="Арабкир">Арабкир</SelectItem>
+              <SelectItem value="Давташен">Давташен</SelectItem>
+              <SelectItem value="Эребуни">Эребуни</SelectItem>
+              <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
+              <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
+              <SelectItem value="Нор Норк">Нор Норк</SelectItem>
+              <SelectItem value="Нубарашен">Нубарашен</SelectItem>
+              <SelectItem value="Шенгавит">Шенгавит</SelectItem>
+              <SelectItem value="Норк-Мараш">Норк-Мараш</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         
         <div>
@@ -158,59 +157,57 @@ export default function PropertyFilters({
       <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
         <div>
           <label className="text-sm font-medium mb-1.5 block">Удобства</label>
-          <MultiSelect
-            options={[
-              { label: 'Телевизор', value: 'Телевизор' },
-              { label: 'Кондиционер', value: 'Кондиционер' },
-              { label: 'Интернет', value: 'Интернет' },
-              { label: 'Холодильник', value: 'Холодильник' },
-              { label: 'Плита', value: 'Плита' },
-              { label: 'Микроволновка', value: 'Микроволновка' },
-              { label: 'Кофеварка', value: 'Кофеварка' },
-              { label: 'Посудомоечная машина', value: 'Посудомоечная машина' },
-              { label: 'Стиральная машина', value: 'Стиральная машина' },
-              { label: 'Сушильная машина', value: 'Сушильная машина' },
-              { label: 'Водонагреватель', value: 'Водонагреватель' },
-              { label: 'Утюг', value: 'Утюг' },
-              { label: 'Фен', value: 'Фен' },
-            ]}
-            selected={amenities}
-            onChange={setAmenities}
-            placeholder="Выберите"
-            className="h-10"
-          />
+          <Select value={amenities} onValueChange={setAmenities}>
+            <SelectTrigger className="h-10">
+              <SelectValue placeholder="Выберите" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="Телевизор">Телевизор</SelectItem>
+              <SelectItem value="Кондиционер">Кондиционер</SelectItem>
+              <SelectItem value="Интернет">Интернет</SelectItem>
+              <SelectItem value="Холодильник">Холодильник</SelectItem>
+              <SelectItem value="Плита">Плита</SelectItem>
+              <SelectItem value="Микроволновка">Микроволновка</SelectItem>
+              <SelectItem value="Кофеварка">Кофеварка</SelectItem>
+              <SelectItem value="Посудомоечная машина">Посудомоечная машина</SelectItem>
+              <SelectItem value="Стиральная машина">Стиральная машина</SelectItem>
+              <SelectItem value="Сушильная машина">Сушильная машина</SelectItem>
+              <SelectItem value="Водонагреватель">Водонагреватель</SelectItem>
+              <SelectItem value="Утюг">Утюг</SelectItem>
+              <SelectItem value="Фен">Фен</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         
         <div>
           <label className="text-sm font-medium mb-1.5 block">Можно с детьми</label>
-          <MultiSelect
-            options={[
-              { label: 'Да', value: 'yes' },
-              { label: 'Нет', value: 'no' },
-              { label: 'По договоренности', value: 'negotiable' },
-            ]}
-            selected={childrenAllowed}
-            onChange={setChildrenAllowed}
-            placeholder="Выберите"
-            className="h-10"
-            showSearch={false}
-          />
+          <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
+            <SelectTrigger className="h-10">
+              <SelectValue placeholder="Выберите" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="yes">Да</SelectItem>
+              <SelectItem value="no">Нет</SelectItem>
+              <SelectItem value="negotiable">По договоренности</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         
         <div>
           <label className="text-sm font-medium mb-1.5 block">Можно с животными</label>
-          <MultiSelect
-            options={[
-              { label: 'Да', value: 'yes' },
-              { label: 'Нет', value: 'no' },
-              { label: 'По договоренности', value: 'negotiable' },
-            ]}
-            selected={petsAllowed}
-            onChange={setPetsAllowed}
-            placeholder="Выберите"
-            className="h-10"
-            showSearch={false}
-          />
+          <Select value={petsAllowed} onValueChange={setPetsAllowed}>
+            <SelectTrigger className="h-10">
+              <SelectValue placeholder="Выберите" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="yes">Да</SelectItem>
+              <SelectItem value="no">Нет</SelectItem>
+              <SelectItem value="negotiable">По договоренности</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         
         <div>
