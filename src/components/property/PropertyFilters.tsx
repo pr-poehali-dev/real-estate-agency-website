@@ -52,9 +52,9 @@ export default function PropertyFilters({
     <div className="border-b border-gray-200 px-3 md:px-6 py-3 md:py-4 bg-gray-50">
       <h3 className="font-bold text-base md:text-lg mb-3">Фильтры</h3>
       
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-3">
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Тип сделки</label>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-3 items-end">
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Тип сделки</label>
           <Select value={transactionType} onValueChange={setTransactionType}>
             <SelectTrigger className="h-10">
               <SelectValue />
@@ -68,8 +68,8 @@ export default function PropertyFilters({
           </Select>
         </div>
         
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Тип недвижимости</label>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Тип недвижимости</label>
           <Select value={propertyType} onValueChange={setPropertyType}>
             <SelectTrigger className="h-10">
               <SelectValue />
@@ -82,8 +82,8 @@ export default function PropertyFilters({
           </Select>
         </div>
         
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Район</label>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Район</label>
           <Select value={district || undefined} onValueChange={setDistrict}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Выберите" />
@@ -105,8 +105,8 @@ export default function PropertyFilters({
           </Select>
         </div>
         
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Количество комнат</label>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Количество комнат</label>
           <Select value={rooms} onValueChange={setRooms}>
             <SelectTrigger className="h-10">
               <SelectValue />
@@ -122,8 +122,8 @@ export default function PropertyFilters({
           </Select>
         </div>
         
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Валюта</label>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Валюта</label>
           <div className="flex gap-1">
             <Button 
               variant={currency === 'AMD' ? 'default' : 'outline'} 
@@ -153,9 +153,9 @@ export default function PropertyFilters({
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Удобства</label>
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-3 items-end">
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Удобства</label>
           <Select value={amenities || undefined} onValueChange={setAmenities}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Выберите" />
@@ -178,8 +178,8 @@ export default function PropertyFilters({
           </Select>
         </div>
         
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Можно с детьми</label>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Можно с детьми</label>
           <Select value={childrenAllowed || undefined} onValueChange={setChildrenAllowed}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Выберите" />
@@ -192,8 +192,8 @@ export default function PropertyFilters({
           </Select>
         </div>
         
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Можно с животными</label>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Можно с животными</label>
           <Select value={petsAllowed || undefined} onValueChange={setPetsAllowed}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Выберите" />
@@ -206,8 +206,8 @@ export default function PropertyFilters({
           </Select>
         </div>
         
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Мин. цена</label>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Мин. цена</label>
           <Input 
             type="number" 
             placeholder="От"
@@ -217,8 +217,8 @@ export default function PropertyFilters({
           />
         </div>
         
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Макс. цена</label>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-2 block h-5">Макс. цена</label>
           <Input 
             type="number" 
             placeholder="До"
@@ -228,8 +228,8 @@ export default function PropertyFilters({
           />
         </div>
         
-        <div>
-          <label className="text-sm font-medium mb-1.5 block md:invisible">Найти</label>
+        <div className="flex flex-col">
+          <div className="h-5 mb-2"></div>
           <Button className="w-full h-10 bg-[#FF7A00] hover:bg-[#E66D00]">
             Найти
           </Button>
