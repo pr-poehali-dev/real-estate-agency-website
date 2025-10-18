@@ -181,6 +181,7 @@ const FullMapPage: React.FC = () => {
         <YerevanMapLeaflet
           properties={allProperties}
           onPropertySelect={handlePropertySelect}
+          openOnClick={true}
         />
       </div>
 

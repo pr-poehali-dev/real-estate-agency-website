@@ -24,6 +24,7 @@ const MapSection: React.FC<MapSectionProps> = ({ properties, isExpanded, onToggl
         onPropertySelect={onPropertySelect}
         keepPopupsOpen={true}
         zoomPosition="topleft"
+        openOnClick={true}
       />
       <button
         onClick={onToggleExpand}

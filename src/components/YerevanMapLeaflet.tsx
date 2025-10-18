@@ -197,6 +197,12 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       
       let popupTimeout: NodeJS.Timeout | null = null;
       
+      marker.on('click', () => {
+        if (openOnClick) {
+          window.location.href = `/property/${property.id}`;
+        }
+      });
+      
       marker.on('popupopen', () => {
         setTimeout(() => {
           const popupElement = document.querySelector(`[data-property-id="${property.id}"]`);
