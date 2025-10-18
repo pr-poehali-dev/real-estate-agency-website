@@ -114,17 +114,17 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
   }, [properties]);
 
   return (
-    <section className="py-8">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-3xl font-bold leading-tight animate-fadeInUp">Недавно добавленные</h2>
+    <section className="py-6 md:py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        <div className="flex items-center justify-between mb-3 md:mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold leading-tight animate-fadeInUp">Недавно добавленные</h2>
         </div>
       </div>
       
       {loading ? (
-        <div className="text-center py-8 text-gray-500 animate-fadeIn">Загрузка...</div>
+        <div className="text-center py-6 md:py-8 text-gray-500 animate-fadeIn text-sm md:text-base">Загрузка...</div>
       ) : sortedProperties.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-6 md:py-8 text-gray-500 text-sm md:text-base">
           <p>Нет добавленных объектов</p>
           <Link to="/admin" className="text-[#FF7A00] hover:underline mt-2 inline-block">
             Добавить первый объект
@@ -212,13 +212,13 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                       )}
                     </div>
                     
-                    <div className="p-5 flex flex-col flex-1">
-                      <div className="mb-3">
-                        <div className="flex items-baseline gap-1.5 mb-1">
-                          <p className="text-2xl font-bold text-gray-900">
+                    <div className="p-4 md:p-5 flex flex-col flex-1">
+                      <div className="mb-2 md:mb-3">
+                        <div className="flex items-baseline gap-1 md:gap-1.5 mb-0.5 md:mb-1">
+                          <p className="text-xl md:text-2xl font-bold text-gray-900">
                             {priceData.value}
                           </p>
-                          <span className="text-sm font-medium text-gray-500">
+                          <span className="text-xs md:text-sm font-medium text-gray-500">
                             {priceData.currency}
                           </span>
                         </div>
@@ -229,29 +229,29 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                         )}
                       </div>
                       
-                      <div className="flex items-start gap-1.5 mb-3">
-                        <Icon name="MapPin" size={14} className="text-gray-400 mt-0.5 flex-shrink-0" />
-                        <p className="text-sm text-gray-700 font-medium line-clamp-2 leading-snug">
+                      <div className="flex items-start gap-1 md:gap-1.5 mb-2 md:mb-3">
+                        <Icon name="MapPin" size={13} className="md:w-3.5 md:h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
+                        <p className="text-xs md:text-sm text-gray-700 font-medium line-clamp-2 leading-snug">
                           {property.street_name || property.address}
                         </p>
                       </div>
                       
-                      <div className="flex items-center gap-3 text-sm text-gray-600 mt-auto pt-3 border-t border-gray-100">
+                      <div className="flex items-center gap-2 md:gap-3 text-xs md:text-sm text-gray-600 mt-auto pt-2 md:pt-3 border-t border-gray-100">
                         {property.rooms && (
-                          <div className="flex items-center gap-1">
-                            <Icon name="Bed" size={16} className="text-gray-400" />
+                          <div className="flex items-center gap-0.5 md:gap-1">
+                            <Icon name="Bed" size={14} className="md:w-4 md:h-4 text-gray-400" />
                             <span>{property.rooms}</span>
                           </div>
                         )}
                         {property.area && (
-                          <div className="flex items-center gap-1">
-                            <Icon name="Maximize2" size={16} className="text-gray-400" />
+                          <div className="flex items-center gap-0.5 md:gap-1">
+                            <Icon name="Maximize2" size={14} className="md:w-4 md:h-4 text-gray-400" />
                             <span>{property.area} м²</span>
                           </div>
                         )}
                         {property.floor && property.total_floors && (
-                          <div className="flex items-center gap-1">
-                            <Icon name="Building2" size={16} className="text-gray-400" />
+                          <div className="flex items-center gap-0.5 md:gap-1">
+                            <Icon name="Building2" size={14} className="md:w-4 md:h-4 text-gray-400" />
                             <span>{property.floor}/{property.total_floors}</span>
                           </div>
                         )}

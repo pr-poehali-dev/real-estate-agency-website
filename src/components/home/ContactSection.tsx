@@ -76,28 +76,28 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="px-6 py-8 bg-gray-50">
+    <section id="contact" className="px-4 md:px-6 py-8 md:py-12 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold mb-8 text-center leading-tight animate-fadeInUp">Свяжитесь с нами</h2>
+        <h2 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8 text-center leading-tight animate-fadeInUp">Свяжитесь с нами</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-3xl p-10 animate-slideInLeft shadow-sm border border-gray-100">
-            <form onSubmit={handleContactSubmit} className="space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-10 animate-slideInLeft shadow-sm border border-gray-100">
+            <form onSubmit={handleContactSubmit} className="space-y-4 md:space-y-5">
               <div>
-                <label className="block text-sm font-medium mb-3 text-gray-600">Имя</label>
+                <label className="block text-xs md:text-sm font-medium mb-2 md:mb-3 text-gray-600">Имя</label>
                 <Input
                   value={contactForm.name}
                   onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
                   placeholder="Ваше имя"
                   required
-                  className="rounded-2xl h-14 border-gray-200"
+                  className="rounded-xl md:rounded-2xl h-12 md:h-14 border-gray-200 text-sm md:text-base"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-3 text-gray-600">Способ связи</label>
+                <label className="block text-xs md:text-sm font-medium mb-2 md:mb-3 text-gray-600">Способ связи</label>
                 <Select value={contactForm.contact_method} onValueChange={(value) => setContactForm({...contactForm, contact_method: value})}>
-                  <SelectTrigger className="rounded-2xl h-14 border-gray-200">
+                  <SelectTrigger className="rounded-xl md:rounded-2xl h-12 md:h-14 border-gray-200 text-sm md:text-base">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -109,20 +109,20 @@ export default function ContactSection() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-3 text-gray-600">Контакт (Telegram)</label>
+                <label className="block text-xs md:text-sm font-medium mb-2 md:mb-3 text-gray-600">Контакт (Telegram)</label>
                 <Input
                   value={contactForm.contact_value}
                   onChange={(e) => setContactForm({...contactForm, contact_value: e.target.value})}
                   placeholder="@username или +7..."
                   required
-                  className="rounded-2xl h-14 border-gray-200"
+                  className="rounded-xl md:rounded-2xl h-12 md:h-14 border-gray-200 text-sm md:text-base"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-3 text-gray-600">Тип услуги</label>
+                <label className="block text-xs md:text-sm font-medium mb-2 md:mb-3 text-gray-600">Тип услуги</label>
                 <Select value={contactForm.service_type} onValueChange={(value) => setContactForm({...contactForm, service_type: value})}>
-                  <SelectTrigger className="rounded-2xl h-14 border-gray-200">
+                  <SelectTrigger className="rounded-xl md:rounded-2xl h-12 md:h-14 border-gray-200 text-sm md:text-base">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -134,18 +134,18 @@ export default function ContactSection() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-3 text-gray-600">Сообщение</label>
+                <label className="block text-xs md:text-sm font-medium mb-2 md:mb-3 text-gray-600">Сообщение</label>
                 <Textarea
                   value={contactForm.message}
                   onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
                   placeholder="Расскажите о ваших требованиях..."
-                  rows={4}
-                  className="rounded-2xl border-gray-200"
+                  rows={3}
+                  className="rounded-xl md:rounded-2xl border-gray-200 text-sm md:text-base"
                 />
               </div>
 
               {formSuccess && (
-                <div className="bg-green-50 text-green-600 p-4 rounded-2xl text-sm">
+                <div className="bg-green-50 text-green-600 p-3 md:p-4 rounded-xl md:rounded-2xl text-xs md:text-sm">
                   Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.
                 </div>
               )}
@@ -153,36 +153,36 @@ export default function ContactSection() {
               <Button 
                 type="submit" 
                 disabled={formLoading}
-                className="w-full h-16 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-2xl text-base font-medium transition-all"
+                className="w-full h-12 md:h-16 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl md:rounded-2xl text-sm md:text-base font-medium transition-all"
               >
                 {formLoading ? 'Отправка...' : 'Отправить заявку'}
               </Button>
             </form>
           </div>
 
-          <div className="space-y-10 animate-fadeInUp delay-200">
-            <h3 className="text-2xl font-bold leading-tight">Свяжитесь с нами</h3>
+          <div className="space-y-6 md:space-y-10 animate-fadeInUp delay-200">
+            <h3 className="text-xl md:text-2xl font-bold leading-tight">Свяжитесь с нами</h3>
             
-            <div className="space-y-8">
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Icon name="Phone" size={24} className="text-white" />
+            <div className="space-y-5 md:space-y-8">
+              <div className="flex items-center gap-3 md:gap-5">
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
+                  <Icon name="Phone" size={20} className="md:w-6 md:h-6 text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-1 text-gray-600">Телефон</p>
-                  <a href="tel:+37495129260" className="text-[#FF7A00] text-xl font-semibold hover:underline">
+                  <p className="font-medium mb-0.5 md:mb-1 text-gray-600 text-sm md:text-base">Телефон</p>
+                  <a href="tel:+37495129260" className="text-[#FF7A00] text-lg md:text-xl font-semibold hover:underline">
                     +374 95129260
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Icon name="Send" size={24} className="text-white" />
+              <div className="flex items-center gap-3 md:gap-5">
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
+                  <Icon name="Send" size={20} className="md:w-6 md:h-6 text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-1 text-gray-600">Telegram</p>
-                  <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-xl font-semibold hover:underline">
+                  <p className="font-medium mb-0.5 md:mb-1 text-gray-600 text-sm md:text-base">Telegram</p>
+                  <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-lg md:text-xl font-semibold hover:underline">
                     WSEManager
                   </a>
                 </div>
