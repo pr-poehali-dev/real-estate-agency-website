@@ -188,25 +188,25 @@ export default function ContactSection() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Icon name="Star" size={24} className="text-white" />
+              <div className="flex items-center gap-3 md:gap-5">
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
+                  <Icon name="Star" size={20} className="md:w-6 md:h-6 text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-1 text-gray-600">Отзывы</p>
-                  <a href="https://yandex.com/maps/org/wse_am/194631976201/reviews/?ll=44.516867%2C40.165353&z=20" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-xl font-semibold hover:underline">
+                  <p className="font-medium mb-0.5 md:mb-1 text-gray-600 text-sm md:text-base">Отзывы</p>
+                  <a href="https://yandex.com/maps/org/wse_am/194631976201/reviews/?ll=44.516867%2C40.165353&z=20" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-lg md:text-xl font-semibold hover:underline">
                     Яндекс.Карты
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Icon name="MapPin" size={24} className="text-white" />
+              <div className="flex items-center gap-3 md:gap-5">
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
+                  <Icon name="MapPin" size={20} className="md:w-6 md:h-6 text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-1 text-gray-600">Адрес</p>
-                  <p className="text-[#FF7A00] text-xl font-semibold">
+                  <p className="font-medium mb-0.5 md:mb-1 text-gray-600 text-sm md:text-base">Адрес</p>
+                  <p className="text-[#FF7A00] text-lg md:text-xl font-semibold">
                     Ереван ул. Хоренаци 47/7
                   </p>
                 </div>
