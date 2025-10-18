@@ -53,12 +53,12 @@ export default function PropertyFilters({
     <div className="border-b border-gray-200 px-3 md:px-6 py-3 md:py-4 bg-gray-50">
       <h3 className="font-bold text-base md:text-lg mb-3">Фильтры</h3>
       
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-3">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-3">
         <div className="flex flex-col">
           <label className="text-sm font-medium mb-2">Тип сделки</label>
           <Select value={transactionType} onValueChange={setTransactionType}>
             <SelectTrigger className="h-10">
-              <SelectValue />
+              <SelectValue placeholder="все" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">все</SelectItem>
@@ -70,10 +70,10 @@ export default function PropertyFilters({
         </div>
         
         <div className="flex flex-col">
-          <label className="text-sm font-medium mb-2">Тип тип недвижимости</label>
+          <label className="text-sm font-medium mb-2">Тип недвижимости</label>
           <Select value={propertyType} onValueChange={setPropertyType}>
             <SelectTrigger className="h-10">
-              <SelectValue />
+              <SelectValue placeholder="все" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">все</SelectItem>
@@ -110,7 +110,7 @@ export default function PropertyFilters({
           <label className="text-sm font-medium mb-2">Количество комнат</label>
           <Select value={rooms} onValueChange={setRooms}>
             <SelectTrigger className="h-10">
-              <SelectValue />
+              <SelectValue placeholder="Выберите" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="any">Выберите</SelectItem>
@@ -152,7 +152,7 @@ export default function PropertyFilters({
         </div>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 items-end">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
         <div className="flex flex-col">
           <label className="text-sm font-medium mb-2">Удобства</label>
           <Select value={amenities || undefined} onValueChange={setAmenities}>
@@ -202,8 +202,8 @@ export default function PropertyFilters({
         <div className="flex flex-col">
           <label className="text-sm font-medium mb-2">Валюта</label>
           <Select value={currency} onValueChange={setCurrency}>
-            <SelectTrigger className="h-10 font-medium">
-              <SelectValue />
+            <SelectTrigger className="h-10">
+              <SelectValue placeholder="AMD" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="AMD">AMD</SelectItem>
@@ -216,7 +216,7 @@ export default function PropertyFilters({
         <div className="flex items-end">
           <Button 
             onClick={onApplyFilters}
-            className="h-10 w-full bg-[#FF7A00] hover:bg-[#E66D00] text-white border-0"
+            className="h-10 w-full bg-[#FF7A00] hover:bg-[#E66D00] text-white"
           >
             Найти
           </Button>
