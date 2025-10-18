@@ -170,6 +170,36 @@ const AdminPanel: React.FC = () => {
     localStorage.removeItem('admin_features_draft');
   }, []);
 
+  const checkForDuplicates = async (street: string, house: string, apartment: string, transactionType: string, currentId?: number) => {
+    try {
+      const token = localStorage.getItem('admin_token');
+      if (token && token.startsWith('demo-token-')) {
+        const demoData = localStorage.getItem('demo_properties');
+        const properties = demoData ? JSON.parse(demoData) : [];
+        return properties.filter((p: Property) => 
+          p.street_name?.toLowerCase() === street.toLowerCase() &&
+          p.house_number === house &&
+          p.apartment_number === apartment &&
+          p.transaction_type === transactionType &&
+          p.id !== currentId
+        );
+      }
+
+      const response = await Properties.list();
+      const properties = (response.properties || []) as Property[];
+      return properties.filter(p => 
+        p.street_name?.toLowerCase() === street.toLowerCase() &&
+        p.house_number === house &&
+        p.apartment_number === apartment &&
+        p.transaction_type === transactionType &&
+        p.id !== currentId
+      );
+    } catch (error) {
+      console.error('Error checking duplicates:', error);
+      return [];
+    }
+  };
+
   const handleAddOrUpdateProperty = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -184,6 +214,29 @@ const AdminPanel: React.FC = () => {
     }
 
     try {
+      const street = propertyForm.street_name?.trim() || '';
+      const house = propertyForm.house_number?.trim() || '';
+      const apartment = propertyForm.apartment_number?.trim() || '';
+      const transactionType = propertyForm.transaction_type;
+
+      if (!isEditing && street && house && apartment) {
+        const duplicates = await checkForDuplicates(street, house, apartment, transactionType);
+        if (duplicates.length > 0) {
+          const duplicate = duplicates[0];
+          const confirmMessage = `⚠️ ВНИМАНИЕ! Возможно дублирующее объявление:\n\n` +
+            `Адрес: ${duplicate.street_name} ${duplicate.house_number}, кв. ${duplicate.apartment_number}\n` +
+            `Тип: ${duplicate.transaction_type === 'rent' ? 'Аренда' : 'Продажа'}\n` +
+            `Цена: ${duplicate.price} ${duplicate.currency}\n\n` +
+            `Всё равно создать новое объявление?`;
+          
+          if (!confirm(confirmMessage)) {
+            setLoading(false);
+            setError('Создание объявления отменено из-за возможного дубля');
+            return;
+          }
+        }
+      }
+
       const features = featuresText.split('\n').filter(f => f.trim()).map(f => f.trim());
 
       const payload = {
