@@ -19,7 +19,7 @@ export default function MapPreview() {
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-12 group-hover:from-black/40 transition-all duration-500">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-center justify-center group-hover:from-black/40 transition-all duration-500">
             <div className="bg-[#FF7A00] hover:bg-[#E66D00] text-white px-8 py-4 rounded-full text-lg font-bold flex items-center gap-3 shadow-2xl group-hover:scale-110 transition-all duration-300">
               <Icon name="Map" size={24} />
               Показать на карте
