@@ -184,7 +184,7 @@ export default function PropertyFilters({
           <label className="text-sm font-medium mb-1.5 block">Можно с детьми</label>
           <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
             <SelectTrigger className="h-10">
-              <SelectValue />
+              <SelectValue placeholder="По догов." />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="any">По договоренности</SelectItem>
@@ -198,7 +198,7 @@ export default function PropertyFilters({
           <label className="text-sm font-medium mb-1.5 block">Можно с животными</label>
           <Select value={petsAllowed} onValueChange={setPetsAllowed}>
             <SelectTrigger className="h-10">
-              <SelectValue />
+              <SelectValue placeholder="По догов." />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="any">По договоренности</SelectItem>
