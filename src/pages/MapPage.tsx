@@ -225,24 +225,22 @@ const MapPage: React.FC = () => {
       </div>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="border-b bg-white px-4 md:px-6 py-3 md:py-4 flex items-center gap-3">
+        <header className="border-b bg-white px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
           <a href="/" className="text-xl md:text-2xl font-black hover:opacity-80 transition-opacity" style={{ color: '#FF7A00' }}>WSE.AM</a>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsFiltersOpen(true)}
-              className="md:hidden relative"
-            >
-              <Icon name="SlidersHorizontal" size={20} />
-              {activeFiltersCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#FF7A00] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {activeFiltersCount}
-                </span>
-              )}
-            </Button>
-          </div>
-          <h1 className="text-base md:text-2xl font-bold text-gray-900 flex-1">Карта недвижимости Еревана</h1>
+          <h1 className="text-base md:text-2xl font-bold text-gray-900 absolute left-1/2 -translate-x-1/2">Карта недвижимости Еревана</h1>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsFiltersOpen(true)}
+            className="md:hidden relative"
+          >
+            <Icon name="SlidersHorizontal" size={20} />
+            {activeFiltersCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-[#FF7A00] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {activeFiltersCount}
+              </span>
+            )}
+          </Button>
         </header>
 
         {error && (
