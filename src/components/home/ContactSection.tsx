@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,10 +27,33 @@ export default function ContactSection() {
   const [contactForm, setContactForm] = useState(loadFormFromStorage());
   const [formLoading, setFormLoading] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     localStorage.setItem('contact_form', JSON.stringify(contactForm));
   }, [contactForm]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -160,11 +183,11 @@ export default function ContactSection() {
             </form>
           </div>
 
-          <div className="space-y-6 md:space-y-10 animate-fadeInUp delay-200">
+          <div ref={sectionRef} className="space-y-6 md:space-y-10">
             <h3 className="text-xl md:text-2xl font-bold leading-tight">Свяжитесь с нами</h3>
             
             <div className="space-y-5 md:space-y-8">
-              <div className="flex items-center gap-3 md:gap-5">
+              <div className={`flex items-center gap-3 md:gap-5 transition-all duration-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '100ms' }}>
                 <div className="w-12 h-12 md:w-14 md:h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
                   <Icon name="Phone" size={20} className="md:w-6 md:h-6 text-white" />
                 </div>
@@ -176,7 +199,7 @@ export default function ContactSection() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 md:gap-5">
+              <div className={`flex items-center gap-3 md:gap-5 transition-all duration-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '200ms' }}>
                 <div className="w-12 h-12 md:w-14 md:h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
                   <Icon name="Send" size={20} className="md:w-6 md:h-6 text-white" />
                 </div>
@@ -188,7 +211,7 @@ export default function ContactSection() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 md:gap-5">
+              <div className={`flex items-center gap-3 md:gap-5 transition-all duration-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
                 <div className="w-12 h-12 md:w-14 md:h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
                   <Icon name="Star" size={20} className="md:w-6 md:h-6 text-white" />
                 </div>
@@ -200,7 +223,7 @@ export default function ContactSection() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 md:gap-5">
+              <div className={`flex items-center gap-3 md:gap-5 transition-all duration-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '400ms' }}>
                 <div className="w-12 h-12 md:w-14 md:h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
                   <Icon name="MapPin" size={20} className="md:w-6 md:h-6 text-white" />
                 </div>
