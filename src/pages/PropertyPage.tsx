@@ -155,6 +155,8 @@ export default function PropertyPage() {
           setDistrict={setDistrict}
           rooms={rooms}
           setRooms={setRooms}
+          amenities={amenities}
+          setAmenities={setAmenities}
           childrenAllowed={childrenAllowed}
           setChildrenAllowed={setChildrenAllowed}
           petsAllowed={petsAllowed}

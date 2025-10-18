@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MultiSelect } from "@/components/ui/multi-select";
 
 interface PropertyFiltersProps {
   transactionType: string;
@@ -11,6 +12,8 @@ interface PropertyFiltersProps {
   setDistrict: (value: string) => void;
   rooms: string;
   setRooms: (value: string) => void;
+  amenities: string[];
+  setAmenities: (value: string[]) => void;
   childrenAllowed: string;
   setChildrenAllowed: (value: string) => void;
   petsAllowed: string;
@@ -32,6 +35,8 @@ export default function PropertyFilters({
   setDistrict,
   rooms,
   setRooms,
+  amenities,
+  setAmenities,
   childrenAllowed,
   setChildrenAllowed,
   petsAllowed,
@@ -149,7 +154,32 @@ export default function PropertyFilters({
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
+        <div>
+          <label className="text-sm font-medium mb-1.5 block">Удобства</label>
+          <MultiSelect
+            options={[
+              { label: 'Телевизор', value: 'Телевизор' },
+              { label: 'Кондиционер', value: 'Кондиционер' },
+              { label: 'Интернет', value: 'Интернет' },
+              { label: 'Холодильник', value: 'Холодильник' },
+              { label: 'Плита', value: 'Плита' },
+              { label: 'Микроволновка', value: 'Микроволновка' },
+              { label: 'Кофеварка', value: 'Кофеварка' },
+              { label: 'Посудомоечная машина', value: 'Посудомоечная машина' },
+              { label: 'Стиральная машина', value: 'Стиральная машина' },
+              { label: 'Сушильная машина', value: 'Сушильная машина' },
+              { label: 'Водонагреватель', value: 'Водонагреватель' },
+              { label: 'Утюг', value: 'Утюг' },
+              { label: 'Фен', value: 'Фен' },
+            ]}
+            selected={amenities}
+            onChange={setAmenities}
+            placeholder="Выберите"
+            className="h-10"
+          />
+        </div>
+        
         <div>
           <label className="text-sm font-medium mb-1.5 block">Можно с детьми</label>
           <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>

@@ -94,10 +94,14 @@ export interface Property {
   latitude: number;
   longitude: number;
   features: string[];
+  amenities?: string[];
   images: string[];
   status?: string;
   created_at?: string;
   updated_at?: string;
+  phone?: string;
+  pets_allowed?: string;
+  children_allowed?: string;
 }
 
 export interface PropertyListResponse {
