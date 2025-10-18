@@ -26,6 +26,15 @@ export default function PropertyList({ properties }: PropertyListProps) {
     return `${day}.${month}.${year}`;
   };
 
+  const getTransactionBadge = (type: string) => {
+    const badges = {
+      rent: { text: 'Аренда', color: 'bg-blue-100 text-blue-700' },
+      daily_rent: { text: 'Посуточно', color: 'bg-purple-100 text-purple-700' },
+      sale: { text: 'Продажа', color: 'bg-green-100 text-green-700' }
+    };
+    return badges[type as keyof typeof badges] || { text: 'Аренда', color: 'bg-gray-100 text-gray-700' };
+  };
+
   return (
     <div className="w-full md:w-1/2 border-t md:border-t-0 md:border-l border-gray-200 bg-white flex flex-col">
       <div className="px-4 md:px-6 pt-4 md:pt-6 pb-6 flex flex-col h-full">
@@ -42,12 +51,17 @@ export default function PropertyList({ properties }: PropertyListProps) {
                 className="block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md hover:border-gray-300 transition-all duration-200"
               >
                 <div className="flex gap-4 p-3">
-                  <div className="w-32 h-32 flex-shrink-0">
+                  <div className="w-32 h-32 flex-shrink-0 relative">
                     <img 
                       src={prop.images?.[0] || '/placeholder.jpg'} 
                       alt={prop.title}
                       className="w-full h-full object-cover rounded-lg"
                     />
+                    {prop.transaction_type && (
+                      <span className={`absolute top-2 left-2 px-2 py-1 rounded text-xs font-semibold ${getTransactionBadge(prop.transaction_type).color}`}>
+                        {getTransactionBadge(prop.transaction_type).text}
+                      </span>
+                    )}
                   </div>
                   
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
