@@ -78,12 +78,22 @@ const MapFilters: React.FC<MapFiltersProps> = ({
             </button>
           )}
         </div>
-        <h2 className="text-base font-bold text-gray-900">Фильтры</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-base font-bold text-gray-900">Фильтры</h2>
+          {!loading && (
+            <span className="text-sm font-semibold text-[#FF7A00] bg-orange-50 px-2 py-1 rounded-full">
+              {filteredCount}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="p-4 space-y-4">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">Тип сделки</label>
+          <div className="flex items-center gap-2 mb-3">
+            <Icon name="Tag" size={16} className="text-gray-500" />
+            <label className="block text-sm font-semibold text-gray-700">Тип сделки</label>
+          </div>
           <Select value={selectedTransaction || 'all'} onValueChange={(v) => setSelectedTransaction(v === 'all' ? '' : v)}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Все типы сделок" />
@@ -98,7 +108,10 @@ const MapFilters: React.FC<MapFiltersProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">Тип недвижимости</label>
+          <div className="flex items-center gap-2 mb-3">
+            <Icon name="Home" size={16} className="text-gray-500" />
+            <label className="block text-sm font-semibold text-gray-700">Тип недвижимости</label>
+          </div>
           <Select value={selectedType || 'all'} onValueChange={(v) => setSelectedType(v === 'all' ? '' : v)}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Все типы" />
@@ -113,7 +126,10 @@ const MapFilters: React.FC<MapFiltersProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">Район</label>
+          <div className="flex items-center gap-2 mb-3">
+            <Icon name="MapPin" size={16} className="text-gray-500" />
+            <label className="block text-sm font-semibold text-gray-700">Район</label>
+          </div>
           <Select value={selectedDistrict[0] || 'all'} onValueChange={(v) => setSelectedDistrict(v === 'all' ? [] : [v])}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Все районы" />
@@ -137,7 +153,10 @@ const MapFilters: React.FC<MapFiltersProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">Количество комнат</label>
+          <div className="flex items-center gap-2 mb-3">
+            <Icon name="Bed" size={16} className="text-gray-500" />
+            <label className="block text-sm font-semibold text-gray-700">Количество комнат</label>
+          </div>
           <Select value={rooms} onValueChange={setRooms}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Выберите" />
@@ -153,7 +172,10 @@ const MapFilters: React.FC<MapFiltersProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">Удобства</label>
+          <div className="flex items-center gap-2 mb-3">
+            <Icon name="Sofa" size={16} className="text-gray-500" />
+            <label className="block text-sm font-semibold text-gray-700">Удобства</label>
+          </div>
           <Select value={amenities} onValueChange={setAmenities}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Выберите удобства" />
@@ -208,7 +230,10 @@ const MapFilters: React.FC<MapFiltersProps> = ({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">Цена</label>
+          <div className="flex items-center gap-2 mb-3">
+            <Icon name="DollarSign" size={16} className="text-gray-500" />
+            <label className="block text-sm font-semibold text-gray-700">Цена</label>
+          </div>
           <div className="space-y-2">
             <Select value={currency} onValueChange={setCurrency}>
               <SelectTrigger className="w-full">
@@ -237,19 +262,15 @@ const MapFilters: React.FC<MapFiltersProps> = ({
           </div>
         </div>
 
-        {hasActiveFilters && (
-          <Button
-            onClick={resetFilters}
-            variant="outline"
-            className="w-full"
-          >
-            Сбросить фильтры
-          </Button>
-        )}
-
-        <div className="text-center text-sm text-gray-600 pt-4 border-t">
-          {loading ? 'Загрузка...' : `Найдено объектов: ${filteredCount}`}
-        </div>
+        <Button
+          onClick={resetFilters}
+          variant="outline"
+          className="w-full hover:bg-gray-50 transition-colors mt-2"
+          disabled={!hasActiveFilters}
+        >
+          <Icon name="RotateCcw" size={16} className="mr-2" />
+          Сбросить фильтры
+        </Button>
 
         {onClose && (
           <Button

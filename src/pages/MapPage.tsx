@@ -150,6 +150,19 @@ const MapPage: React.FC = () => {
     setStreetSearch('');
   };
 
+  const activeFiltersCount = [
+    selectedType,
+    selectedTransaction,
+    selectedDistrict.length > 0,
+    minPrice,
+    maxPrice,
+    rooms,
+    amenities,
+    petsAllowed,
+    childrenAllowed,
+    streetSearch
+  ].filter(Boolean).length;
+
   useEffect(() => {
     loadProperties();
   }, []);
@@ -213,15 +226,30 @@ const MapPage: React.FC = () => {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="border-b bg-white px-4 md:px-6 py-3 md:py-4 flex items-center gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsFiltersOpen(true)}
-            className="md:hidden"
-          >
-            <Icon name="SlidersHorizontal" size={20} />
-          </Button>
-          <h1 className="text-lg md:text-2xl font-bold text-gray-900">Карта недвижимости Еревана</h1>
+          <a href="/" className="text-xl md:text-2xl font-black hover:opacity-80 transition-opacity" style={{ color: '#FF7A00' }}>WSE.AM</a>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsFiltersOpen(true)}
+              className="md:hidden relative"
+            >
+              <Icon name="SlidersHorizontal" size={20} />
+              {activeFiltersCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#FF7A00] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </Button>
+            <div className="hidden md:flex items-center gap-2 text-sm text-gray-600">
+              {!loading && (
+                <span className="font-semibold">
+                  Найдено: <span className="text-[#FF7A00]">{filteredProperties.length}</span>
+                </span>
+              )}
+            </div>
+          </div>
+          <h1 className="text-base md:text-2xl font-bold text-gray-900 flex-1">Карта недвижимости Еревана</h1>
         </header>
 
         {error && (

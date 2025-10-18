@@ -19,6 +19,14 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties, selectedPropert
     return `${price.toLocaleString()} ${currency}`;
   };
 
+  const isNew = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays < 3;
+  };
+
   if (properties.length === 0) {
     return (
       <div className="text-center py-20 text-gray-400">
@@ -42,17 +50,30 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties, selectedPropert
             }`}
             onClick={() => window.location.href = `/property/${property.id}`}
           >
-            {property.images && property.images.length > 0 ? (
-              <img
-                src={property.images[0]}
-                alt={property.title}
-                className="w-full h-36 object-cover"
-              />
-            ) : (
-              <div className="w-full h-36 bg-gray-200 flex items-center justify-center">
-                <span className="text-gray-400 text-sm">Нет фото</span>
-              </div>
-            )}
+            <div className="relative">
+              {property.images && property.images.length > 0 ? (
+                <img
+                  src={property.images[0]}
+                  alt={property.title}
+                  className="w-full h-36 object-cover"
+                />
+              ) : (
+                <div className="w-full h-36 bg-gray-200 flex items-center justify-center">
+                  <span className="text-gray-400 text-sm">Нет фото</span>
+                </div>
+              )}
+              {property.created_at && isNew(property.created_at) && (
+                <div className="absolute top-2 left-2 bg-[#FF7A00] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
+                  Новое
+                </div>
+              )}
+              {property.images && property.images.length > 1 && (
+                <div className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                  <Icon name="Image" size={12} />
+                  <span>{property.images.length}</span>
+                </div>
+              )}
+            </div>
             
             <div className="p-3 flex flex-col flex-1">
               <p className="text-lg font-bold text-[#FF7A00] mb-1">
