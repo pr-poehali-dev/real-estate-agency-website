@@ -124,32 +124,16 @@ export default function PropertyFilters({
         
         <div className="flex flex-col">
           <label className="text-sm font-medium mb-2 block h-5">Валюта</label>
-          <div className="flex gap-1">
-            <Button 
-              variant={currency === 'AMD' ? 'default' : 'outline'} 
-              size="sm" 
-              className="flex-1 h-10"
-              onClick={() => setCurrency('AMD')}
-            >
-              AMD
-            </Button>
-            <Button 
-              variant={currency === 'USD' ? 'default' : 'outline'} 
-              size="sm" 
-              className="flex-1 h-10"
-              onClick={() => setCurrency('USD')}
-            >
-              USD
-            </Button>
-            <Button 
-              variant={currency === 'RUB' ? 'default' : 'outline'} 
-              size="sm" 
-              className="flex-1 h-10"
-              onClick={() => setCurrency('RUB')}
-            >
-              RUB
-            </Button>
-          </div>
+          <Select value={currency} onValueChange={setCurrency}>
+            <SelectTrigger className="h-10">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="AMD">AMD (֏)</SelectItem>
+              <SelectItem value="USD">USD ($)</SelectItem>
+              <SelectItem value="RUB">RUB (₽)</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       
