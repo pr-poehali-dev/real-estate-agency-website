@@ -17,10 +17,10 @@ interface MapFiltersProps {
   setRooms: (value: string) => void;
   amenities: string[];
   setAmenities: (value: string[]) => void;
-  childrenAllowed: string;
-  setChildrenAllowed: (value: string) => void;
-  petsAllowed: string;
-  setPetsAllowed: (value: string) => void;
+  childrenAllowed: string[];
+  setChildrenAllowed: (value: string[]) => void;
+  petsAllowed: string[];
+  setPetsAllowed: (value: string[]) => void;
   currency: string;
   setCurrency: (value: string) => void;
   minPrice: string;
@@ -178,30 +178,32 @@ const MapFilters: React.FC<MapFiltersProps> = ({
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с детьми</label>
-          <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="По договоренности" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">По договоренности</SelectItem>
-              <SelectItem value="yes">Да</SelectItem>
-              <SelectItem value="no">Нет</SelectItem>
-            </SelectContent>
-          </Select>
+          <MultiSelect
+            options={[
+              { label: 'Да', value: 'yes' },
+              { label: 'Нет', value: 'no' },
+              { label: 'По договоренности', value: 'negotiable' },
+            ]}
+            selected={childrenAllowed}
+            onChange={setChildrenAllowed}
+            placeholder="Выберите"
+            className="w-full"
+          />
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с животными</label>
-          <Select value={petsAllowed} onValueChange={setPetsAllowed}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="По договоренности" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">По договоренности</SelectItem>
-              <SelectItem value="yes">Да</SelectItem>
-              <SelectItem value="no">Нет</SelectItem>
-            </SelectContent>
-          </Select>
+          <MultiSelect
+            options={[
+              { label: 'Да', value: 'yes' },
+              { label: 'Нет', value: 'no' },
+              { label: 'По договоренности', value: 'negotiable' },
+            ]}
+            selected={petsAllowed}
+            onChange={setPetsAllowed}
+            placeholder="Выберите"
+            className="w-full"
+          />
         </div>
 
         <div>

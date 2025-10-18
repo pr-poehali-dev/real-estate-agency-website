@@ -7,8 +7,8 @@ export interface MapFilters {
   currency: string;
   rooms: string;
   amenities: string[];
-  petsAllowed: string;
-  childrenAllowed: string;
+  petsAllowed: string[];
+  childrenAllowed: string[];
   streetSearch: string;
 }
 
@@ -24,8 +24,8 @@ export const loadFilters = (): MapFilters => {
     currency: 'AMD',
     rooms: '',
     amenities: [],
-    petsAllowed: '',
-    childrenAllowed: '',
+    petsAllowed: [],
+    childrenAllowed: [],
     streetSearch: ''
   };
   

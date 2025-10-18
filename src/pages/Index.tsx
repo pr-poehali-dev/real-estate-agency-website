@@ -29,8 +29,8 @@ export default function Index() {
   const [district, setDistrict] = useState('all');
   const [rooms, setRooms] = useState('any');
   const [amenities, setAmenities] = useState<string[]>([]);
-  const [petsAllowed, setPetsAllowed] = useState('any');
-  const [childrenAllowed, setChildrenAllowed] = useState('any');
+  const [petsAllowed, setPetsAllowed] = useState<string[]>([]);
+  const [childrenAllowed, setChildrenAllowed] = useState<string[]>([]);
   const [streetSearch, setStreetSearch] = useState('');
 
   useEffect(() => {

@@ -32,8 +32,8 @@ const MapPage: React.FC = () => {
   const [currency, setCurrency] = useState(initialFilters.currency);
   const [rooms, setRooms] = useState<string>(initialFilters.rooms);
   const [amenities, setAmenities] = useState<string[]>(initialFilters.amenities);
-  const [petsAllowed, setPetsAllowed] = useState<string>(initialFilters.petsAllowed);
-  const [childrenAllowed, setChildrenAllowed] = useState<string>(initialFilters.childrenAllowed);
+  const [petsAllowed, setPetsAllowed] = useState<string[]>(Array.isArray(initialFilters.petsAllowed) ? initialFilters.petsAllowed : []);
+  const [childrenAllowed, setChildrenAllowed] = useState<string[]>(Array.isArray(initialFilters.childrenAllowed) ? initialFilters.childrenAllowed : []);
   const [streetSearch, setStreetSearch] = useState(initialFilters.streetSearch);
   const [isMapExpanded, setIsMapExpanded] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
