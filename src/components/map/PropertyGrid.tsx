@@ -38,14 +38,14 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties, selectedPropert
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 auto-rows-min">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 auto-rows-min">
       {properties
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
         .map((property, idx) => (
           <div
             key={property.id}
             ref={(el) => { propertyRefs.current[property.id] = el; }}
-            className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-2 hover:scale-105 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp delay-${Math.min((idx % 6) * 100, 500)} ${
+            className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl md:hover:-translate-y-2 md:hover:scale-105 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp delay-${Math.min((idx % 6) * 100, 500)} ${
               selectedPropertyId === property.id ? 'ring-4 ring-[#FF7A00]' : ''
             }`}
             onClick={() => window.location.href = `/property/${property.id}`}
@@ -55,15 +55,15 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties, selectedPropert
                 <img
                   src={property.images[0]}
                   alt={property.title}
-                  className="w-full h-36 object-cover"
+                  className="w-full h-44 sm:h-36 object-cover"
                 />
               ) : (
-                <div className="w-full h-36 bg-gray-200 flex items-center justify-center">
+                <div className="w-full h-44 sm:h-36 bg-gray-200 flex items-center justify-center">
                   <span className="text-gray-400 text-sm">Нет фото</span>
                 </div>
               )}
               {property.created_at && isNew(property.created_at) && (
-                <div className="absolute top-2 left-2 bg-[#FF7A00] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
+                <div className="absolute top-2 left-2 bg-[#FF7A00] text-white text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-md">
                   Новое
                 </div>
               )}
@@ -75,17 +75,17 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties, selectedPropert
               )}
             </div>
             
-            <div className="p-3 flex flex-col flex-1">
-              <p className="text-lg font-bold text-[#FF7A00] mb-1">
+            <div className="p-3 sm:p-3 flex flex-col flex-1">
+              <p className="text-base sm:text-lg font-bold text-[#FF7A00] mb-1">
                 {formatPrice(property.price, property.currency)}
                 {property.transaction_type === 'rent' && <span className="text-xs font-normal text-gray-600"> /мес</span>}
               </p>
               
-              <p className="text-gray-900 font-medium mb-2 line-clamp-1 text-sm">
+              <p className="text-gray-900 font-medium mb-2 line-clamp-2 sm:line-clamp-1 text-sm">
                 {property.title}
               </p>
               
-              <div className="flex items-center gap-2 text-xs text-gray-600 mb-2">
+              <div className="flex items-center gap-2 text-xs text-gray-600 mb-2 flex-wrap">
                 {property.rooms && <span>{property.rooms} комн.</span>}
                 {property.area && <span>• {property.area} м²</span>}
                 {property.floor && <span>• {property.floor} эт.</span>}

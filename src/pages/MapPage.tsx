@@ -226,21 +226,23 @@ const MapPage: React.FC = () => {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="border-b bg-white px-4 md:px-6 py-3 md:py-4 flex items-center justify-between relative">
-          <a href="/" className="text-xl md:text-2xl font-black hover:opacity-80 transition-opacity" style={{ color: '#FF7A00' }}>WSE.AM</a>
-          <h1 className="text-base md:text-2xl font-bold text-gray-900 absolute left-[200px] md:left-[280px]">Карта недвижимости Еревана</h1>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsFiltersOpen(true)}
-            className="md:hidden relative"
-          >
-            <Icon name="SlidersHorizontal" size={20} />
-            {activeFiltersCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#FF7A00] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                {activeFiltersCount}
-              </span>
-            )}
-          </Button>
+          <a href="/" className="text-lg md:text-2xl font-black hover:opacity-80 transition-opacity" style={{ color: '#FF7A00' }}>WSE.AM</a>
+          <h1 className="hidden sm:block text-base md:text-2xl font-bold text-gray-900 absolute left-[140px] sm:left-[200px] md:left-[280px]">Карта недвижимости Еревана</h1>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsFiltersOpen(true)}
+              className="md:hidden relative"
+            >
+              <Icon name="SlidersHorizontal" size={18} />
+              {activeFiltersCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#FF7A00] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </Button>
+          </div>
         </header>
 
         {error && (
@@ -265,7 +267,7 @@ const MapPage: React.FC = () => {
           onPropertySelect={setSelectedProperty}
         />
 
-        <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
+        <div className="flex-1 overflow-y-auto bg-gray-50 p-3 sm:p-4">
           <PropertyGrid
             properties={filteredProperties}
             selectedPropertyId={selectedProperty?.id || null}

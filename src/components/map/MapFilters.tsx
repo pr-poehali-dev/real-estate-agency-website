@@ -62,33 +62,33 @@ const MapFilters: React.FC<MapFiltersProps> = ({
   const hasActiveFilters = selectedType || selectedTransaction || selectedDistrict || minPrice || maxPrice || rooms || amenities.length > 0 || petsAllowed || childrenAllowed;
 
   return (
-    <aside className="w-64 md:w-64 border-r bg-white overflow-y-auto flex-shrink-0 h-full">
-      <div className="sticky top-0 bg-white border-b px-4 py-3 z-10">
-        <div className="flex items-center justify-between mb-4">
+    <aside className="w-full sm:w-72 md:w-64 border-r bg-white overflow-y-auto flex-shrink-0 h-full">
+      <div className="sticky top-0 bg-white border-b px-3 sm:px-4 py-3 z-10">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
           <Link to="/" className="flex items-center gap-2 text-gray-900 hover:text-[#FF7A00] transition-colors">
-            <Icon name="ArrowLeft" size={20} />
-            <span className="font-semibold">Назад</span>
+            <Icon name="ArrowLeft" size={18} className="sm:w-5 sm:h-5" />
+            <span className="font-semibold text-sm sm:text-base">Назад</span>
           </Link>
           {onClose && (
             <button 
               onClick={onClose}
-              className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="md:hidden p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <Icon name="X" size={20} />
             </button>
           )}
         </div>
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-gray-900">Фильтры</h2>
+          <h2 className="text-sm sm:text-base font-bold text-gray-900">Фильтры</h2>
           {!loading && (
-            <span className="text-sm font-semibold text-[#FF7A00] bg-orange-50 px-2 py-1 rounded-full">
+            <span className="text-xs sm:text-sm font-semibold text-[#FF7A00] bg-orange-50 px-2 py-1 rounded-full">
               {filteredCount}
             </span>
           )}
         </div>
       </div>
 
-      <div className="p-4 space-y-4">
+      <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
         <div>
           <div className="flex items-center gap-2 mb-3">
             <Icon name="Tag" size={16} className="text-gray-500" />
