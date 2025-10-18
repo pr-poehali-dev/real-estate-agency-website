@@ -86,30 +86,6 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold animate-fadeInUp">Недавно добавленные</h2>
-          
-          {/* Кнопки прокрутки для десктопа */}
-          {sortedProperties.length > 3 && (
-            <div className="hidden md:flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => scroll('left')}
-                disabled={!canScrollLeft}
-                className="rounded-full w-10 h-10 p-0"
-              >
-                <Icon name="ChevronLeft" size={20} />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => scroll('right')}
-                disabled={!canScrollRight}
-                className="rounded-full w-10 h-10 p-0"
-              >
-                <Icon name="ChevronRight" size={20} />
-              </Button>
-            </div>
-          )}
         </div>
       </div>
       
@@ -124,15 +100,15 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
         </div>
       ) : (
         <div className="relative max-w-7xl mx-auto px-3 md:px-6">
-          {/* Кнопки прокрутки для мобильного (поверх контента) */}
-          {sortedProperties.length > 1 && (
+          {/* Кнопки прокрутки по бокам от карточек */}
+          {sortedProperties.length > 3 && (
             <>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('left')}
                 disabled={!canScrollLeft}
-                className="md:hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg"
+                className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg disabled:opacity-50"
               >
                 <Icon name="ChevronLeft" size={20} />
               </Button>
@@ -141,7 +117,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 size="sm"
                 onClick={() => scroll('right')}
                 disabled={!canScrollRight}
-                className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg"
+                className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg disabled:opacity-50"
               >
                 <Icon name="ChevronRight" size={20} />
               </Button>
