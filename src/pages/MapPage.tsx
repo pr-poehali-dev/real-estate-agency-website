@@ -84,8 +84,6 @@ const MapPage: React.FC = () => {
         if (!streetMatch && !addressMatch) return false;
       }
       
-      if (currency && prop.currency !== currency) return false;
-      
       const price = Number(prop.price);
       if (minPrice && price < Number(minPrice)) return false;
       if (maxPrice && price > Number(maxPrice)) return false;
@@ -114,7 +112,7 @@ const MapPage: React.FC = () => {
       
       return b.id - a.id;
     });
-  }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
+  }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
 
   useEffect(() => {
     const filters: MapFiltersType = {
