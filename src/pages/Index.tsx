@@ -71,9 +71,15 @@ export default function Index() {
     const filters = {
       selectedTransaction: transactionType === 'all' ? '' : transactionType,
       selectedType: propertyType === 'all' ? '' : propertyType,
-      selectedDistrict: district === 'all' ? '' : district,
+      selectedDistrict: district === 'all' ? [] : [district],
       minPrice: minPrice,
-      currency: currency
+      maxPrice: '',
+      currency: currency,
+      rooms: '',
+      amenities: '',
+      petsAllowed: '',
+      childrenAllowed: '',
+      streetSearch: ''
     };
     localStorage.setItem('map_filters', JSON.stringify(filters));
     navigate('/map');
