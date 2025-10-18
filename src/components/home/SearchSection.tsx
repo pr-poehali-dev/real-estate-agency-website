@@ -52,11 +52,11 @@ export default function SearchSection({
 
         <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 animate-scaleIn delay-200">
           <div className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="space-y-2">
                 <label className="text-sm text-gray-600 font-medium">Тип сделки</label>
                 <Select value={transactionType} onValueChange={setTransactionType}>
-                  <SelectTrigger className="h-12 rounded-xl border-gray-200">
+                  <SelectTrigger className="h-14 rounded-xl border-gray-200">
                     <SelectValue placeholder="Все типы сделок" />
                   </SelectTrigger>
                   <SelectContent>
@@ -71,7 +71,7 @@ export default function SearchSection({
               <div className="space-y-2">
                 <label className="text-sm text-gray-600 font-medium">Тип недвижимости</label>
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="h-12 rounded-xl border-gray-200">
+                  <SelectTrigger className="h-14 rounded-xl border-gray-200">
                     <SelectValue placeholder="Все типы" />
                   </SelectTrigger>
                   <SelectContent>
@@ -86,7 +86,7 @@ export default function SearchSection({
               <div className="space-y-2">
                 <label className="text-sm text-gray-600 font-medium">Район</label>
                 <Select value={district} onValueChange={setDistrict}>
-                  <SelectTrigger className="h-12 rounded-xl border-gray-200">
+                  <SelectTrigger className="h-14 rounded-xl border-gray-200">
                     <SelectValue placeholder="Все районы" />
                   </SelectTrigger>
                   <SelectContent>
@@ -111,7 +111,7 @@ export default function SearchSection({
                 <label className="text-sm text-gray-600 font-medium">Цена</label>
                 <div className="flex gap-2">
                   <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger className="h-12 rounded-xl w-28 border-gray-200">
+                    <SelectTrigger className="h-14 rounded-xl w-32 border-gray-200">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -125,19 +125,20 @@ export default function SearchSection({
                     placeholder="Цена"
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
-                    className="h-12 rounded-xl border-gray-200 flex-1"
+                    className="h-14 rounded-xl border-gray-200 flex-1"
                   />
                 </div>
               </div>
-            </div>
 
-            <div className="flex gap-4">
-              <Button 
-                onClick={onSearch}
-                className="h-12 px-8 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl font-medium transition-all text-base whitespace-nowrap"
-              >
-                Найти
-              </Button>
+              <div className="space-y-2">
+                <label className="text-sm text-gray-600 font-medium opacity-0">Поиск</label>
+                <Button 
+                  onClick={onSearch}
+                  className="h-14 w-full bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl font-medium transition-all text-base"
+                >
+                  Найти
+                </Button>
+              </div>
             </div>
 
             <Button 
