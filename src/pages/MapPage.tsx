@@ -97,8 +97,15 @@ const MapPage: React.FC = () => {
         if (!hasAllAmenities) return false;
       }
       
-      if (petsAllowed && petsAllowed !== 'any' && prop.pets_allowed !== petsAllowed) return false;
-      if (childrenAllowed && childrenAllowed !== 'any' && prop.children_allowed !== childrenAllowed) return false;
+      if (petsAllowed.length > 0) {
+        const matches = petsAllowed.includes(prop.pets_allowed || 'negotiable');
+        if (!matches) return false;
+      }
+      
+      if (childrenAllowed.length > 0) {
+        const matches = childrenAllowed.includes(prop.children_allowed || 'negotiable');
+        if (!matches) return false;
+      }
       
       return true;
     });
@@ -141,8 +148,8 @@ const MapPage: React.FC = () => {
     setCurrency('AMD');
     setRooms('');
     setAmenities([]);
-    setPetsAllowed('');
-    setChildrenAllowed('');
+    setPetsAllowed([]);
+    setChildrenAllowed([]);
     setStreetSearch('');
   };
 

@@ -30,8 +30,8 @@ export default function PropertyPage() {
   const [district, setDistrict] = useState('all');
   const [rooms, setRooms] = useState('any');
   const [amenities, setAmenities] = useState<string[]>([]);
-  const [petsAllowed, setPetsAllowed] = useState('any');
-  const [childrenAllowed, setChildrenAllowed] = useState('any');
+  const [petsAllowed, setPetsAllowed] = useState<string[]>([]);
+  const [childrenAllowed, setChildrenAllowed] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [currency, setCurrency] = useState('all');
@@ -81,8 +81,16 @@ export default function PropertyPage() {
     if (propertyType !== 'all' && prop.property_type !== propertyType) return false;
     if (district !== 'all' && prop.district !== district) return false;
     if (rooms !== 'any' && prop.rooms !== Number(rooms)) return false;
-    if (childrenAllowed !== 'any' && prop.children_allowed !== (childrenAllowed === 'yes')) return false;
-    if (petsAllowed !== 'any' && prop.pets_allowed !== (petsAllowed === 'yes')) return false;
+    
+    if (childrenAllowed.length > 0) {
+      const matches = childrenAllowed.includes(prop.children_allowed || 'negotiable');
+      if (!matches) return false;
+    }
+    
+    if (petsAllowed.length > 0) {
+      const matches = petsAllowed.includes(prop.pets_allowed || 'negotiable');
+      if (!matches) return false;
+    }
     if (currency !== 'all' && prop.currency !== currency) return false;
     if (minPrice && prop.price < Number(minPrice)) return false;
     if (maxPrice && prop.price > Number(maxPrice)) return false;

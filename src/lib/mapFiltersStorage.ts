@@ -36,7 +36,10 @@ export const loadFilters = (): MapFilters => {
       return {
         ...defaults,
         ...parsed,
-        currency: parsed.currency || 'AMD'
+        currency: parsed.currency || 'AMD',
+        petsAllowed: Array.isArray(parsed.petsAllowed) ? parsed.petsAllowed : [],
+        childrenAllowed: Array.isArray(parsed.childrenAllowed) ? parsed.childrenAllowed : [],
+        amenities: Array.isArray(parsed.amenities) ? parsed.amenities : []
       };
     }
   } catch (e) {
