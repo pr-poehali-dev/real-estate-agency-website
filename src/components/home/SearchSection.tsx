@@ -128,7 +128,7 @@ export default function SearchSection({
 
               <Button 
                 onClick={onSearch}
-                className="h-16 px-12 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-2xl font-medium transition-all text-base whitespace-nowrap"
+                className="h-12 px-8 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl font-medium transition-all text-base whitespace-nowrap"
               >
                 Найти
               </Button>

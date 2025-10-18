@@ -10,7 +10,7 @@ export default function Header() {
         <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">Контакты</a>
         <Button 
           onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-          className="bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl px-8 transition-all"
+          className="h-12 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-xl px-8 transition-all"
         >
           Связаться
         </Button>
