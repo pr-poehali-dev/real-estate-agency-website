@@ -57,15 +57,36 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollContainerRef.current) return;
     
-    const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
-    const targetScroll = direction === 'left' 
-      ? scrollContainerRef.current.scrollLeft - scrollAmount
-      : scrollContainerRef.current.scrollLeft + scrollAmount;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+    const scrollAmount = clientWidth * 0.8;
     
-    scrollContainerRef.current.scrollTo({
-      left: targetScroll,
-      behavior: 'smooth'
-    });
+    if (direction === 'left') {
+      // Если в начале списка, прокручиваем в конец
+      if (scrollLeft <= 0) {
+        scrollContainerRef.current.scrollTo({
+          left: scrollWidth - clientWidth,
+          behavior: 'smooth'
+        });
+      } else {
+        scrollContainerRef.current.scrollTo({
+          left: scrollLeft - scrollAmount,
+          behavior: 'smooth'
+        });
+      }
+    } else {
+      // Если в конце списка, прокручиваем в начало
+      if (scrollLeft >= scrollWidth - clientWidth - 10) {
+        scrollContainerRef.current.scrollTo({
+          left: 0,
+          behavior: 'smooth'
+        });
+      } else {
+        scrollContainerRef.current.scrollTo({
+          left: scrollLeft + scrollAmount,
+          behavior: 'smooth'
+        });
+      }
+    }
   };
 
   useEffect(() => {
@@ -107,8 +128,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('left')}
-                disabled={!canScrollLeft}
-                className="absolute left-2 md:left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg disabled:opacity-50 hover:bg-gray-50"
+                className="absolute left-2 md:left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg hover:bg-gray-50"
               >
                 <Icon name="ChevronLeft" size={20} />
               </Button>
@@ -116,8 +136,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('right')}
-                disabled={!canScrollRight}
-                className="absolute right-2 md:right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg disabled:opacity-50 hover:bg-gray-50"
+                className="absolute right-2 md:right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg hover:bg-gray-50"
               >
                 <Icon name="ChevronRight" size={20} />
               </Button>
