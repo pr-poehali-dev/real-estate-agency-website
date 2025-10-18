@@ -26,6 +26,7 @@ interface MultiSelectProps {
   onChange: (values: string[]) => void;
   placeholder?: string;
   className?: string;
+  showSearch?: boolean;
 }
 
 export function MultiSelect({
@@ -34,6 +35,7 @@ export function MultiSelect({
   onChange,
   placeholder = "Выберите...",
   className,
+  showSearch = true,
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -78,8 +80,8 @@ export function MultiSelect({
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0" align="start">
         <Command>
-          <CommandInput placeholder="Поиск..." />
-          <CommandEmpty>Ничего не найдено</CommandEmpty>
+          {showSearch && <CommandInput placeholder="Поиск..." />}
+          {showSearch && <CommandEmpty>Ничего не найдено</CommandEmpty>}
           <CommandGroup className="max-h-64 overflow-auto">
             {options.map((option) => {
               const isSelected = selected.includes(option.value);

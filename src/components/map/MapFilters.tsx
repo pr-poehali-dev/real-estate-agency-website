@@ -188,6 +188,7 @@ const MapFilters: React.FC<MapFiltersProps> = ({
             onChange={setChildrenAllowed}
             placeholder="Выберите"
             className="w-full"
+            showSearch={false}
           />
         </div>
 
@@ -203,6 +204,7 @@ const MapFilters: React.FC<MapFiltersProps> = ({
             onChange={setPetsAllowed}
             placeholder="Выберите"
             className="w-full"
+            showSearch={false}
           />
         </div>
 

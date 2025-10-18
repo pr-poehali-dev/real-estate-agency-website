@@ -192,6 +192,7 @@ export default function PropertyFilters({
             onChange={setChildrenAllowed}
             placeholder="Выберите"
             className="h-10"
+            showSearch={false}
           />
         </div>
         
@@ -207,6 +208,7 @@ export default function PropertyFilters({
             onChange={setPetsAllowed}
             placeholder="Выберите"
             className="h-10"
+            showSearch={false}
           />
         </div>
         
