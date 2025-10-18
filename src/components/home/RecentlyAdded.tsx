@@ -103,9 +103,9 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
   }, [properties]);
 
   return (
-    <section className="py-24">
+    <section className="py-12">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex items-center justify-between mb-6">
           <h2 className="text-3xl font-bold leading-tight animate-fadeInUp">Недавно добавленные</h2>
         </div>
       </div>
