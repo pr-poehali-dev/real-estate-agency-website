@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 import type { Property as ApiProperty } from "@/lib/api";
 
@@ -13,6 +14,15 @@ interface PropertyListProps {
 }
 
 export default function PropertyList({ properties }: PropertyListProps) {
+  const { id } = useParams();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [id]);
+
   const formatPrice = (price: number, currency: string) => {
     return `${price.toLocaleString()} ${currency}`;
   };
@@ -43,7 +53,7 @@ export default function PropertyList({ properties }: PropertyListProps) {
         {properties.length === 0 ? (
           <p className="text-gray-500 text-center py-12">Нет объектов с такими параметрами</p>
         ) : (
-          <div className="overflow-y-auto overflow-x-hidden pr-2 space-y-4 flex-1">
+          <div ref={scrollContainerRef} className="overflow-y-auto overflow-x-hidden pr-2 space-y-4 flex-1">
             {properties.map((prop) => (
               <Link 
                 key={prop.id} 
