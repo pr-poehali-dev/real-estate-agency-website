@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,15 +6,31 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Icon from "@/components/ui/icon";
 
 export default function ContactSection() {
-  const [contactForm, setContactForm] = useState({
-    name: '',
-    contact_method: 'telegram',
-    contact_value: '',
-    service_type: 'rent',
-    message: ''
-  });
+  const loadFormFromStorage = () => {
+    try {
+      const saved = localStorage.getItem('contact_form');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Failed to load contact form:', e);
+    }
+    return {
+      name: '',
+      contact_method: 'telegram',
+      contact_value: '',
+      service_type: 'rent',
+      message: ''
+    };
+  };
+
+  const [contactForm, setContactForm] = useState(loadFormFromStorage());
   const [formLoading, setFormLoading] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('contact_form', JSON.stringify(contactForm));
+  }, [contactForm]);
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,13 +59,15 @@ export default function ContactSection() {
       });
 
       setFormSuccess(true);
-      setContactForm({
+      const emptyForm = {
         name: '',
         contact_method: 'telegram',
         contact_value: '',
         service_type: 'rent',
         message: ''
-      });
+      };
+      setContactForm(emptyForm);
+      localStorage.setItem('contact_form', JSON.stringify(emptyForm));
     } catch (error) {
       console.error('Error sending message:', error);
     } finally {
