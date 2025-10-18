@@ -172,12 +172,12 @@ export default function ContactSection() {
 
               <div className="flex items-start gap-4 hover:scale-105 transition-transform duration-300">
                 <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 hover:rotate-12 transition-transform duration-300">
-                  <Icon name="Instagram" size={24} className="text-white" />
+                  <Icon name="Star" size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-1">Instagram</p>
-                  <a href="https://instagram.com/w.s.e._am" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-lg font-semibold hover:underline">
-                    w.s.e._am
+                  <p className="font-medium mb-1">Отзывы</p>
+                  <a href="https://yandex.com/maps/org/wse_am/194631976201/reviews/?ll=44.516867%2C40.165353&z=20" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-lg font-semibold hover:underline">
+                    Яндекс.Карты
                   </a>
                 </div>
               </div>
