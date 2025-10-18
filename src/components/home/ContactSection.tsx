@@ -164,48 +164,48 @@ export default function ContactSection() {
             <h3 className="text-2xl font-bold leading-tight">Свяжитесь с нами</h3>
             
             <div className="space-y-8">
-              <div className="flex items-start gap-5 transition-opacity hover:opacity-80">
-                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 transition-transform">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
                   <Icon name="Phone" size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-2 text-gray-600">Телефон</p>
+                  <p className="font-medium mb-1 text-gray-600">Телефон</p>
                   <a href="tel:+37495129260" className="text-[#FF7A00] text-xl font-semibold hover:underline">
                     +374 95129260
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 hover:scale-105 transition-transform duration-300">
-                <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 hover:rotate-12 transition-transform duration-300">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
                   <Icon name="Send" size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-2 text-gray-600">Telegram</p>
+                  <p className="font-medium mb-1 text-gray-600">Telegram</p>
                   <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-xl font-semibold hover:underline">
                     WSEManager
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-5 transition-opacity hover:opacity-80">
-                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 transition-transform">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
                   <Icon name="Star" size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-2 text-gray-600">Отзывы</p>
+                  <p className="font-medium mb-1 text-gray-600">Отзывы</p>
                   <a href="https://yandex.com/maps/org/wse_am/194631976201/reviews/?ll=44.516867%2C40.165353&z=20" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-xl font-semibold hover:underline">
                     Яндекс.Карты
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-5 transition-opacity hover:opacity-80">
-                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 transition-transform">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0">
                   <Icon name="MapPin" size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-2 text-gray-600">Адрес</p>
+                  <p className="font-medium mb-1 text-gray-600">Адрес</p>
                   <p className="text-[#FF7A00] text-xl font-semibold">
                     Ереван ул. Хоренаци 47/7
                   </p>
