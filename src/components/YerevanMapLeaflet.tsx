@@ -300,18 +300,6 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
   return (
     <div className="h-full w-full relative">
       <div ref={mapContainer} className="h-full w-full rounded-xl" />
-      
-
-
-      {!isPreview && (
-        <a 
-          href="/full-map"
-          className="absolute bottom-4 right-4 bg-[#FF7A00] hover:bg-[#E66D00] text-white rounded-lg shadow-lg px-4 py-2.5 z-[1000] flex items-center gap-2 font-medium transition-all hover:shadow-xl"
-        >
-          <Icon name="Map" size={18} />
-          Показать на карте
-        </a>
-      )}
 
       <style>{`
         .custom-marker {
