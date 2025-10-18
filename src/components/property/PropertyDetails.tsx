@@ -288,25 +288,20 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
             return (
               <div className="bg-white rounded-2xl p-4 md:p-6 mb-4">
                 <h2 className="text-lg md:text-xl font-bold mb-4">Удобства</h2>
-                {knownAmenities.length > 0 && (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
-                    {knownAmenities.map((amenity, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <Icon name={amenitiesMap[amenity].icon} size={20} className="text-[#FF7A00]" />
-                        <span className="text-sm">{amenitiesMap[amenity].label}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {otherFeatures.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {otherFeatures.map((feature, idx) => (
-                      <span key={idx} className="px-3 py-1 bg-orange-50 text-[#FF7A00] rounded-full text-sm">
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {knownAmenities.map((amenity, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <Icon name={amenitiesMap[amenity].icon} size={20} className="text-[#FF7A00]" />
+                      <span className="text-sm">{amenitiesMap[amenity].label}</span>
+                    </div>
+                  ))}
+                  {otherFeatures.map((feature, idx) => (
+                    <div key={`other-${idx}`} className="flex items-center gap-2">
+                      <Icon name="Check" size={20} className="text-[#FF7A00]" />
+                      <span className="text-sm">{feature}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             );
           })()}
