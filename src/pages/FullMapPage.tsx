@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Properties } from '@/lib/api';
 import type { Property as ApiProperty } from '@/lib/api';
+import FloatingContactButtons from '@/components/FloatingContactButtons';
 
 interface Property extends ApiProperty {
   id: number;
@@ -199,6 +200,8 @@ const FullMapPage: React.FC = () => {
           </Button>
         </div>
       )}
+      
+      <FloatingContactButtons />
     </div>
   );
 };

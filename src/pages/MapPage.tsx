@@ -8,6 +8,7 @@ import MapFilters from '@/components/map/MapFilters';
 import MapSection from '@/components/map/MapSection';
 import PropertyGrid from '@/components/map/PropertyGrid';
 import { loadFilters, saveFilters, type MapFilters as MapFiltersType } from '@/lib/mapFiltersStorage';
+import FloatingContactButtons from '@/components/FloatingContactButtons';
 
 interface Property extends ApiProperty {
   id: number;
@@ -227,6 +228,8 @@ const MapPage: React.FC = () => {
           />
         </div>
       </div>
+      
+      <FloatingContactButtons />
     </div>
   );
 };

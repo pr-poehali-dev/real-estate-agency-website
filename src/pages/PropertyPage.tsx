@@ -9,6 +9,7 @@ import PropertyFilters from "@/components/property/PropertyFilters";
 import PropertyDetails from "@/components/property/PropertyDetails";
 import PropertyList from "@/components/property/PropertyList";
 import PropertyMap from "@/components/property/PropertyMap";
+import FloatingContactButtons from "@/components/FloatingContactButtons";
 
 interface Property extends ApiProperty {
   id: number;
@@ -180,6 +181,11 @@ export default function PropertyPage() {
             navigate(`/property/${selected.id}`);
           }
         }}
+      />
+      
+      <FloatingContactButtons 
+        phoneNumber={property.phone}
+        whatsappNumber={property.phone}
       />
     </div>
   );

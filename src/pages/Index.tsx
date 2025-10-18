@@ -9,6 +9,7 @@ import RecentlyAdded from "@/components/home/RecentlyAdded";
 import MapPreview from "@/components/home/MapPreview";
 import ContactSection from "@/components/home/ContactSection";
 import Footer from "@/components/home/Footer";
+import FloatingContactButtons from "@/components/FloatingContactButtons";
 
 interface Property extends ApiProperty {
   id: number;
@@ -114,6 +115,8 @@ export default function Index() {
       <ContactSection />
       
       <Footer />
+      
+      <FloatingContactButtons />
     </div>
   );
 }
