@@ -61,7 +61,7 @@ export function MultiSelect({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-full justify-between rounded-full",
+            "w-full justify-between rounded-md",
             className
           )}
         >
