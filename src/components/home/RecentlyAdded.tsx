@@ -17,9 +17,11 @@ interface RecentlyAddedProps {
 
 export default function RecentlyAdded({ properties, loading }: RecentlyAddedProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<Record<number, number>>({});
+  const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
 
   const formatPrice = (price: number, currency: string) => {
     return {
@@ -113,6 +115,27 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
     }
   }, [properties]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const cardId = parseInt(entry.target.getAttribute('data-card-id') || '0');
+            setVisibleCards(prev => new Set(prev).add(cardId));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const cards = document.querySelectorAll('[data-card-id]');
+    cards.forEach(card => observer.observe(card));
+
+    return () => {
+      cards.forEach(card => observer.unobserve(card));
+    };
+  }, [properties]);
+
   return (
     <section className="py-6 md:py-8">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -162,15 +185,17 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
               const priceData = formatPrice(property.price, property.currency);
               const imageCount = property.images?.length || 0;
               const currentIndex = currentImageIndex[property.id] || 0;
+              const isVisible = visibleCards.has(property.id);
               
               return (
                 <Link 
                   key={property.id} 
                   to={`/property/${property.id}`} 
                   className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-[calc(33.333%-16px)] snap-center group"
+                  data-card-id={property.id}
                 >
-                  <div className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-xl hover:border-[#FF7A00]/30 hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp`}
-                    style={{ animationDelay: `${idx * 100}ms` }}
+                  <div className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-xl hover:border-[#FF7A00]/30 hover:-translate-y-2 transition-all duration-500 cursor-pointer h-full flex flex-col ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                    style={{ transitionDelay: `${idx * 100}ms` }}
                   >
                     <div className="relative overflow-hidden">
                       {property.images && property.images.length > 0 ? (
