@@ -21,16 +21,6 @@ export default function FloatingContactButtons({
 
   return (
     <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[999] flex flex-col gap-3 md:gap-4">
-      {/* Telegram Button */}
-      <button
-        onClick={() => window.open('https://t.me/WSEManager', '_blank')}
-        className="w-14 h-14 md:w-16 md:h-16 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95 border border-gray-100"
-        title="Написать в Telegram"
-        aria-label="Написать в Telegram"
-      >
-        <Icon name="Send" size={24} className="md:w-[26px] md:h-[26px] text-gray-600 group-hover:text-[#0088cc] transition-colors" />
-      </button>
-
       {/* WhatsApp Button */}
       <button
         onClick={handleWhatsApp}
