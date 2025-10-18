@@ -76,28 +76,28 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="px-6 py-16 bg-white">
+    <section id="contact" className="px-6 py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center animate-fadeInUp">Свяжитесь с нами</h2>
+        <h2 className="text-4xl font-bold mb-16 text-center leading-tight animate-fadeInUp">Свяжитесь с нами</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="bg-[#F5F3EE] rounded-2xl p-8 animate-slideInLeft hover:shadow-xl transition-shadow duration-300">
-            <form onSubmit={handleContactSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div className="bg-white rounded-3xl p-10 animate-slideInLeft shadow-sm border border-gray-100">
+            <form onSubmit={handleContactSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium mb-2">Имя</label>
+                <label className="block text-sm font-medium mb-3 text-gray-600">Имя</label>
                 <Input
                   value={contactForm.name}
                   onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
                   placeholder="Ваше имя"
                   required
-                  className="rounded-xl"
+                  className="rounded-2xl h-14 border-gray-200"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Способ связи</label>
+                <label className="block text-sm font-medium mb-3 text-gray-600">Способ связи</label>
                 <Select value={contactForm.contact_method} onValueChange={(value) => setContactForm({...contactForm, contact_method: value})}>
-                  <SelectTrigger className="rounded-xl">
+                  <SelectTrigger className="rounded-2xl h-14 border-gray-200">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -109,20 +109,20 @@ export default function ContactSection() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Контакт (Telegram)</label>
+                <label className="block text-sm font-medium mb-3 text-gray-600">Контакт (Telegram)</label>
                 <Input
                   value={contactForm.contact_value}
                   onChange={(e) => setContactForm({...contactForm, contact_value: e.target.value})}
                   placeholder="@username или +7..."
                   required
-                  className="rounded-xl"
+                  className="rounded-2xl h-14 border-gray-200"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Тип услуги</label>
+                <label className="block text-sm font-medium mb-3 text-gray-600">Тип услуги</label>
                 <Select value={contactForm.service_type} onValueChange={(value) => setContactForm({...contactForm, service_type: value})}>
-                  <SelectTrigger className="rounded-xl">
+                  <SelectTrigger className="rounded-2xl h-14 border-gray-200">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -134,18 +134,18 @@ export default function ContactSection() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Сообщение</label>
+                <label className="block text-sm font-medium mb-3 text-gray-600">Сообщение</label>
                 <Textarea
                   value={contactForm.message}
                   onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
                   placeholder="Расскажите о ваших требованиях..."
                   rows={4}
-                  className="rounded-xl"
+                  className="rounded-2xl border-gray-200"
                 />
               </div>
 
               {formSuccess && (
-                <div className="bg-green-50 text-green-600 p-3 rounded-xl text-sm">
+                <div className="bg-green-50 text-green-600 p-4 rounded-2xl text-sm">
                   Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.
                 </div>
               )}
@@ -153,24 +153,24 @@ export default function ContactSection() {
               <Button 
                 type="submit" 
                 disabled={formLoading}
-                className="w-full h-12 bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-105 text-white rounded-xl text-base font-medium transition-all duration-300"
+                className="w-full h-16 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-2xl text-base font-medium transition-all"
               >
                 {formLoading ? 'Отправка...' : 'Отправить заявку'}
               </Button>
             </form>
           </div>
 
-          <div className="space-y-8 animate-fadeInUp delay-200">
-            <h3 className="text-2xl font-bold mb-6">Свяжитесь с нами</h3>
+          <div className="space-y-10 animate-fadeInUp delay-200">
+            <h3 className="text-2xl font-bold leading-tight">Свяжитесь с нами</h3>
             
-            <div className="space-y-6">
-              <div className="flex items-start gap-4 hover:scale-105 transition-transform duration-300">
-                <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 hover:rotate-12 transition-transform duration-300">
+            <div className="space-y-8">
+              <div className="flex items-start gap-5 transition-opacity hover:opacity-80">
+                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 transition-transform">
                   <Icon name="Phone" size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-1">Телефон</p>
-                  <a href="tel:+37495129260" className="text-[#FF7A00] text-lg font-semibold hover:underline">
+                  <p className="font-medium mb-2 text-gray-600">Телефон</p>
+                  <a href="tel:+37495129260" className="text-[#FF7A00] text-xl font-semibold hover:underline">
                     +374 95129260
                   </a>
                 </div>
@@ -181,41 +181,41 @@ export default function ContactSection() {
                   <Icon name="Send" size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-1">Telegram</p>
-                  <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-lg font-semibold hover:underline">
+                  <p className="font-medium mb-2 text-gray-600">Telegram</p>
+                  <a href="https://t.me/WSEManager" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-xl font-semibold hover:underline">
                     WSEManager
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 hover:scale-105 transition-transform duration-300">
-                <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 hover:rotate-12 transition-transform duration-300">
+              <div className="flex items-start gap-5 transition-opacity hover:opacity-80">
+                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 transition-transform">
                   <Icon name="Star" size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-1">Отзывы</p>
-                  <a href="https://yandex.com/maps/org/wse_am/194631976201/reviews/?ll=44.516867%2C40.165353&z=20" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-lg font-semibold hover:underline">
+                  <p className="font-medium mb-2 text-gray-600">Отзывы</p>
+                  <a href="https://yandex.com/maps/org/wse_am/194631976201/reviews/?ll=44.516867%2C40.165353&z=20" target="_blank" rel="noopener noreferrer" className="text-[#FF7A00] text-xl font-semibold hover:underline">
                     Яндекс.Карты
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 hover:scale-105 transition-transform duration-300">
-                <div className="w-12 h-12 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 hover:rotate-12 transition-transform duration-300">
+              <div className="flex items-start gap-5 transition-opacity hover:opacity-80">
+                <div className="w-14 h-14 bg-[#FF7A00] rounded-full flex items-center justify-center flex-shrink-0 transition-transform">
                   <Icon name="MapPin" size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium mb-1">Адрес</p>
-                  <p className="text-[#FF7A00] text-lg font-semibold">
+                  <p className="font-medium mb-2 text-gray-600">Адрес</p>
+                  <p className="text-[#FF7A00] text-xl font-semibold">
                     Ереван ул. Хоренаци 47/7
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-[#F5F3EE] rounded-2xl p-6 mt-8">
-              <h4 className="font-bold mb-4">Режим работы</h4>
-              <div className="space-y-2 text-sm">
+            <div className="bg-gray-50 rounded-3xl p-8 mt-8">
+              <h4 className="font-bold mb-6 text-lg">Режим работы</h4>
+              <div className="space-y-3 text-sm text-gray-600">
                 <div className="flex justify-between">
                   <span>Пн-Пт:</span>
                   <span className="font-medium">11:00 - 19:00</span>

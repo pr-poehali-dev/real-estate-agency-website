@@ -48,18 +48,18 @@ export default function SearchSection({
   const navigate = useNavigate();
 
   return (
-    <section className="relative px-6 py-4 max-w-7xl mx-auto">
+    <section className="relative px-6 py-20 max-w-7xl mx-auto">
       <div className="relative z-10">
-        <div className="mb-8">
-          <h1 className="text-3xl font-black mb-2 animate-fadeInUp">Поиск недвижимости в Ереване</h1>
-          <p className="text-gray-600 text-lg animate-fadeInUp delay-100">Найди свой идеальный вариант</p>
+        <div className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight animate-fadeInUp">Поиск недвижимости в Ереване</h1>
+          <p className="text-gray-600 text-xl leading-relaxed animate-fadeInUp delay-100">Найди свой идеальный вариант</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6 animate-scaleIn delay-200">
-          <div className="space-y-4">
-            <div className="flex flex-col md:flex-row gap-3">
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 animate-scaleIn delay-200">
+          <div className="space-y-5">
+            <div className="flex flex-col md:flex-row gap-4">
               <Select value={transactionType} onValueChange={setTransactionType}>
-                <SelectTrigger className="h-14 rounded-lg w-full md:w-52">
+                <SelectTrigger className="h-16 rounded-2xl w-full md:w-52 border-gray-200">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -70,7 +70,7 @@ export default function SearchSection({
               </Select>
 
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="h-14 rounded-lg w-full md:w-52">
+                <SelectTrigger className="h-16 rounded-2xl w-full md:w-52 border-gray-200">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -81,7 +81,7 @@ export default function SearchSection({
               </Select>
 
               <Select value={district} onValueChange={setDistrict}>
-                <SelectTrigger className="h-14 rounded-lg w-full md:w-52">
+                <SelectTrigger className="h-16 rounded-2xl w-full md:w-52 border-gray-200">
                   <SelectValue placeholder="Все районы" />
                 </SelectTrigger>
                 <SelectContent>
@@ -106,17 +106,17 @@ export default function SearchSection({
                 placeholder="Цена от"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                className="h-14 rounded-lg w-full md:w-32"
+                className="h-16 rounded-2xl w-full md:w-32 border-gray-200"
               />
               <Input
                 type="number"
                 placeholder="до"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                className="h-14 rounded-lg w-full md:w-32"
+                className="h-16 rounded-2xl w-full md:w-32 border-gray-200"
               />
               <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="h-14 rounded-lg w-full md:w-24">
+                <SelectTrigger className="h-16 rounded-2xl w-full md:w-24 border-gray-200">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -128,7 +128,7 @@ export default function SearchSection({
 
               <Button 
                 onClick={onSearch}
-                className="h-14 px-10 bg-[#FF7A00] hover:bg-[#E66D00] hover:scale-105 text-white rounded-lg font-medium transition-all text-base whitespace-nowrap"
+                className="h-16 px-12 bg-[#FF7A00] hover:bg-[#E66D00] hover:opacity-90 text-white rounded-2xl font-medium transition-all text-base whitespace-nowrap"
               >
                 Найти
               </Button>
@@ -137,7 +137,7 @@ export default function SearchSection({
             <Button 
               onClick={() => navigate('/map')}
               variant="outline"
-              className="w-full h-14 rounded-lg border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 hover:scale-[1.02] font-medium transition-all"
+              className="w-full h-16 rounded-2xl border border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-medium transition-all"
             >
               <Icon name="Map" size={20} className="mr-2" />
               Открыть карту

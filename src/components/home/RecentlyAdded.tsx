@@ -103,10 +103,10 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
   }, [properties]);
 
   return (
-    <section className="py-6">
+    <section className="py-24">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold animate-fadeInUp">Недавно добавленные</h2>
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-3xl font-bold leading-tight animate-fadeInUp">Недавно добавленные</h2>
         </div>
       </div>
       
@@ -128,7 +128,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('left')}
-                className="absolute left-2 md:left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg hover:bg-gray-50"
+                className="absolute left-2 md:left-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-12 h-12 p-0 bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white border-gray-200"
               >
                 <Icon name="ChevronLeft" size={20} />
               </Button>
@@ -136,7 +136,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('right')}
-                className="absolute right-2 md:right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-10 h-10 p-0 bg-white shadow-lg hover:bg-gray-50"
+                className="absolute right-2 md:right-2 top-1/2 -translate-y-1/2 z-10 rounded-full w-12 h-12 p-0 bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white border-gray-200"
               >
                 <Icon name="ChevronRight" size={20} />
               </Button>
@@ -155,7 +155,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                 to={`/property/${property.id}`} 
                 className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-[calc(33.333%-16px)] snap-center"
               >
-                <div className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-2 hover:scale-105 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp`}
+                <div className={`bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp`}
                   style={{ animationDelay: `${idx * 100}ms` }}
                 >
                   {property.images && property.images.length > 0 ? (
@@ -170,7 +170,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                     </div>
                   )}
                   
-                  <div className="p-4 flex flex-col flex-1">
+                  <div className="p-6 flex flex-col flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-lg font-bold text-[#FF7A00]">
                         {formatPrice(property.price, property.currency)}
