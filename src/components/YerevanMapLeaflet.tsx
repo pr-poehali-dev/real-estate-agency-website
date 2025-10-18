@@ -244,7 +244,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       
       marker.bindPopup(popup);
       
-      let popupTimeout: NodeJS.Timeout | null = null;
+      const popupTimeout: NodeJS.Timeout | null = null;
       
       marker.on('click', () => {
         if (openOnClick) {
@@ -255,7 +255,6 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       marker.on('popupopen', () => {
         setTimeout(() => {
           const popupElement = document.querySelector(`[data-property-id="${property.id}"]`);
-          const leafletPopup = document.querySelector('.leaflet-popup');
           
           if (popupElement) {
             if (openOnClick) {
@@ -293,39 +292,8 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
               popupElement.addEventListener('click', handleClick);
             }
           }
-          
-          if (leafletPopup) {
-          leafletPopup.addEventListener('mouseenter', () => {
-            if (popupTimeout) {
-              clearTimeout(popupTimeout);
-              popupTimeout = null;
-            }
-          });
-          
-          leafletPopup.addEventListener('mouseleave', () => {
-            popupTimeout = setTimeout(() => {
-              marker.closePopup();
-            }, 300);
-          });
-        }
         }, 100);
       });
-      
-      if (!keepPopupsOpen) {
-        marker.on('mouseover', () => {
-          if (popupTimeout) {
-            clearTimeout(popupTimeout);
-            popupTimeout = null;
-          }
-          marker.openPopup();
-        });
-        
-        marker.on('mouseout', () => {
-          popupTimeout = setTimeout(() => {
-            marker.closePopup();
-          }, 300);
-        });
-      }
       
         marker.on('click', (e) => {
           L.DomEvent.stopPropagation(e);
