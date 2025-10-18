@@ -171,7 +171,7 @@ const FullMapPage: React.FC = () => {
       {/* Back button */}
       <Link 
         to="/"
-        className="absolute left-4 bottom-4 z-[1000] bg-white hover:bg-gray-50 text-gray-700 px-4 py-2.5 rounded-lg shadow-lg transition-all hover:shadow-xl flex items-center gap-2"
+        className="absolute left-4 bottom-20 z-[1000] bg-white hover:bg-gray-50 text-gray-700 px-4 py-2.5 rounded-lg shadow-lg transition-all hover:shadow-xl flex items-center gap-2"
       >
         <Icon name="ArrowLeft" size={20} />
         <span className="font-medium">Назад</span>
