@@ -23,7 +23,6 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const [transactionType, setTransactionType] = useState('all');
   const [propertyType, setPropertyType] = useState('all');
-  const [maxPrice, setMaxPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [currency, setCurrency] = useState('AMD');
   const [district, setDistrict] = useState<string>('all');
@@ -73,7 +72,6 @@ export default function Index() {
       selectedTransaction: transactionType === 'all' ? '' : transactionType,
       selectedType: propertyType === 'all' ? '' : propertyType,
       selectedDistrict: district === 'all' ? '' : district,
-      maxPrice: maxPrice,
       minPrice: minPrice,
       currency: currency
     };
@@ -95,8 +93,6 @@ export default function Index() {
         setDistrict={setDistrict}
         minPrice={minPrice}
         setMinPrice={setMinPrice}
-        maxPrice={maxPrice}
-        setMaxPrice={setMaxPrice}
         currency={currency}
         setCurrency={setCurrency}
         onSearch={handleSearch}

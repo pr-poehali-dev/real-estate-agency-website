@@ -13,8 +13,6 @@ interface SearchSectionProps {
   setDistrict: (value: string) => void;
   minPrice: string;
   setMinPrice: (value: string) => void;
-  maxPrice: string;
-  setMaxPrice: (value: string) => void;
   currency: string;
   setCurrency: (value: string) => void;
   onSearch: () => void;
@@ -29,8 +27,6 @@ export default function SearchSection({
   setDistrict,
   minPrice,
   setMinPrice,
-  maxPrice,
-  setMaxPrice,
   currency,
   setCurrency,
   onSearch
@@ -115,25 +111,15 @@ export default function SearchSection({
                       <SelectItem value="RUB">RUB</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Input
+                    type="number"
+                    placeholder="Цена"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
+                    className="h-12 rounded-xl border-gray-200 flex-1"
+                  />
                 </div>
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                type="number"
-                placeholder="Мин цена"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className="h-12 rounded-xl border-gray-200"
-              />
-              <Input
-                type="number"
-                placeholder="Макс цена"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className="h-12 rounded-xl border-gray-200"
-              />
             </div>
 
             <div className="flex gap-4">
