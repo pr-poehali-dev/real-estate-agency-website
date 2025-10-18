@@ -1,9 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import 'leaflet.markercluster';
 import Icon from '@/components/ui/icon';
 
 interface Property {
@@ -46,7 +43,6 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
   const mapInstance = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
   const markersMapRef = useRef<Map<number, L.Marker>>(new Map());
-  const markerClusterGroup = useRef<L.MarkerClusterGroup | null>(null);
   const hasInitialFit = useRef(false);
 
   const formatPrice = (price: number, currency: string) => {
@@ -130,40 +126,6 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
 
     L.control.layers(baseMaps, {}, { position: 'topright' }).addTo(mapInstance.current);
 
-    markerClusterGroup.current = (L as any).markerClusterGroup({
-      maxClusterRadius: 60,
-      spiderfyOnMaxZoom: true,
-      showCoverageOnHover: false,
-      zoomToBoundsOnClick: true,
-      iconCreateFunction: (cluster: any) => {
-        const count = cluster.getChildCount();
-        let size = 'small';
-        if (count > 10) size = 'medium';
-        if (count > 50) size = 'large';
-        
-        return L.divIcon({
-          html: `<div style="
-            background: linear-gradient(135deg, #FF7A00 0%, #FF5500 100%);
-            border: 3px solid white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 2px 8px rgba(255, 122, 0, 0.4);
-          ">${count}</div>`,
-          className: 'marker-cluster',
-          iconSize: L.point(40, 40)
-        });
-      }
-    });
-    
-    markerClusterGroup.current.addTo(mapInstance.current);
-
     if (onMapMove) {
       mapInstance.current.on('moveend', () => {
         if (mapInstance.current) {
@@ -226,8 +188,8 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
     existingIds.forEach(id => {
       if (!currentPropertyIds.has(id)) {
         const marker = markersMapRef.current.get(id);
-        if (marker && markerClusterGroup.current) {
-          markerClusterGroup.current.removeLayer(marker);
+        if (marker) {
+          marker.remove();
           markersMapRef.current.delete(id);
         }
       }
@@ -338,9 +300,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
           marker!.openPopup();
         });
 
-        if (markerClusterGroup.current) {
-          markerClusterGroup.current.addLayer(marker);
-        }
+        marker.addTo(mapInstance.current!);
         markersMapRef.current.set(property.id, marker);
       } else {
         marker.setIcon(createMarkerIcon(property, isSelected));

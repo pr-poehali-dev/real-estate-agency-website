@@ -242,25 +242,3 @@
     animation-delay: 0.5s;
   }
 }
-
-/* Leaflet Marker Cluster Customization */
-.marker-cluster {
-  background: transparent !important;
-  border: none !important;
-}
-
-.marker-cluster div {
-  transition: all 0.2s ease;
-}
-
-.marker-cluster:hover div {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.6) !important;
-}
-
-.leaflet-cluster-anim .leaflet-marker-icon,
-.leaflet-cluster-anim .leaflet-marker-shadow {
-  transition:
-    transform 0.3s ease-out,
-    opacity 0.3s ease-in;
-}
