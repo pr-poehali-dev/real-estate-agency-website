@@ -212,43 +212,54 @@ const MapFilters: React.FC<MapFiltersProps> = ({
           </div>
 
           <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с детьми</label>
-          <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Выберите" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
-              <SelectItem value="yes">Да</SelectItem>
-              <SelectItem value="no">Нет</SelectItem>
-              <SelectItem value="negotiable">По договоренности</SelectItem>
-            </SelectContent>
-          </Select>
+            <div className="flex items-center gap-2 mb-2">
+              <Icon name="Baby" size={14} className="text-gray-500" />
+              <label className="block text-sm font-semibold text-gray-700">Можно с детьми</label>
+            </div>
+            <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="Выберите" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Не важно</SelectItem>
+                <SelectItem value="yes">Да</SelectItem>
+                <SelectItem value="no">Нет</SelectItem>
+                <SelectItem value="negotiable">По договоренности</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Icon name="Dog" size={14} className="text-gray-500" />
+              <label className="block text-sm font-semibold text-gray-700">Можно с животными</label>
+            </div>
+            <Select value={petsAllowed} onValueChange={setPetsAllowed}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="Выберите" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Не важно</SelectItem>
+                <SelectItem value="yes">Да</SelectItem>
+                <SelectItem value="no">Нет</SelectItem>
+                <SelectItem value="negotiable">По договоренности</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с животными</label>
-          <Select value={petsAllowed} onValueChange={setPetsAllowed}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Выберите" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
-              <SelectItem value="yes">Да</SelectItem>
-              <SelectItem value="no">Нет</SelectItem>
-              <SelectItem value="negotiable">По договоренности</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Разделитель */}
+        <div className="border-t border-gray-200"></div>
 
+        {/* Цена */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Icon name="DollarSign" size={16} className="text-gray-500" />
+          <div className="flex items-center gap-2 mb-2">
+            <Icon name="DollarSign" size={14} className="text-gray-500" />
             <label className="block text-sm font-semibold text-gray-700">Цена</label>
           </div>
           <div className="space-y-2">
             <Select value={currency} onValueChange={setCurrency}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full h-10">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -262,14 +273,14 @@ const MapFilters: React.FC<MapFiltersProps> = ({
               placeholder="Мин цена"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="w-full"
+              className="w-full h-10"
             />
             <Input
               type="number"
               placeholder="Макс цена"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-full"
+              className="w-full h-10"
             />
           </div>
         </div>
