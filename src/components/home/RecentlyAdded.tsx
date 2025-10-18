@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
-import FavoriteButton from "@/components/FavoriteButton";
 import type { Property as ApiProperty } from "@/lib/api";
 
 interface Property extends ApiProperty {
@@ -261,21 +260,16 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                       )}
                       
                       
-                      <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
-                        {property.created_at && isNew(property.created_at) && (
-                          <div className="bg-[#FF7A00] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md animate-pulse">
-                            ✨ Новое
-                          </div>
-                        )}
-                        <div className="ml-auto">
-                          <FavoriteButton propertyId={property.id} />
+                      {property.created_at && isNew(property.created_at) && (
+                        <div className="absolute top-3 left-3 bg-[#FF7A00] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
+                          Новое
                         </div>
-                      </div>
+                      )}
                       
                       {property.transaction_type && (
-                        <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm text-gray-900 text-xs font-bold px-3 py-1.5 rounded-full shadow-lg border-2 border-white">
-                          {property.transaction_type === 'sale' ? '💰 Продажа' : 
-                           property.transaction_type === 'rent' ? '🏠 Аренда' : '⏰ Посуточно'}
+                        <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm text-gray-900 text-xs font-medium px-3 py-1.5 rounded-full shadow-sm border border-gray-200">
+                          {property.transaction_type === 'sale' ? 'Продажа' : 
+                           property.transaction_type === 'rent' ? 'Аренда' : 'Посуточно'}
                         </div>
                       )}
                     </div>
@@ -283,16 +277,16 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                     <div className="p-4 md:p-5 flex flex-col flex-1">
                       <div className="mb-2 md:mb-3">
                         <div className="flex items-baseline gap-1 md:gap-1.5 mb-0.5 md:mb-1">
-                          <p className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-[#FF7A00] to-[#FF5500] bg-clip-text text-transparent">
+                          <p className="text-xl md:text-2xl font-bold text-gray-900">
                             {priceData.value}
                           </p>
-                          <span className="text-sm md:text-base font-bold text-[#FF7A00]">
+                          <span className="text-xs md:text-sm font-medium text-gray-500">
                             {priceData.currency}
                           </span>
                         </div>
                         {property.created_at && (
-                          <span className="text-xs text-gray-500 font-medium">
-                            📅 {formatDate(property.created_at)}
+                          <span className="text-xs text-gray-400">
+                            {formatDate(property.created_at)}
                           </span>
                         )}
                       </div>
@@ -324,6 +318,8 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                           </div>
                         )}
                       </div>
+                      
+
                     </div>
                   </div>
                 </Link>
