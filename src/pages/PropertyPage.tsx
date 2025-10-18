@@ -22,7 +22,7 @@ export default function PropertyPage() {
   const [property, setProperty] = useState<Property | null>(null);
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   
   const [transactionType, setTransactionType] = useState('all');
   const [propertyType, setPropertyType] = useState('all');
