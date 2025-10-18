@@ -27,7 +27,7 @@ export default function PropertyPage() {
   
   const [transactionType, setTransactionType] = useState('all');
   const [propertyType, setPropertyType] = useState('all');
-  const [district, setDistrict] = useState('all');
+  const [district, setDistrict] = useState<string[]>([]);
   const [rooms, setRooms] = useState('any');
   const [amenities, setAmenities] = useState<string[]>([]);
   const [petsAllowed, setPetsAllowed] = useState<string[]>([]);
@@ -79,7 +79,7 @@ export default function PropertyPage() {
   const filteredProperties = allProperties.filter(prop => {
     if (transactionType !== 'all' && prop.transaction_type !== transactionType) return false;
     if (propertyType !== 'all' && prop.property_type !== propertyType) return false;
-    if (district !== 'all' && prop.district !== district) return false;
+    if (district.length > 0 && !district.includes(prop.district || '')) return false;
     if (rooms !== 'any' && prop.rooms !== Number(rooms)) return false;
     
     if (childrenAllowed.length > 0) {

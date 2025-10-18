@@ -26,7 +26,7 @@ const MapPage: React.FC = () => {
   const initialFilters = loadFilters();
   const [selectedType, setSelectedType] = useState<string>(initialFilters.selectedType);
   const [selectedTransaction, setSelectedTransaction] = useState<string>(initialFilters.selectedTransaction);
-  const [selectedDistrict, setSelectedDistrict] = useState<string>(initialFilters.selectedDistrict);
+  const [selectedDistrict, setSelectedDistrict] = useState<string[]>(Array.isArray(initialFilters.selectedDistrict) ? initialFilters.selectedDistrict : []);
   const [minPrice, setMinPrice] = useState(initialFilters.minPrice);
   const [maxPrice, setMaxPrice] = useState(initialFilters.maxPrice);
   const [currency, setCurrency] = useState(initialFilters.currency);
@@ -76,7 +76,7 @@ const MapPage: React.FC = () => {
     const filtered = allProperties.filter((prop) => {
       if (selectedType && prop.property_type !== selectedType) return false;
       if (selectedTransaction && prop.transaction_type !== selectedTransaction) return false;
-      if (selectedDistrict && selectedDistrict !== 'Все районы' && prop.district !== selectedDistrict) return false;
+      if (selectedDistrict.length > 0 && !selectedDistrict.includes(prop.district || '')) return false;
       
       if (streetSearch.trim()) {
         const searchLower = streetSearch.toLowerCase();
@@ -142,7 +142,7 @@ const MapPage: React.FC = () => {
   const resetFilters = () => {
     setSelectedType('');
     setSelectedTransaction('');
-    setSelectedDistrict('');
+    setSelectedDistrict([]);
     setMinPrice('');
     setMaxPrice('');
     setCurrency('AMD');

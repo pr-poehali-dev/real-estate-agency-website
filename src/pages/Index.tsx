@@ -26,7 +26,7 @@ export default function Index() {
   const [maxPrice, setMaxPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [currency, setCurrency] = useState('AMD');
-  const [district, setDistrict] = useState('all');
+  const [district, setDistrict] = useState<string[]>([]);
   const [rooms, setRooms] = useState('any');
   const [amenities, setAmenities] = useState<string[]>([]);
   const [petsAllowed, setPetsAllowed] = useState<string[]>([]);

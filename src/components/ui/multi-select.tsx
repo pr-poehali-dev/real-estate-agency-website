@@ -95,7 +95,7 @@ export function MultiSelect({
                     className={cn(
                       "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                       isSelected
-                        ? "bg-primary border-primary text-primary-foreground"
+                        ? "bg-gray-700 border-gray-700 text-white"
                         : "border-gray-300 [&_svg]:invisible"
                     )}
                   >
@@ -127,7 +127,7 @@ export function MultiSelect({
                 return (
                   <div
                     key={value}
-                    className="bg-primary/10 text-primary text-xs rounded-full px-2 py-1 flex items-center gap-1"
+                    className="bg-gray-100 text-gray-700 text-xs rounded-full px-2 py-1 flex items-center gap-1"
                   >
                     {label}
                     <button
@@ -135,7 +135,7 @@ export function MultiSelect({
                         e.stopPropagation();
                         handleRemove(value);
                       }}
-                      className="hover:bg-primary/20 rounded-full"
+                      className="hover:bg-gray-200 rounded-full"
                     >
                       <X className="h-3 w-3" />
                     </button>

@@ -1,7 +1,7 @@
 export interface MapFilters {
   selectedType: string;
   selectedTransaction: string;
-  selectedDistrict: string;
+  selectedDistrict: string[];
   minPrice: string;
   maxPrice: string;
   currency: string;
@@ -18,7 +18,7 @@ export const loadFilters = (): MapFilters => {
   const defaults: MapFilters = {
     selectedType: '',
     selectedTransaction: '',
-    selectedDistrict: '',
+    selectedDistrict: [],
     minPrice: '',
     maxPrice: '',
     currency: 'AMD',
@@ -37,6 +37,7 @@ export const loadFilters = (): MapFilters => {
         ...defaults,
         ...parsed,
         currency: parsed.currency || 'AMD',
+        selectedDistrict: Array.isArray(parsed.selectedDistrict) ? parsed.selectedDistrict : [],
         petsAllowed: Array.isArray(parsed.petsAllowed) ? parsed.petsAllowed : [],
         childrenAllowed: Array.isArray(parsed.childrenAllowed) ? parsed.childrenAllowed : [],
         amenities: Array.isArray(parsed.amenities) ? parsed.amenities : []

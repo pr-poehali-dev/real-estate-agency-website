@@ -8,8 +8,8 @@ interface PropertyFiltersProps {
   setTransactionType: (value: string) => void;
   propertyType: string;
   setPropertyType: (value: string) => void;
-  district: string;
-  setDistrict: (value: string) => void;
+  district: string[];
+  setDistrict: (value: string[]) => void;
   rooms: string;
   setRooms: (value: string) => void;
   amenities: string[];
@@ -84,26 +84,27 @@ export default function PropertyFilters({
         
         <div>
           <label className="text-sm font-medium mb-1.5 block">Район</label>
-          <Select value={district} onValueChange={setDistrict}>
-            <SelectTrigger className="h-10">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Все районы</SelectItem>
-              <SelectItem value="Центр (Кентрон)">Центр</SelectItem>
-              <SelectItem value="Аван">Аван</SelectItem>
-              <SelectItem value="Ачапняк">Ачапняк</SelectItem>
-              <SelectItem value="Арабкир">Арабкир</SelectItem>
-              <SelectItem value="Давташен">Давташен</SelectItem>
-              <SelectItem value="Эребуни">Эребуни</SelectItem>
-              <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
-              <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
-              <SelectItem value="Нор Норк">Нор Норк</SelectItem>
-              <SelectItem value="Нубарашен">Нубарашен</SelectItem>
-              <SelectItem value="Шенгавит">Шенгавит</SelectItem>
-              <SelectItem value="Норк-Мараш">Норк-Мараш</SelectItem>
-            </SelectContent>
-          </Select>
+          <MultiSelect
+            options={[
+              { label: 'Центр', value: 'Центр (Кентрон)' },
+              { label: 'Аван', value: 'Аван' },
+              { label: 'Ачапняк', value: 'Ачапняк' },
+              { label: 'Арабкир', value: 'Арабкир' },
+              { label: 'Давташен', value: 'Давташен' },
+              { label: 'Эребуни', value: 'Эребуни' },
+              { label: 'Канакер-Зейтун', value: 'Канакер-Зейтун' },
+              { label: 'Малатия-Себастия', value: 'Малатия-Себастия' },
+              { label: 'Нор Норк', value: 'Нор Норк' },
+              { label: 'Нубарашен', value: 'Нубарашен' },
+              { label: 'Шенгавит', value: 'Шенгавит' },
+              { label: 'Норк-Мараш', value: 'Норк-Мараш' },
+            ]}
+            selected={district}
+            onChange={setDistrict}
+            placeholder="Все районы"
+            className="h-10"
+            showSearch={false}
+          />
         </div>
         
         <div>
