@@ -295,7 +295,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                     <SelectValue placeholder="Выберите район" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Аджапняк">Аджапняк</SelectItem>
+                    <SelectItem value="Ачапняк">Ачапняк</SelectItem>
                     <SelectItem value="Арабкир">Арабкир</SelectItem>
                     <SelectItem value="Аван">Аван</SelectItem>
                     <SelectItem value="Давташен">Давташен</SelectItem>

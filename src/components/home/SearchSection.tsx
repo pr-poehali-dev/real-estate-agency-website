@@ -86,7 +86,7 @@ export default function SearchSection({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все районы</SelectItem>
-                  <SelectItem value="ajapnyak">Аджапняк</SelectItem>
+                  <SelectItem value="ajapnyak">Ачапняк</SelectItem>
                   <SelectItem value="arabkir">Арабкир</SelectItem>
                   <SelectItem value="avan">Аван</SelectItem>
                   <SelectItem value="davtashen">Давташен</SelectItem>
