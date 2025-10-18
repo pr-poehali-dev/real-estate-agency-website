@@ -92,11 +92,33 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       position: zoomPosition
     }).addTo(mapInstance.current);
 
-    L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=ru', {
+    const streetLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=ru', {
       attribution: '© Google Maps',
       maxZoom: 20,
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    }).addTo(mapInstance.current);
+    });
+
+    const satelliteLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}&hl=ru', {
+      attribution: '© Google Maps',
+      maxZoom: 20,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+    const hybridLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}&hl=ru', {
+      attribution: '© Google Maps',
+      maxZoom: 20,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+    streetLayer.addTo(mapInstance.current);
+
+    const baseMaps = {
+      "Схема": streetLayer,
+      "Спутник": satelliteLayer,
+      "Гибрид": hybridLayer
+    };
+
+    L.control.layers(baseMaps, {}, { position: 'topright' }).addTo(mapInstance.current);
 
     return () => {
       if (mapInstance.current) {
@@ -104,7 +126,7 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         mapInstance.current = null;
       }
     };
-  }, [isPreview]);
+  }, [isPreview, zoomPosition]);
 
   useEffect(() => {
     if (!mapInstance.current) return;
