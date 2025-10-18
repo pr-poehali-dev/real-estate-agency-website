@@ -241,13 +241,6 @@ const MapPage: React.FC = () => {
                 </span>
               )}
             </Button>
-            <div className="hidden md:flex items-center gap-2 text-sm text-gray-600">
-              {!loading && (
-                <span className="font-semibold">
-                  Найдено: <span className="text-[#FF7A00]">{filteredProperties.length}</span>
-                </span>
-              )}
-            </div>
           </div>
           <h1 className="text-base md:text-2xl font-bold text-gray-900 flex-1">Карта недвижимости Еревана</h1>
         </header>
