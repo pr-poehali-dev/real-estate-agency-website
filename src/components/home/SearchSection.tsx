@@ -45,7 +45,7 @@ export default function SearchSection({
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
       
       <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="mb-6 md:mb-8 text-center">
+        <div className="mb-6 md:mb-8 text-left">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-3 md:mb-4 leading-tight animate-fadeInUp text-white drop-shadow-lg">Поиск недвижимости в Ереване</h1>
           <p className="text-white text-lg md:text-xl leading-relaxed animate-fadeInUp delay-100 drop-shadow-md">Найди свой идеальный вариант</p>
         </div>
