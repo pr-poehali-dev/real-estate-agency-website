@@ -140,15 +140,6 @@ export default function SearchSection({
                 </Button>
               </div>
             </div>
-
-            <Button 
-              onClick={() => navigate('/map')}
-              variant="outline"
-              className="w-full h-16 rounded-2xl border border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-medium transition-all"
-            >
-              <Icon name="Map" size={20} className="mr-2" />
-              Открыть карту
-            </Button>
           </div>
         </div>
       </div>
