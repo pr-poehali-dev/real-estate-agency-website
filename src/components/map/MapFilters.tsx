@@ -120,7 +120,7 @@ const MapFilters: React.FC<MapFiltersProps> = ({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Все районы</SelectItem>
-              <SelectItem value="Центр (Кентрон)">Центр</SelectItem>
+              <SelectItem value="Центр (Кентрон)">Кентрон</SelectItem>
               <SelectItem value="Аван">Аван</SelectItem>
               <SelectItem value="Ачапняк">Ачапняк</SelectItem>
               <SelectItem value="Арабкир">Арабкир</SelectItem>
