@@ -117,11 +117,11 @@ export default function SearchSection({
                   className="h-14 rounded-xl border-gray-200 w-24"
                 />
                 <Select value={currency} onValueChange={setCurrency}>
-                  <SelectTrigger className="h-14 rounded-xl flex-1 border-gray-200">
+                  <SelectTrigger className="h-14 rounded-xl flex-1 border-gray-200 text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="AMD">AMD (֏)</SelectItem>
+                    <SelectItem value="AMD">AMD</SelectItem>
                     <SelectItem value="USD">USD</SelectItem>
                     <SelectItem value="RUB">RUB</SelectItem>
                   </SelectContent>
