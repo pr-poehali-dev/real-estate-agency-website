@@ -151,14 +151,14 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
           {/* Контейнер с прокруткой */}
           <div 
             ref={scrollContainerRef}
-            className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory scrollbar-hide pb-2"
+            className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {sortedProperties.map((property, idx) => (
               <Link 
                 key={property.id} 
                 to={`/property/${property.id}`} 
-                className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-auto snap-center md:snap-align-none"
+                className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-[calc(33.333%-16px)] snap-center"
               >
                 <div className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-2 hover:scale-105 transition-all duration-300 cursor-pointer h-full flex flex-col animate-fadeInUp`}
                   style={{ animationDelay: `${idx * 100}ms` }}
