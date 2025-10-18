@@ -187,7 +187,7 @@ export default function PropertyFilters({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="any">По договоренности</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
             </SelectContent>
@@ -201,7 +201,7 @@ export default function PropertyFilters({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="any">По договоренности</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
             </SelectContent>

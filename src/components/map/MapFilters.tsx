@@ -168,13 +168,12 @@ const MapFilters: React.FC<MapFiltersProps> = ({
           <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с детьми</label>
           <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Не важно" />
+              <SelectValue placeholder="По договоренности" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="any">По договоренности</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
-              <SelectItem value="negotiable">По договоренности</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -183,13 +182,12 @@ const MapFilters: React.FC<MapFiltersProps> = ({
           <label className="block text-sm font-semibold text-gray-700 mb-3">Можно с животными</label>
           <Select value={petsAllowed} onValueChange={setPetsAllowed}>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Не важно" />
+              <SelectValue placeholder="По договоренности" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Не важно</SelectItem>
+              <SelectItem value="any">По договоренности</SelectItem>
               <SelectItem value="yes">Да</SelectItem>
               <SelectItem value="no">Нет</SelectItem>
-              <SelectItem value="negotiable">По договоренности</SelectItem>
             </SelectContent>
           </Select>
         </div>
