@@ -44,10 +44,10 @@ export default function PropertyFilters({
   setCurrency
 }: PropertyFiltersProps) {
   return (
-    <div className="border-b border-gray-200 px-6 py-4 bg-gray-50">
-      <h3 className="font-bold text-lg mb-3">Фильтры</h3>
+    <div className="border-b border-gray-200 px-3 md:px-6 py-3 md:py-4 bg-gray-50">
+      <h3 className="font-bold text-base md:text-lg mb-3">Фильтры</h3>
       
-      <div className="grid grid-cols-5 gap-3 mb-3">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-3">
         <div>
           <label className="text-sm font-medium mb-1.5 block">Тип сделки</label>
           <Select value={transactionType} onValueChange={setTransactionType}>
@@ -119,7 +119,7 @@ export default function PropertyFilters({
         </div>
         
         <div>
-          <label className="text-sm font-medium mb-1.5 block invisible">Валюта</label>
+          <label className="text-sm font-medium mb-1.5 block">Валюта</label>
           <div className="flex gap-1">
             <Button 
               variant={currency === 'AMD' ? 'default' : 'outline'} 
@@ -149,7 +149,7 @@ export default function PropertyFilters({
         </div>
       </div>
       
-      <div className="grid grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
         <div>
           <label className="text-sm font-medium mb-1.5 block">Можно с детьми</label>
           <Select value={childrenAllowed} onValueChange={setChildrenAllowed}>
@@ -201,8 +201,8 @@ export default function PropertyFilters({
         </div>
         
         <div>
-          <label className="text-sm font-medium mb-1.5 block invisible">Найти</label>
-          <Button className="w-full h-10">
+          <label className="text-sm font-medium mb-1.5 block md:invisible">Найти</label>
+          <Button className="w-full h-10 bg-[#FF7A00] hover:bg-[#E66D00]">
             Найти
           </Button>
         </div>

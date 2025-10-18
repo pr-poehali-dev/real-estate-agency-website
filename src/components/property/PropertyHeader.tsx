@@ -10,33 +10,36 @@ interface PropertyHeaderProps {
 
 export default function PropertyHeader({ onBack, onToggleFilters, showFilters }: PropertyHeaderProps) {
   return (
-    <header className="bg-white px-6 py-4 shadow-sm">
+    <header className="bg-white px-3 md:px-6 py-3 md:py-4 shadow-sm">
       <div className="max-w-[1800px] mx-auto flex items-center justify-between">
-        <Link to="/" className="text-2xl font-bold" style={{ color: '#FF7A00' }}>WSE.AM</Link>
-        <div className="flex gap-3">
+        <Link to="/" className="text-xl md:text-2xl font-bold" style={{ color: '#FF7A00' }}>WSE.AM</Link>
+        <div className="flex gap-2 md:gap-3">
           <Button 
             onClick={onBack}
             variant="outline"
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            size="sm"
+            className="border-gray-300 text-gray-700 hover:bg-gray-50 h-9 md:h-10"
           >
-            <Icon name="ArrowLeft" size={20} className="mr-2" />
-            Назад
+            <Icon name="ArrowLeft" size={18} className="md:mr-2" />
+            <span className="hidden md:inline">Назад</span>
           </Button>
           <Button 
             onClick={onToggleFilters}
             variant="outline"
-            className={`border-gray-300 text-gray-700 hover:bg-gray-50 ${showFilters ? 'bg-gray-100' : ''}`}
+            size="sm"
+            className={`border-gray-300 text-gray-700 hover:bg-gray-50 h-9 md:h-10 ${showFilters ? 'bg-gray-100' : ''}`}
           >
-            <Icon name="SlidersHorizontal" size={20} className="mr-2" />
-            Фильтры
+            <Icon name="SlidersHorizontal" size={18} className="md:mr-2" />
+            <span className="hidden sm:inline">Фильтры</span>
           </Button>
           <Button 
             onClick={() => document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' })}
             variant="outline"
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            size="sm"
+            className="border-gray-300 text-gray-700 hover:bg-gray-50 h-9 md:h-10 hidden sm:flex"
           >
-            <Icon name="Map" size={20} className="mr-2" />
-            Карта
+            <Icon name="Map" size={18} className="md:mr-2" />
+            <span className="hidden md:inline">Карта</span>
           </Button>
         </div>
       </div>
