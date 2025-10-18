@@ -277,10 +277,10 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                     <div className="p-4 md:p-5 flex flex-col flex-1">
                       <div className="mb-2 md:mb-3">
                         <div className="flex items-baseline gap-1 md:gap-1.5 mb-0.5 md:mb-1">
-                          <p className="text-xl md:text-2xl font-bold text-gray-900">
+                          <p className="text-xl md:text-2xl font-bold text-[#FF7A00]">
                             {priceData.value}
                           </p>
-                          <span className="text-xs md:text-sm font-medium text-gray-500">
+                          <span className="text-xs md:text-sm font-medium text-[#FF7A00]">
                             {priceData.currency}
                           </span>
                         </div>
