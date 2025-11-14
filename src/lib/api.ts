@@ -18,7 +18,7 @@ async function api<T>(path: string, opts: RequestInit = {}): Promise<T> {
   };
   
   if (token) {
-    headers['X-Auth-Token'] = token;
+    headers['Authorization'] = `Bearer ${token}`;
   }
   
   const url = path;
@@ -62,8 +62,10 @@ export const Auth = {
       body: JSON.stringify({ username, password })
     }),
   
-  me: () =>
-    api<{ user: User }>(BACKEND_URLS.auth),
+  me: async () => {
+    const result = await api<{ user: User }>(BACKEND_URLS.auth);
+    return result.user;
+  },
   
   logout: () => {
     localStorage.removeItem('admin_token');
@@ -109,64 +111,16 @@ export interface PropertyListResponse {
   count: number;
 }
 
-function isDemoMode(): boolean {
-  const token = localStorage.getItem('admin_token');
-  return token?.startsWith('demo-token-') || false;
-}
-
-function getDemoProperties(): Property[] {
-  try {
-    const data = localStorage.getItem('demo_properties');
-    return data ? JSON.parse(data) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveDemoProperties(properties: Property[]): void {
-  try {
-    const propertiesWithoutImages = properties.map(p => ({
-      ...p,
-      images: p.images?.slice(0, 2) || []
-    }));
-    localStorage.setItem('demo_properties', JSON.stringify(propertiesWithoutImages));
-  } catch (error) {
-    console.error('Failed to save demo properties:', error);
-    const propertiesWithoutImages = properties.map(p => ({
-      ...p,
-      images: []
-    }));
-    localStorage.setItem('demo_properties', JSON.stringify(propertiesWithoutImages));
-  }
-}
-
 export const Properties = {
   list: async (query = '') => {
-    const properties = getDemoProperties();
-    return { properties, count: properties.length };
+    return api<PropertyListResponse>(BACKEND_URLS.properties + (query ? `?${query}` : ''));
   },
   
   get: async (id: number) => {
-    const properties = getDemoProperties();
-    const property = properties.find(p => p.id === id);
-    if (!property) throw new Error('Объект не найден');
-    return property;
+    return api<Property>(`${BACKEND_URLS.properties}?id=${id}`);
   },
   
   create: async (payload: Partial<Property>) => {
-    if (isDemoMode()) {
-      const properties = getDemoProperties();
-      const newProperty: Property = {
-        ...payload,
-        id: Date.now(),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        status: 'active'
-      } as Property;
-      properties.push(newProperty);
-      saveDemoProperties(properties);
-      return { property_id: newProperty.id!, message: 'Объект добавлен (демо-режим)' };
-    }
     return api<{ property_id: number; message: string }>(BACKEND_URLS.properties, {
       method: 'POST',
       body: JSON.stringify(payload)
@@ -174,19 +128,6 @@ export const Properties = {
   },
   
   update: async (id: number, payload: Partial<Property>) => {
-    if (isDemoMode()) {
-      const properties = getDemoProperties();
-      const index = properties.findIndex(p => p.id === id);
-      if (index === -1) throw new Error('Property not found');
-      properties[index] = {
-        ...properties[index],
-        ...payload,
-        id,
-        updated_at: new Date().toISOString()
-      };
-      saveDemoProperties(properties);
-      return { message: 'Объект обновлён (демо-режим)' };
-    }
     return api<{ message: string }>(`${BACKEND_URLS.properties}?id=${id}`, {
       method: 'PUT',
       body: JSON.stringify(payload)
@@ -194,12 +135,6 @@ export const Properties = {
   },
   
   remove: async (id: number) => {
-    if (isDemoMode()) {
-      const properties = getDemoProperties();
-      const filtered = properties.filter(p => p.id !== id);
-      saveDemoProperties(filtered);
-      return { message: 'Объект удалён (демо-режим)' };
-    }
     return api<{ message: string }>(`${BACKEND_URLS.properties}?id=${id}`, {
       method: 'DELETE'
     });
