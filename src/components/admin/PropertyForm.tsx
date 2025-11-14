@@ -73,14 +73,16 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
   };
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (propertyForm.street_name && propertyForm.district) {
-        geocodeAddress(propertyForm.street_name, propertyForm.district);
-      }
-    }, 1000);
+    if (!isEditing) {
+      const timeoutId = setTimeout(() => {
+        if (propertyForm.street_name && propertyForm.district) {
+          geocodeAddress(propertyForm.street_name, propertyForm.district);
+        }
+      }, 1000);
 
-    return () => clearTimeout(timeoutId);
-  }, [propertyForm.street_name, propertyForm.district]);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [propertyForm.street_name, propertyForm.district, isEditing]);
 
   return (
     <Card>
@@ -283,14 +285,32 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 <Input
                   id="street_name"
                   value={propertyForm.street_name || ''}
-                  onChange={(e) => setPropertyForm(prev => ({...prev, street_name: e.target.value}))}
+                  onChange={(e) => {
+                    const newStreet = e.target.value;
+                    setPropertyForm(prev => ({...prev, street_name: newStreet}));
+                    if (isEditing && newStreet && propertyForm.district) {
+                      setTimeout(() => {
+                        geocodeAddress(newStreet, propertyForm.district);
+                      }, 1000);
+                    }
+                  }}
                   placeholder="ул. Абовяна 15"
                   required
                 />
               </div>
               <div>
                 <Label htmlFor="district">Район *</Label>
-                <Select value={propertyForm.district || ''} onValueChange={(value) => setPropertyForm(prev => ({...prev, district: value}))}>
+                <Select 
+                  value={propertyForm.district || ''} 
+                  onValueChange={(value) => {
+                    setPropertyForm(prev => ({...prev, district: value}));
+                    if (isEditing && propertyForm.street_name && value) {
+                      setTimeout(() => {
+                        geocodeAddress(propertyForm.street_name, value);
+                      }, 500);
+                    }
+                  }}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите район" />
                   </SelectTrigger>
@@ -393,15 +413,15 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
             />
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-3">
+            <Button type="submit" className="flex-1" disabled={loading}>
+              {loading ? (isEditing ? 'Сохранение...' : 'Добавление...') : (isEditing ? 'Сохранить' : 'Добавить объект')}
+            </Button>
             {isEditing && onCancel && (
               <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
-                Отмена
+                Отменить
               </Button>
             )}
-            <Button type="submit" className="flex-1" disabled={loading}>
-              {loading ? (isEditing ? 'Сохранение...' : 'Добавление...') : (isEditing ? 'Сохранить изменения' : 'Добавить объект')}
-            </Button>
           </div>
         </form>
 
