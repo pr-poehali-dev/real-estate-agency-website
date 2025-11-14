@@ -1,7 +1,7 @@
 '''
-Business: Create new admin user with hashed password
-Args: event with httpMethod, body containing username, email, password, full_name
-Returns: HTTP response with created user data
+Business: Reset admin user password to a new value
+Args: event with httpMethod, body containing username and new_password
+Returns: HTTP response with success message
 '''
 
 import json
@@ -23,7 +23,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'headers': {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Max-Age': '86400'
             },
             'body': '',
@@ -57,19 +57,16 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     try:
         body_data = json.loads(event.get('body', '{}'))
         username = body_data.get('username', '').strip()
-        email = body_data.get('email', '').strip()
-        password = body_data.get('password', '').strip()
-        full_name = body_data.get('full_name', '').strip()
-        role = body_data.get('role', 'admin').strip()
+        new_password = body_data.get('new_password', '').strip()
         
-        if not username or not email or not password:
+        if not username or not new_password:
             return {
                 'statusCode': 400,
                 'headers': {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
                 },
-                'body': json.dumps({'ok': False, 'error': 'Username, email and password are required'}),
+                'body': json.dumps({'ok': False, 'error': 'Username and new_password are required'}),
                 'isBase64Encoded': False
             }
         
@@ -79,39 +76,34 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         escaped_username = escape_sql_string(username)
         check_query = f"SELECT id FROM t_p37006348_real_estate_agency_w.admin_users WHERE username = '{escaped_username}'"
         cursor.execute(check_query)
-        existing = cursor.fetchone()
+        user = cursor.fetchone()
         
-        if existing:
+        if not user:
             return {
-                'statusCode': 400,
+                'statusCode': 404,
                 'headers': {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
                 },
-                'body': json.dumps({'ok': False, 'error': 'Username already exists'}),
+                'body': json.dumps({'ok': False, 'error': 'User not found'}),
                 'isBase64Encoded': False
             }
         
-        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        password_hash = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         
-        escaped_email = escape_sql_string(email)
-        escaped_full_name = escape_sql_string(full_name) if full_name else ''
-        escaped_role = escape_sql_string(role)
         escaped_password_hash = escape_sql_string(password_hash)
         
-        insert_query = f"""
-            INSERT INTO t_p37006348_real_estate_agency_w.admin_users 
-            (username, email, password_hash, full_name, role, is_active)
-            VALUES ('{escaped_username}', '{escaped_email}', '{escaped_password_hash}', '{escaped_full_name}', '{escaped_role}', true)
-            RETURNING id, username, email, full_name, role
+        update_query = f"""
+            UPDATE t_p37006348_real_estate_agency_w.admin_users 
+            SET password_hash = '{escaped_password_hash}'
+            WHERE username = '{escaped_username}'
         """
         
-        cursor.execute(insert_query)
-        new_user = cursor.fetchone()
+        cursor.execute(update_query)
         conn.commit()
         
         return {
-            'statusCode': 201,
+            'statusCode': 200,
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
@@ -119,7 +111,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'body': json.dumps({
                 'ok': True,
                 'data': {
-                    'user': dict(new_user)
+                    'message': f'Password for user {username} has been reset successfully'
                 }
             }),
             'isBase64Encoded': False
