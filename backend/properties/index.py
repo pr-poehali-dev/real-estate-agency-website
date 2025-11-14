@@ -51,6 +51,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             headers = event.get('headers', {})
             auth_header = headers.get('Authorization', '')
             
+            is_admin = False
             if auth_header.startswith('Bearer '):
                 token = auth_header[7:]
                 secret_key = os.environ.get('JWT_SECRET', 'default-secret-change-in-production')
@@ -58,17 +59,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 try:
                     payload = jwt.decode(token, secret_key, algorithms=['HS256'])
                     if payload.get('role') == 'admin':
-                        pass
+                        is_admin = True
                 except jwt.InvalidTokenError:
-                    return {
-                        'statusCode': 403,
-                        'headers': {
-                            'Content-Type': 'application/json',
-                            'Access-Control-Allow-Origin': '*'
-                        },
-                        'body': json.dumps({'ok': False, 'error': 'Invalid admin token'}),
-                        'isBase64Encoded': False
-                    }
+                    pass
             
             query_params = event.get('queryStringParameters', {}) or {}
             
