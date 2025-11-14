@@ -168,9 +168,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         elif method == 'GET':
             headers = event.get('headers', {})
-            print(f"DEBUG GET headers: {headers}")
+            print(f"DEBUG GET headers keys: {list(headers.keys())}")
             auth_header = headers.get('Authorization') or headers.get('authorization', '')
-            if not auth_header.startswith('Bearer '):
+            print(f"DEBUG auth_header: '{auth_header}'")
+            
+            if not auth_header or not auth_header.startswith('Bearer '):
+                print(f"DEBUG: No valid Bearer token. auth_header='{auth_header}'")
                 return {
                     'statusCode': 401,
                     'headers': {
