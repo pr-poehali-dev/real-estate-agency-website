@@ -9,7 +9,7 @@ export default function MapPreview() {
         <p className="text-base md:text-xl text-gray-600 leading-relaxed animate-fadeInUp delay-100">Все объекты недвижимости в Ереване на интерактивной карте</p>
       </div>
       
-      <Link to="/full-map" className="block group">
+      <Link to="/map" className="block group">
         <div className="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all duration-500 animate-scaleIn delay-200">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48624.58415456418!2d44.47379!3d40.18111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x406abd39496ad82b%3A0x2e2579e7e2d4621b!2sYerevan%2C%20Armenia!5e0!3m2!1sen!2s!4v1234567890"
