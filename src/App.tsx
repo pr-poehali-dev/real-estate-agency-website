@@ -11,6 +11,7 @@ import FullMapPage from "./pages/FullMapPage";
 import AdminPage from "./pages/AdminPage";
 import PropertyPage from "./pages/PropertyPage";
 import NotFound from "./pages/NotFound";
+import ResetAdminPassword from "./pages/ResetAdminPassword";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/full-map" element={<FullMapPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/property/:id" element={<PropertyPage />} />
+            <Route path="/reset-admin-pwd" element={<ResetAdminPassword />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
