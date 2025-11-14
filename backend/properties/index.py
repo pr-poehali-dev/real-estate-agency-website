@@ -48,6 +48,28 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         
         if method == 'GET':
+            headers = event.get('headers', {})
+            auth_header = headers.get('Authorization', '')
+            
+            if auth_header.startswith('Bearer '):
+                token = auth_header[7:]
+                secret_key = os.environ.get('JWT_SECRET', 'default-secret-change-in-production')
+                
+                try:
+                    payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+                    if payload.get('role') == 'admin':
+                        pass
+                except jwt.InvalidTokenError:
+                    return {
+                        'statusCode': 403,
+                        'headers': {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                        },
+                        'body': json.dumps({'ok': False, 'error': 'Invalid admin token'}),
+                        'isBase64Encoded': False
+                    }
+            
             query_params = event.get('queryStringParameters', {}) or {}
             
             where_conditions = []
