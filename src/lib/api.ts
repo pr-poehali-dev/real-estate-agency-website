@@ -18,7 +18,7 @@ async function api<T>(path: string, opts: RequestInit = {}): Promise<T> {
   };
   
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers['X-Auth-Token'] = token;
   }
   
   const url = path;

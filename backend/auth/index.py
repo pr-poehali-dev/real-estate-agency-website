@@ -168,12 +168,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         elif method == 'GET':
             headers = event.get('headers', {})
-            print(f"DEBUG GET headers keys: {list(headers.keys())}")
-            auth_header = headers.get('Authorization') or headers.get('authorization', '')
-            print(f"DEBUG auth_header: '{auth_header}'")
+            token = headers.get('X-Auth-Token') or headers.get('x-auth-token', '')
             
-            if not auth_header or not auth_header.startswith('Bearer '):
-                print(f"DEBUG: No valid Bearer token. auth_header='{auth_header}'")
+            if not token:
                 return {
                     'statusCode': 401,
                     'headers': {
@@ -183,8 +180,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'body': json.dumps({'ok': False, 'error': 'No token provided'}),
                     'isBase64Encoded': False
                 }
-            
-            token = auth_header[7:]
             secret_key = os.environ.get('JWT_SECRET', 'default-secret-change-in-production')
             
             try:
