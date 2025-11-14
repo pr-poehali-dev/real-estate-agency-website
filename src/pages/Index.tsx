@@ -33,22 +33,6 @@ export default function Index() {
 
   const loadProperties = async () => {
     setLoading(true);
-    
-    const token = localStorage.getItem('admin_token');
-    if (token && token.startsWith('demo-token-')) {
-      const demoData = localStorage.getItem('demo_properties');
-      const demoProps = demoData ? JSON.parse(demoData) : [];
-      // Сортировка по дате для демо-режима
-      const sortedDemoProps = demoProps.sort((a: Property, b: Property) => {
-        const dateA = new Date(a.created_at || 0).getTime();
-        const dateB = new Date(b.created_at || 0).getTime();
-        if (dateB !== dateA) return dateB - dateA;
-        return b.id - a.id;
-      });
-      setProperties(sortedDemoProps.slice(0, 6));
-      setLoading(false);
-      return;
-    }
 
     try {
       const response = await Properties.list();

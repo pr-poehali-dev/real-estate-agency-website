@@ -16,15 +16,6 @@ export default function MapPreview({ t, isVisible }: MapPreviewProps) {
   
   useEffect(() => {
     const loadPreviewData = async () => {
-      const token = localStorage.getItem('admin_token');
-      
-      if (token && token.startsWith('demo-token-')) {
-        const demoData = localStorage.getItem('demo_properties');
-        const demoProps = demoData ? JSON.parse(demoData) : [];
-        setPreviewProperties(demoProps.slice(0, 10));
-        return;
-      }
-
       try {
         const response = await Properties.list();
         const props = (response.properties || []).slice(0, 10);

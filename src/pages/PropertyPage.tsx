@@ -96,21 +96,6 @@ export default function PropertyPage() {
 
   const loadProperty = async () => {
     setLoading(true);
-    
-    const token = localStorage.getItem('admin_token');
-    if (token && token.startsWith('demo-token-')) {
-      const demoData = localStorage.getItem('demo_properties');
-      const demoProps = demoData ? JSON.parse(demoData) : [];
-      const propsWithDates = demoProps.map((p: any) => ({
-        ...p,
-        created_at: p.created_at || new Date().toISOString()
-      }));
-      const found = propsWithDates.find((p: Property) => p.id === Number(id));
-      setProperty(found || null);
-      setAllProperties(propsWithDates.filter((p: Property) => p.id !== Number(id)));
-      setLoading(false);
-      return;
-    }
 
     try {
       const response = await Properties.list();

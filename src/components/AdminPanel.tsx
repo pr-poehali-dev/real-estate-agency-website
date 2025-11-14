@@ -98,25 +98,26 @@ const AdminPanel: React.FC = () => {
   }, []);
 
   const checkAuthStatus = async () => {
-    const mockUser: AdminUser = {
-      id: 1,
-      username: 'demo',
-      email: 'demo@wse.am',
-      full_name: 'Демо-режим',
-      role: 'admin'
-    };
-    setUser(mockUser);
-    localStorage.setItem('admin_token', 'demo-token-' + Date.now());
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      setUser(null);
+      return;
+    }
+
+    try {
+      const userData = await Auth.me();
+      setUser(userData);
+    } catch (error) {
+      console.error('Auth check failed:', error);
+      localStorage.removeItem('admin_token');
+      setUser(null);
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
-    localStorage.removeItem('demo_properties');
-    localStorage.removeItem('admin_form_draft');
-    localStorage.removeItem('admin_features_draft');
 
     try {
       const data = await Auth.login(loginForm.username, loginForm.password);
@@ -172,19 +173,6 @@ const AdminPanel: React.FC = () => {
 
   const checkForDuplicates = async (street: string, house: string, apartment: string, transactionType: string, currentId?: number) => {
     try {
-      const token = localStorage.getItem('admin_token');
-      if (token && token.startsWith('demo-token-')) {
-        const demoData = localStorage.getItem('demo_properties');
-        const properties = demoData ? JSON.parse(demoData) : [];
-        return properties.filter((p: Property) => 
-          p.street_name?.toLowerCase() === street.toLowerCase() &&
-          p.house_number === house &&
-          p.apartment_number === apartment &&
-          p.transaction_type === transactionType &&
-          p.id !== currentId
-        );
-      }
-
       const response = await Properties.list();
       const properties = (response.properties || []) as Property[];
       return properties.filter(p => 
