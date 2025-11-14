@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -7,8 +7,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Icon from '../ui/icon';
 import ImageUpload from './ImageUpload';
-import MapPicker from './MapPicker';
-import { Property } from '@/types/property';
+import AddressSelector from './AddressSelector';
+import { Property, AddressComponents, LocationPoint } from '@/types/property';
+
+// Property interface now imported from types
 
 interface PropertyFormProps {
   propertyForm: Property;
@@ -35,71 +37,66 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
   isEditing = false,
   onCancel
 }) => {
-  const [isMapOpen, setIsMapOpen] = useState(false);
-  const [geocoding, setGeocoding] = useState(false);
 
-  const handleLocationChange = (lat: number, lng: number) => {
-    setPropertyForm(prev => ({
-      ...prev,
-      latitude: lat,
-      longitude: lng
-    }));
+  const handleImagesChange = (newImages: string[]) => {
+    setPropertyForm({
+      ...propertyForm,
+      images: newImages
+    });
   };
 
-  const geocodeAddress = async (streetName: string, district: string) => {
-    if (!streetName || !district) return;
-    
-    setGeocoding(true);
-    try {
-      const query = `${streetName}, ${district}, Ереван, Армения`;
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`
-      );
-      const data = await response.json();
-      
-      if (data && data.length > 0) {
-        const { lat, lon } = data[0];
-        setPropertyForm(prev => ({
-          ...prev,
-          latitude: parseFloat(lat),
-          longitude: parseFloat(lon)
-        }));
-      }
-    } catch (error) {
-      console.error('Geocoding error:', error);
-    } finally {
-      setGeocoding(false);
-    }
+  // Новые обработчики для AddressSelector
+  const handleAddressChange = (address: AddressComponents) => {
+    setPropertyForm({
+      ...propertyForm,
+      street_name: address.street_name,
+      house_number: address.house_number,
+      apartment_number: address.apartment_number,
+      district: address.district,
+      address: address.formatted_address || propertyForm.address
+    });
   };
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (propertyForm.street_name && propertyForm.district) {
-        geocodeAddress(propertyForm.street_name, propertyForm.district);
-      }
-    }, 1000);
+  const handleCoordinatesChange = (coordinates: LocationPoint) => {
+    setPropertyForm({
+      ...propertyForm,
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+      address: coordinates.address || propertyForm.address
+    });
+  };
 
-    return () => clearTimeout(timeoutId);
-  }, [propertyForm.street_name, propertyForm.district]);
+  // Формируем текущий адрес для AddressSelector
+  const currentAddress: AddressComponents = {
+    street_name: propertyForm.street_name || '',
+    house_number: propertyForm.house_number || '',
+    apartment_number: propertyForm.apartment_number || '',
+    district: propertyForm.district,
+    formatted_address: propertyForm.address
+  };
+
+  const currentCoordinates: LocationPoint = {
+    latitude: propertyForm.latitude,
+    longitude: propertyForm.longitude,
+    address: propertyForm.address
+  };
 
   return (
     <Card>
-      <CardHeader className="p-4 md:p-6">
-        <CardTitle className="flex items-center justify-between text-base md:text-lg">
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Icon name={isEditing ? "Edit" : "Plus"} size={20} className="hidden sm:block" />
-            <span className="text-sm sm:text-base">
-              {isEditing ? "Редактировать объект" : "Добавить объект"}
-            </span>
+            <Icon name={isEditing ? "Edit" : "Plus"} size={20} />
+            {isEditing ? "Редактировать объект недвижимости" : "Добавить объект недвижимости"}
           </div>
           {isEditing && onCancel && (
-            <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
+            <Button variant="ghost" onClick={onCancel}>
               <Icon name="X" size={16} />
             </Button>
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-4 md:p-6">
+      <CardContent>
         <form onSubmit={onSubmit} className="space-y-6">
           {error && (
             <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
@@ -121,7 +118,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 <Input
                   id="title"
                   value={propertyForm.title}
-                  onChange={(e) => setPropertyForm(prev => ({...prev, title: e.target.value}))}
+                  onChange={(e) => setPropertyForm({...propertyForm, title: e.target.value})}
                   placeholder="Например: 3-комнатная квартира в центре"
                   required
                 />
@@ -132,7 +129,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                 <Textarea
                   id="description"
                   value={propertyForm.description}
-                  onChange={(e) => setPropertyForm(prev => ({...prev, description: e.target.value}))}
+                  onChange={(e) => setPropertyForm({...propertyForm, description: e.target.value})}
                   placeholder="Подробное описание объекта"
                   rows={3}
                 />
@@ -140,7 +137,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
 
               <div>
                 <Label htmlFor="property_type">Тип недвижимости *</Label>
-                <Select value={propertyForm.property_type} onValueChange={(value) => setPropertyForm(prev => ({...prev, property_type: value}))}>
+                <Select value={propertyForm.property_type} onValueChange={(value) => setPropertyForm({...propertyForm, property_type: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -154,14 +151,13 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
 
               <div>
                 <Label htmlFor="transaction_type">Тип операции *</Label>
-                <Select value={propertyForm.transaction_type} onValueChange={(value) => setPropertyForm(prev => ({...prev, transaction_type: value}))}>
+                <Select value={propertyForm.transaction_type} onValueChange={(value) => setPropertyForm({...propertyForm, transaction_type: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="rent">Долгосрочная аренда</SelectItem>
                     <SelectItem value="daily_rent">Посуточная аренда</SelectItem>
-                    <SelectItem value="sale">Продажа</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -172,21 +168,21 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   <Input
                     id="price"
                     type="number"
-                    value={propertyForm.price || ''}
-                    onChange={(e) => setPropertyForm(prev => ({...prev, price: e.target.value ? Number(e.target.value) : 0}))}
+                    value={propertyForm.price}
+                    onChange={(e) => setPropertyForm({...propertyForm, price: Number(e.target.value)})}
                     required
                   />
                 </div>
                 <div>
                   <Label htmlFor="currency">Валюта</Label>
-                  <Select value={propertyForm.currency} onValueChange={(value) => setPropertyForm(prev => ({...prev, currency: value}))}>
+                  <Select value={propertyForm.currency} onValueChange={(value) => setPropertyForm({...propertyForm, currency: value})}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="AMD">AMD</SelectItem>
-                      <SelectItem value="USD">USD</SelectItem>
-                      <SelectItem value="RUB">RUB</SelectItem>
+                      <SelectItem value="AMD">AMD (драм)</SelectItem>
+                      <SelectItem value="USD">USD (доллар)</SelectItem>
+                      <SelectItem value="EUR">EUR (евро)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -195,201 +191,110 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
 
             {/* Details */}
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="rooms">Комнат</Label>
-                  <Select value={propertyForm.rooms?.toString() || ''} onValueChange={(value) => setPropertyForm(prev => ({...prev, rooms: value ? Number(value) : 0}))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1 комната</SelectItem>
-                      <SelectItem value="2">2 комнаты</SelectItem>
-                      <SelectItem value="3">3 комнаты</SelectItem>
-                      <SelectItem value="4">4+ комнат</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="area">Площадь (м²)</Label>
                   <Input
                     id="area"
                     type="number"
                     step="0.1"
-                    value={propertyForm.area || ''}
-                    onChange={(e) => setPropertyForm(prev => ({...prev, area: e.target.value ? Number(e.target.value) : 0}))}
+                    value={propertyForm.area}
+                    onChange={(e) => setPropertyForm({...propertyForm, area: Number(e.target.value)})}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="floor">Этаж</Label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Input
-                      id="floor"
-                      type="number"
-                      placeholder="Этаж"
-                      value={propertyForm.floor || ''}
-                      onChange={(e) => setPropertyForm(prev => ({...prev, floor: e.target.value ? Number(e.target.value) : 0}))}
-                    />
-                    <Input
-                      id="total_floors"
-                      type="number"
-                      placeholder="Всего"
-                      value={propertyForm.total_floors || ''}
-                      onChange={(e) => setPropertyForm(prev => ({...prev, total_floors: e.target.value ? Number(e.target.value) : 0}))}
-                    />
-                  </div>
+                  <Label htmlFor="rooms">Комнат</Label>
+                  <Input
+                    id="rooms"
+                    type="number"
+                    value={propertyForm.rooms}
+                    onChange={(e) => setPropertyForm({...propertyForm, rooms: Number(e.target.value)})}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="bedrooms">Спален</Label>
+                  <Input
+                    id="bedrooms"
+                    type="number"
+                    value={propertyForm.bedrooms}
+                    onChange={(e) => setPropertyForm({...propertyForm, bedrooms: Number(e.target.value)})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="bathrooms">Ванных</Label>
+                  <Input
+                    id="bathrooms"
+                    type="number"
+                    value={propertyForm.bathrooms}
+                    onChange={(e) => setPropertyForm({...propertyForm, bathrooms: Number(e.target.value)})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="year_built">Год постройки</Label>
+                  <Input
+                    id="year_built"
+                    type="number"
+                    value={propertyForm.year_built}
+                    onChange={(e) => setPropertyForm({...propertyForm, year_built: Number(e.target.value)})}
+                  />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="pets_allowed">Можно с животными</Label>
-                  <Select value={propertyForm.pets_allowed || 'any'} onValueChange={(value) => setPropertyForm(prev => ({...prev, pets_allowed: value}))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Не важно" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Не важно</SelectItem>
-                      <SelectItem value="yes">Да</SelectItem>
-                      <SelectItem value="no">Нет</SelectItem>
-                      <SelectItem value="negotiable">По договоренности</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="floor">Этаж</Label>
+                  <Input
+                    id="floor"
+                    type="number"
+                    value={propertyForm.floor}
+                    onChange={(e) => setPropertyForm({...propertyForm, floor: Number(e.target.value)})}
+                  />
                 </div>
                 <div>
-                  <Label htmlFor="children_allowed">Можно с детьми</Label>
-                  <Select value={propertyForm.children_allowed || 'any'} onValueChange={(value) => setPropertyForm(prev => ({...prev, children_allowed: value}))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Не важно" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Не важно</SelectItem>
-                      <SelectItem value="yes">Да</SelectItem>
-                      <SelectItem value="no">Нет</SelectItem>
-                      <SelectItem value="negotiable">По договоренности</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="total_floors">Всего этажей</Label>
+                  <Input
+                    id="total_floors"
+                    type="number"
+                    value={propertyForm.total_floors}
+                    onChange={(e) => setPropertyForm({...propertyForm, total_floors: Number(e.target.value)})}
+                  />
                 </div>
               </div>
+
             </div>
           </div>
 
-          {/* Address */}
+          {/* Address Selection */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Адрес объекта</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="street_name">Улица и дом *</Label>
-                <Input
-                  id="street_name"
-                  value={propertyForm.street_name || ''}
-                  onChange={(e) => setPropertyForm(prev => ({...prev, street_name: e.target.value}))}
-                  placeholder="ул. Абовяна 15"
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="district">Район *</Label>
-                <Select value={propertyForm.district || ''} onValueChange={(value) => setPropertyForm(prev => ({...prev, district: value}))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите район" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Ачапняк">Ачапняк</SelectItem>
-                    <SelectItem value="Арабкир">Арабкир</SelectItem>
-                    <SelectItem value="Аван">Аван</SelectItem>
-                    <SelectItem value="Давташен">Давташен</SelectItem>
-                    <SelectItem value="Эребуни">Эребуни</SelectItem>
-                    <SelectItem value="Кентрон">Кентрон</SelectItem>
-                    <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
-                    <SelectItem value="Нор Норк">Нор Норк</SelectItem>
-                    <SelectItem value="Нубарашен">Нубарашен</SelectItem>
-                    <SelectItem value="Шенгавит">Шенгавит</SelectItem>
-                    <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="border rounded-lg p-4 bg-gray-50">
-              <div className="flex items-center justify-between mb-2">
-                <Label>Местоположение на карте {geocoding && <span className="text-xs text-gray-500">(определение...)</span>}</Label>
-                <Button type="button" variant="outline" size="sm" onClick={() => setIsMapOpen(true)}>
-                  <Icon name="MapPin" size={16} className="mr-1" />
-                  Выбрать на карте
-                </Button>
-              </div>
-              <div className="text-sm text-gray-600">
-                <p>Широта: {propertyForm.latitude?.toFixed(6) || 'не указано'}</p>
-                <p>Долгота: {propertyForm.longitude?.toFixed(6) || 'не указано'}</p>
-                {propertyForm.latitude && propertyForm.longitude && (
-                  <p className="text-xs text-green-600 mt-1">✓ Координаты установлены автоматически</p>
-                )}
-              </div>
-            </div>
+            <AddressSelector
+              address={currentAddress}
+              onAddressChange={handleAddressChange}
+              coordinates={currentCoordinates}
+              onCoordinatesChange={handleCoordinatesChange}
+            />
           </div>
 
-          {/* Amenities */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Удобства</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: 'Телевизор', value: 'tv' },
-                { label: 'Кондиционер', value: 'ac' },
-                { label: 'Интернет', value: 'internet' },
-                { label: 'Холодильник', value: 'fridge' },
-                { label: 'Плита', value: 'stove' },
-                { label: 'Микроволновка', value: 'microwave' },
-                { label: 'Кофеварка', value: 'coffee_maker' },
-                { label: 'Посудомоечная машина', value: 'dishwasher' },
-                { label: 'Стиральная машина', value: 'washing_machine' },
-                { label: 'Сушильная машина', value: 'dryer' },
-                { label: 'Водонагреватель', value: 'water_heater' },
-                { label: 'Утюг', value: 'iron' },
-                { label: 'Фен', value: 'hair_dryer' },
-              ].map((amenity) => {
-                const currentFeatures = featuresText.split('\n').filter(f => f.trim());
-                const isChecked = currentFeatures.includes(amenity.label);
-                return (
-                  <label key={amenity.value} className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setFeaturesText(prev => prev ? `${prev}\n${amenity.label}` : amenity.label);
-                        } else {
-                          const newFeatures = currentFeatures.filter(f => f !== amenity.label);
-                          setFeaturesText(newFeatures.join('\n'));
-                        }
-                      }}
-                      className="w-4 h-4 rounded border-gray-300"
-                    />
-                    <span className="text-sm">{amenity.label}</span>
-                  </label>
-                );
-              })}
-            </div>
+          {/* Features and Images */}
+          <div className="space-y-6">
             <div>
-              <Label htmlFor="features">Дополнительные особенности (каждая с новой строки)</Label>
+              <Label htmlFor="features">Особенности (каждая с новой строки)</Label>
               <Textarea
                 id="features"
                 value={featuresText}
                 onChange={(e) => setFeaturesText(e.target.value)}
                 placeholder="Парковка&#10;Балкон&#10;Лифт&#10;Мебель"
-                rows={3}
+                rows={4}
               />
             </div>
-          </div>
-
-          {/* Images */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Фотографии</h3>
 
             <ImageUpload
-              images={propertyForm.images || []}
-              onImagesChange={(newImages) => setPropertyForm(prev => ({...prev, images: newImages}))}
-              maxImages={10}
+              images={propertyForm.images}
+              onImagesChange={handleImagesChange}
+              maxImages={5}
             />
           </div>
 
@@ -404,14 +309,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
             </Button>
           </div>
         </form>
-
-        <MapPicker
-          latitude={propertyForm.latitude || 40.1792}
-          longitude={propertyForm.longitude || 44.4991}
-          onLocationChange={handleLocationChange}
-          isOpen={isMapOpen}
-          onClose={() => setIsMapOpen(false)}
-        />
       </CardContent>
     </Card>
   );

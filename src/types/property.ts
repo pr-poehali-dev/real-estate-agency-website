@@ -29,8 +29,6 @@ export interface Property {
   longitude: number;
   features: string[];
   images: string[];
-  pets_allowed?: string;
-  children_allowed?: string;
   status?: string;
   created_at?: string;
   updated_at?: string;

@@ -13,7 +13,7 @@ interface ImageUploadProps {
 const ImageUpload: React.FC<ImageUploadProps> = ({ 
   images, 
   onImagesChange, 
-  maxImages = 7 
+  maxImages = 5 
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [compressionEnabled, setCompressionEnabled] = useState(true);

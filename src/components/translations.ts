@@ -4,7 +4,6 @@ export const translations = {
       about: 'О нас',
       services: 'Услуги',
       contact: 'Контакты',
-      map: 'Карта объектов',
       submitRequest: 'Оставить заявку'
     },
     hero: {
@@ -84,7 +83,6 @@ export const translations = {
       about: 'About',
       services: 'Services',
       contact: 'Contact',
-      map: 'Property Map',
       submitRequest: 'Submit Request'
     },
     hero: {
