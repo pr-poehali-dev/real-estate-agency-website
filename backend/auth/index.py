@@ -129,7 +129,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            update_query = f"UPDATE t_p37006348_real_estate_agency_w.admin_users SET updated_at = CURRENT_TIMESTAMP WHERE id = {user['id']}"
+            update_query = f"UPDATE t_p37006348_real_estate_agency_w.admin_users SET last_login = CURRENT_TIMESTAMP WHERE id = {user['id']}"
             cursor.execute(update_query)
             conn.commit()
             
