@@ -32,7 +32,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 214.3 31.8% 91.4%;
 
     --radius: 0.5rem;
 
@@ -97,7 +97,148 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Leaflet Map Styles */
+.leaflet-container {
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 12px 12px 10px;
+}
+
+.compact-popup .leaflet-popup-content-wrapper {
+  max-width: 240px !important;
+}
+
+.compact-popup .leaflet-popup-content {
+  margin: 10px;
+  width: 220px !important;
+}
+
+.leaflet-popup-tip {
+  background: white;
+}
+
+.custom-marker {
+  background: none;
+  border: none;
+}
+
+/* Scrollbar Hide */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slideInLeft {
+    animation: slideInLeft 0.5s ease-out forwards;
+  }
+
+  .animate-scaleIn {
+    animation: scaleIn 0.4s ease-out forwards;
+  }
+
+  [class*="delay-"] {
+    opacity: 0;
+  }
+
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+  .delay-400 {
+    animation-delay: 0.4s;
+  }
+  .delay-500 {
+    animation-delay: 0.5s;
   }
 }
