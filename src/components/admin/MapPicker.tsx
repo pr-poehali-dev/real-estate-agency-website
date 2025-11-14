@@ -27,7 +27,15 @@ const MapPicker: React.FC<MapPickerProps> = ({
   const [selectedLng, setSelectedLng] = useState(longitude);
 
   useEffect(() => {
-    if (!isOpen || !mapContainer.current || mapInstance.current) return;
+    if (!isOpen || !mapContainer.current) return;
+
+    if (mapInstance.current) {
+      mapInstance.current.remove();
+      mapInstance.current = null;
+      if (markerRef.current) {
+        markerRef.current = null;
+      }
+    }
 
     mapInstance.current = L.map(mapContainer.current, {
       center: [latitude, longitude],
@@ -82,8 +90,11 @@ const MapPicker: React.FC<MapPickerProps> = ({
         mapInstance.current.remove();
         mapInstance.current = null;
       }
+      if (markerRef.current) {
+        markerRef.current = null;
+      }
     };
-  }, [isOpen]);
+  }, [isOpen, latitude, longitude]);
 
   const handleConfirm = () => {
     onClose();
