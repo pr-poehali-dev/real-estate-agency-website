@@ -303,6 +303,10 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
         marker.addTo(mapInstance.current!);
         markersMapRef.current.set(property.id, marker);
       } else {
+        const currentLatLng = marker.getLatLng();
+        if (currentLatLng.lat !== lat || currentLatLng.lng !== lng) {
+          marker.setLatLng([lat, lng]);
+        }
         marker.setIcon(createMarkerIcon(property, isSelected));
       }
     });

@@ -78,6 +78,14 @@ export default function PropertyPage() {
   }, [id]);
 
   useEffect(() => {
+    const handleFocus = () => {
+      loadProperty();
+    };
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [id]);
+
+  useEffect(() => {
     const filters = {
       showFilters,
       transactionType,
