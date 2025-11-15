@@ -60,37 +60,33 @@ export default function ContactSection() {
     setFormLoading(true);
     setFormSuccess(false);
 
-    const message = `🏠 *Новая заявка с сайта WSE.AM*\n\n` +
-      `👤 *Имя:* ${contactForm.name}\n` +
-      `📞 *Способ связи:* ${contactForm.contact_method === 'telegram' ? 'Telegram' : contactForm.contact_method === 'phone' ? 'Телефон' : 'WhatsApp'}\n` +
-      `📱 *Контакт:* ${contactForm.contact_value}\n` +
-      `🏡 *Тип услуги:* ${contactForm.service_type === 'rent' ? 'Аренда квартир' : contactForm.service_type === 'sale' ? 'Покупка недвижимости' : 'Консультация'}\n` +
-      `💬 *Сообщение:* ${contactForm.message || 'Не указано'}`;
-
     try {
-      const TELEGRAM_BOT_TOKEN = '7777777777:AAHexampleTokenHere';
-      const TELEGRAM_CHAT_ID = '-1001234567890';
-      
-      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      const response = await fetch('https://functions.poehali.dev/09d9ff7b-b72a-40eb-ac66-289fa2f53b56', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: message,
-          parse_mode: 'Markdown'
+          name: contactForm.name,
+          contactMethod: contactForm.contact_method === 'telegram' ? 'Telegram' : contactForm.contact_method === 'phone' ? 'Телефон' : 'WhatsApp',
+          contact: contactForm.contact_value,
+          service: contactForm.service_type === 'rent' ? 'Аренда квартир' : contactForm.service_type === 'sale' ? 'Покупка недвижимости' : 'Консультация',
+          message: contactForm.message || 'Не указано'
         })
       });
 
-      setFormSuccess(true);
-      const emptyForm = {
-        name: '',
-        contact_method: 'telegram',
-        contact_value: '',
-        service_type: 'rent',
-        message: ''
-      };
-      setContactForm(emptyForm);
-      localStorage.setItem('contact_form', JSON.stringify(emptyForm));
+      if (response.ok) {
+        setFormSuccess(true);
+        const emptyForm = {
+          name: '',
+          contact_method: 'telegram',
+          contact_value: '',
+          service_type: 'rent',
+          message: ''
+        };
+        setContactForm(emptyForm);
+        localStorage.setItem('contact_form', JSON.stringify(emptyForm));
+      } else {
+        console.error('Failed to send form');
+      }
     } catch (error) {
       console.error('Error sending message:', error);
     } finally {
