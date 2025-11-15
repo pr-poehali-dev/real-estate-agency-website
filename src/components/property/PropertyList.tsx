@@ -67,11 +67,6 @@ export default function PropertyList({ properties }: PropertyListProps) {
                       alt={prop.title}
                       className="w-full h-full object-cover rounded-lg"
                     />
-                    {prop.transaction_type && (
-                      <span className={`absolute top-2 left-2 px-2 py-1 rounded text-xs font-semibold ${getTransactionBadge(prop.transaction_type).color}`}>
-                        {getTransactionBadge(prop.transaction_type).text}
-                      </span>
-                    )}
                   </div>
                   
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
