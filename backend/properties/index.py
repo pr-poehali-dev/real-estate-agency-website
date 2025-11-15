@@ -246,18 +246,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             images = body_data.get('images', [])
             images_str = "ARRAY[" + ",".join([f"'{escape_sql_string(img)}'" for img in images]) + "]" if images else "'{}'"
             
+            badges = body_data.get('badges', [])
+            badges_str = "ARRAY[" + ",".join([f"'{escape_sql_string(b)}'" for b in badges]) + "]" if badges else "'{}'"
+            
             insert_query = f"""
                 INSERT INTO properties (
                     title, description, property_type, transaction_type, price, currency,
                     area, rooms, bedrooms, bathrooms, floor, total_floors, year_built,
                     district, address, street_name, house_number, apartment_number,
-                    latitude, longitude, features, images, status
+                    latitude, longitude, features, images, badges, status
                 ) VALUES (
                     '{title}', '{description}', '{property_type}', '{transaction_type}', 
                     {price}, '{currency}', {area}, {rooms}, {bedrooms}, {bathrooms}, 
                     {floor}, {total_floors}, {year_built}, '{district}', '{address}',
                     '{street_name}', '{house_number}', '{apartment_number}',
-                    {latitude}, {longitude}, {features_str}, {images_str}, '{status}'
+                    {latitude}, {longitude}, {features_str}, {images_str}, {badges_str}, '{status}'
                 ) RETURNING id
             """
             
@@ -418,6 +421,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 images = body_data['images']
                 images_str = "ARRAY[" + ",".join([f"'{escape_sql_string(img)}'" for img in images]) + "]" if images else "'{}'"
                 set_clauses.append(f"images = {images_str}")
+            if 'badges' in body_data:
+                badges = body_data['badges']
+                badges_str = "ARRAY[" + ",".join([f"'{escape_sql_string(b)}'" for b in badges]) + "]" if badges else "'{}'"
+                set_clauses.append(f"badges = {badges_str}")
             
             set_clauses.append("updated_at = CURRENT_TIMESTAMP")
             
