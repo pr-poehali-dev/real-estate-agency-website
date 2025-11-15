@@ -90,18 +90,17 @@ export default function SearchSection({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все районы</SelectItem>
-                  <SelectItem value="ajapnyak">Ачапняк</SelectItem>
-                  <SelectItem value="arabkir">Арабкир</SelectItem>
-                  <SelectItem value="avan">Аван</SelectItem>
-                  <SelectItem value="davtashen">Давташен</SelectItem>
-                  <SelectItem value="erebuni">Эребуни</SelectItem>
-                  <SelectItem value="kentron">Кентрон</SelectItem>
-                  <SelectItem value="malatia-sebastia">Малатия-Себастия</SelectItem>
-                  <SelectItem value="nor-nork">Нор Норк</SelectItem>
-                  <SelectItem value="nubarashen">Нубарашен</SelectItem>
-                  <SelectItem value="shengavit">Шенгавит</SelectItem>
-                  <SelectItem value="kanaker-zeytun">Канакер-Зейтун</SelectItem>
-                  <SelectItem value="qanaqer-zeytun">Канакер-Зейтун</SelectItem>
+                  <SelectItem value="Ачапняк">Ачапняк</SelectItem>
+                  <SelectItem value="Арабкир">Арабкир</SelectItem>
+                  <SelectItem value="Аван">Аван</SelectItem>
+                  <SelectItem value="Давташен">Давташен</SelectItem>
+                  <SelectItem value="Эребуни">Эребуни</SelectItem>
+                  <SelectItem value="Кентрон">Кентрон</SelectItem>
+                  <SelectItem value="Малатия-Себастия">Малатия-Себастия</SelectItem>
+                  <SelectItem value="Нор Норк">Нор Норк</SelectItem>
+                  <SelectItem value="Нубарашен">Нубарашен</SelectItem>
+                  <SelectItem value="Шенгавит">Шенгавит</SelectItem>
+                  <SelectItem value="Канакер-Зейтун">Канакер-Зейтун</SelectItem>
                 </SelectContent>
               </Select>
             </div>
