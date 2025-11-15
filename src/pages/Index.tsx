@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Properties } from "@/lib/api";
 import type { Property as ApiProperty } from "@/lib/api";
 import SEO from "@/components/SEO";
@@ -20,6 +20,7 @@ interface Property extends ApiProperty {
 
 export default function Index() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [transactionType, setTransactionType] = useState('all');
@@ -31,6 +32,14 @@ export default function Index() {
   useEffect(() => {
     loadProperties();
   }, []);
+
+  useEffect(() => {
+    if (location.state?.scrollToContact) {
+      setTimeout(() => {
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [location]);
 
   const loadProperties = async () => {
     setLoading(true);
