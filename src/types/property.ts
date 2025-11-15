@@ -31,6 +31,7 @@ export interface Property {
   images: string[];
   pets_allowed?: string;
   children_allowed?: string;
+  is_new_building?: boolean;
   status?: string;
   created_at?: string;
   updated_at?: string;

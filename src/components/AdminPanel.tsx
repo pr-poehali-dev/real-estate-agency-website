@@ -71,7 +71,8 @@ const AdminPanel: React.FC = () => {
       features: [],
       images: [],
       pets_allowed: 'any',
-      children_allowed: 'any'
+      children_allowed: 'any',
+      is_new_building: false
     };
   });
 
@@ -161,7 +162,8 @@ const AdminPanel: React.FC = () => {
       features: [],
       images: [],
       pets_allowed: 'any',
-      children_allowed: 'any'
+      children_allowed: 'any',
+      is_new_building: false
     };
     setPropertyForm(emptyForm);
     setFeaturesText('');

@@ -273,6 +273,18 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
                   </Select>
                 </div>
               </div>
+
+              <div>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={propertyForm.is_new_building || false}
+                    onChange={(e) => setPropertyForm(prev => ({...prev, is_new_building: e.target.checked}))}
+                    className="rounded border-gray-300"
+                  />
+                  <span className="text-sm font-medium">Новостройка</span>
+                </label>
+              </div>
             </div>
           </div>
 

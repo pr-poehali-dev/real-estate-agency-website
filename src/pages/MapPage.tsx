@@ -34,6 +34,7 @@ const MapPage: React.FC = () => {
   const [amenities, setAmenities] = useState<string>(typeof initialFilters.amenities === 'string' ? initialFilters.amenities : '');
   const [petsAllowed, setPetsAllowed] = useState<string>(typeof initialFilters.petsAllowed === 'string' ? initialFilters.petsAllowed : '');
   const [childrenAllowed, setChildrenAllowed] = useState<string>(typeof initialFilters.childrenAllowed === 'string' ? initialFilters.childrenAllowed : '');
+  const [isNewBuilding, setIsNewBuilding] = useState<string>(typeof initialFilters.isNewBuilding === 'string' ? initialFilters.isNewBuilding : '');
   const [streetSearch, setStreetSearch] = useState(initialFilters.streetSearch);
   const [isMapExpanded, setIsMapExpanded] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -103,6 +104,12 @@ const MapPage: React.FC = () => {
         if (prop.children_allowed !== childrenAllowed) return false;
       }
       
+      if (isNewBuilding && isNewBuilding !== 'any') {
+        const isNew = prop.is_new_building || false;
+        if (isNewBuilding === 'yes' && !isNew) return false;
+        if (isNewBuilding === 'no' && isNew) return false;
+      }
+      
       return true;
     });
 
@@ -116,7 +123,7 @@ const MapPage: React.FC = () => {
       
       return b.id - a.id;
     });
-  }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
+  }, [allProperties, selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, rooms, amenities, petsAllowed, childrenAllowed, isNewBuilding, streetSearch]);
 
   useEffect(() => {
     const filters: MapFiltersType = {
@@ -130,10 +137,11 @@ const MapPage: React.FC = () => {
       amenities,
       petsAllowed,
       childrenAllowed,
+      isNewBuilding,
       streetSearch
     };
     saveFilters(filters);
-  }, [selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, streetSearch]);
+  }, [selectedType, selectedTransaction, selectedDistrict, minPrice, maxPrice, currency, rooms, amenities, petsAllowed, childrenAllowed, isNewBuilding, streetSearch]);
 
   const resetFilters = () => {
     setSelectedType('');
@@ -146,6 +154,7 @@ const MapPage: React.FC = () => {
     setAmenities('');
     setPetsAllowed('');
     setChildrenAllowed('');
+    setIsNewBuilding('');
     setStreetSearch('');
   };
 
@@ -210,6 +219,8 @@ const MapPage: React.FC = () => {
           setChildrenAllowed={setChildrenAllowed}
           petsAllowed={petsAllowed}
           setPetsAllowed={setPetsAllowed}
+          isNewBuilding={isNewBuilding}
+          setIsNewBuilding={setIsNewBuilding}
           currency={currency}
           setCurrency={setCurrency}
           minPrice={minPrice}

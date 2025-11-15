@@ -1,0 +1,1 @@
+ALTER TABLE properties ADD COLUMN is_new_building BOOLEAN DEFAULT false;

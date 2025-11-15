@@ -62,11 +62,18 @@ const PropertyGrid: React.FC<PropertyGridProps> = ({ properties, selectedPropert
                   <span className="text-gray-400 text-sm">Нет фото</span>
                 </div>
               )}
-              {property.created_at && isNew(property.created_at) && (
-                <div className="absolute top-2 left-2 bg-[#FF7A00] text-white text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-md">
-                  Новое
-                </div>
-              )}
+              <div className="absolute top-2 left-2 flex gap-1.5">
+                {property.created_at && isNew(property.created_at) && (
+                  <div className="bg-[#FF7A00] text-white text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-md">
+                    Новое
+                  </div>
+                )}
+                {property.is_new_building && (
+                  <div className="bg-emerald-500 text-white text-xs font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-md">
+                    Новостройка
+                  </div>
+                )}
+              </div>
               {property.images && property.images.length > 1 && (
                 <div className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
                   <Icon name="Image" size={12} />

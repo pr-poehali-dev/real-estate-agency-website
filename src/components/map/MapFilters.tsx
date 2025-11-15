@@ -21,6 +21,8 @@ interface MapFiltersProps {
   setChildrenAllowed: (value: string) => void;
   petsAllowed: string;
   setPetsAllowed: (value: string) => void;
+  isNewBuilding: string;
+  setIsNewBuilding: (value: string) => void;
   currency: string;
   setCurrency: (value: string) => void;
   minPrice: string;
@@ -48,6 +50,8 @@ const MapFilters: React.FC<MapFiltersProps> = ({
   setChildrenAllowed,
   petsAllowed,
   setPetsAllowed,
+  isNewBuilding,
+  setIsNewBuilding,
   currency,
   setCurrency,
   minPrice,
@@ -243,6 +247,23 @@ const MapFilters: React.FC<MapFiltersProps> = ({
                 <SelectItem value="yes">Да</SelectItem>
                 <SelectItem value="no">Нет</SelectItem>
                 <SelectItem value="negotiable">По договоренности</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Icon name="Building2" size={14} className="text-gray-500" />
+              <label className="block text-sm font-semibold text-gray-700">Новостройка</label>
+            </div>
+            <Select value={isNewBuilding} onValueChange={setIsNewBuilding}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="Не важно" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Не важно</SelectItem>
+                <SelectItem value="yes">Только новостройки</SelectItem>
+                <SelectItem value="no">Вторичное жилье</SelectItem>
               </SelectContent>
             </Select>
           </div>

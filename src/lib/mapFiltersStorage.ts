@@ -9,6 +9,7 @@ export interface MapFilters {
   amenities: string;
   petsAllowed: string;
   childrenAllowed: string;
+  isNewBuilding: string;
   streetSearch: string;
 }
 
@@ -26,6 +27,7 @@ export const loadFilters = (): MapFilters => {
     amenities: '',
     petsAllowed: '',
     childrenAllowed: '',
+    isNewBuilding: '',
     streetSearch: ''
   };
   
@@ -40,6 +42,7 @@ export const loadFilters = (): MapFilters => {
         selectedDistrict: Array.isArray(parsed.selectedDistrict) ? parsed.selectedDistrict : [],
         petsAllowed: typeof parsed.petsAllowed === 'string' ? parsed.petsAllowed : '',
         childrenAllowed: typeof parsed.childrenAllowed === 'string' ? parsed.childrenAllowed : '',
+        isNewBuilding: typeof parsed.isNewBuilding === 'string' ? parsed.isNewBuilding : '',
         amenities: typeof parsed.amenities === 'string' ? parsed.amenities : ''
       };
     }
