@@ -3,7 +3,7 @@ export const sampleProperties = [
   // Центр (Кентрон) - 3 объекта
   {
     id: 1,
-    title: '3-комнатная квартира в центре Еревана',
+    title: '3-спальная квартира в центре Еревана',
     description: 'Прекрасная квартира в самом сердце Еревана. Рядом с главными достопримечательностями, ресторанами и магазинами.',
     property_type: 'apartment',
     transaction_type: 'rent',
@@ -28,7 +28,7 @@ export const sampleProperties = [
   },
   {
     id: 2,
-    title: 'Элитная 2-комнатная квартира на площади Республики',
+    title: 'Элитная 2-спальная квартира на площади Республики',
     description: 'Роскошная квартира с видом на площадь Республики. Дизайнерский ремонт, премиальная мебель.',
     property_type: 'apartment',
     transaction_type: 'rent',
@@ -80,7 +80,7 @@ export const sampleProperties = [
   // Аван - 1 объект
   {
     id: 4,
-    title: 'Просторная квартира в Авановском районе',
+    title: 'Просторная 3-спальная квартира в Авановском районе',
     description: 'Тихий район с хорошей инфраструктурой. Рядом школы, садики и парки.',
     property_type: 'apartment',
     transaction_type: 'rent',
@@ -107,7 +107,7 @@ export const sampleProperties = [
   // Ачапняк - 1 объект
   {
     id: 5,
-    title: 'Современная квартира в Ачапняке',
+    title: 'Современная 2-спальная квартира в Ачапняке',
     description: 'Новая квартира с европейским ремонтом в развивающемся районе.',
     property_type: 'apartment',
     transaction_type: 'rent',
@@ -134,8 +134,8 @@ export const sampleProperties = [
   // Арабкир - 1 объект
   {
     id: 6,
-    title: 'Семейная квартира в Арабкире',
-    description: 'Уютная 3-комнатная квартира в престижном районе с хорошей инфраструктурой.',
+    title: 'Семейная 3-спальная квартира в Арабкире',
+    description: 'Уютная 3-спальная квартира в престижном районе с хорошей инфраструктурой.',
     property_type: 'apartment',
     transaction_type: 'rent',
     price: 320000,
@@ -161,7 +161,7 @@ export const sampleProperties = [
   // Давташен - 1 объект
   {
     id: 7,
-    title: 'Уютная квартира в Давташене',
+    title: 'Уютная 2-спальная квартира в Давташене',
     description: 'Комфортное жильё в спокойном районе. Хорошая транспортная доступность.',
     property_type: 'apartment',
     transaction_type: 'rent',
@@ -188,7 +188,7 @@ export const sampleProperties = [
   // Эребуни - 1 объект
   {
     id: 8,
-    title: 'Квартира с видом в Эребуни',
+    title: '2-спальная квартира с видом в Эребуни',
     description: 'Светлая квартира с прекрасным видом на город. Тихий и экологичный район.',
     property_type: 'apartment',
     transaction_type: 'rent',
@@ -215,7 +215,7 @@ export const sampleProperties = [
   // Канакер-Зейтун - 1 объект
   {
     id: 9,
-    title: 'Современное жильё в Канакер-Зейтуне',
+    title: 'Современное 2-спальное жильё в Канакер-Зейтуне',
     description: 'Новая квартира в быстрорастущем районе. Отличная инфраструктура.',
     property_type: 'apartment',
     transaction_type: 'rent',
@@ -242,7 +242,7 @@ export const sampleProperties = [
   // Малатия-Себастия - 1 объект
   {
     id: 10,
-    title: 'Просторная квартира в Малатия-Себастии',
+    title: 'Просторная 3-спальная квартира в Малатия-Себастии',
     description: 'Большая семейная квартира в районе с развитой инфраструктурой.',
     property_type: 'apartment',
     transaction_type: 'rent',
@@ -269,7 +269,7 @@ export const sampleProperties = [
   // Нор Норк - 1 объект
   {
     id: 11,
-    title: 'Квартира в новом микрорайоне Нор Норк',
+    title: '2-спальная квартира в новом микрорайоне Нор Норк',
     description: 'Современное жильё в одном из самых развивающихся районов Еревана.',
     property_type: 'apartment',
     transaction_type: 'rent',

@@ -109,7 +109,7 @@ export default function PropertyFilters({
         </div>
         
         <div className="flex flex-col">
-          <label className="text-sm font-medium mb-2">Количество комнат</label>
+          <label className="text-sm font-medium mb-2">Количество спален</label>
           <Select value={rooms} onValueChange={setRooms}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Выберите" />

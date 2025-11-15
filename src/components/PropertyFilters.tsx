@@ -128,9 +128,9 @@ const PropertyFilters: React.FC<FilterProps> = ({
             </Select>
           </div>
 
-          {/* Количество комнат */}
+          {/* Количество спален */}
           <div className="space-y-2">
-            <Label htmlFor="rooms">Количество комнат</Label>
+            <Label htmlFor="rooms">Количество спален</Label>
             <Select value="all">
               <SelectTrigger>
                 <SelectValue placeholder="Выберите" />

@@ -199,16 +199,16 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <Label htmlFor="rooms">Комнат</Label>
+                  <Label htmlFor="rooms">Спален</Label>
                   <Select value={propertyForm.rooms?.toString() || ''} onValueChange={(value) => setPropertyForm(prev => ({...prev, rooms: value ? Number(value) : 0}))}>
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1">1 комната</SelectItem>
-                      <SelectItem value="2">2 комнаты</SelectItem>
-                      <SelectItem value="3">3 комнаты</SelectItem>
-                      <SelectItem value="4">4+ комнат</SelectItem>
+                      <SelectItem value="1">1 спальня</SelectItem>
+                      <SelectItem value="2">2 спальни</SelectItem>
+                      <SelectItem value="3">3 спальни</SelectItem>
+                      <SelectItem value="4">4+ спален</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
