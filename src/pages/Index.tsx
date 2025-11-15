@@ -6,6 +6,7 @@ import SEO from "@/components/SEO";
 import Header from "@/components/home/Header";
 import SearchSection from "@/components/home/SearchSection";
 import RecentlyAdded from "@/components/home/RecentlyAdded";
+import AboutSection from "@/components/home/AboutSection";
 import MapPreview from "@/components/home/MapPreview";
 import ContactSection from "@/components/home/ContactSection";
 import Footer from "@/components/home/Footer";
@@ -89,6 +90,8 @@ export default function Index() {
       />
 
       <RecentlyAdded properties={properties} loading={loading} />
+      
+      <AboutSection />
       
       <MapPreview />
       
