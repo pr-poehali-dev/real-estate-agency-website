@@ -71,9 +71,22 @@ const MapPage: React.FC = () => {
         if (!streetMatch && !addressMatch) return false;
       }
       
-      const price = Number(prop.price);
-      if (minPrice && price < Number(minPrice)) return false;
-      if (maxPrice && price > Number(maxPrice)) return false;
+      const propPrice = Number(prop.price);
+      const propCurrency = prop.currency || 'AMD';
+      
+      if (minPrice) {
+        if (currency && propCurrency !== currency) {
+          return true;
+        }
+        if (propPrice < Number(minPrice)) return false;
+      }
+      
+      if (maxPrice) {
+        if (currency && propCurrency !== currency) {
+          return true;
+        }
+        if (propPrice > Number(maxPrice)) return false;
+      }
       
       if (rooms && rooms !== 'any' && prop.rooms !== Number(rooms)) return false;
       
