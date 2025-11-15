@@ -179,6 +179,16 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
                 </div>
               )}
 
+              {property.is_new_building && (
+                <div className="flex items-center gap-3">
+                  <Icon name="Building2" size={24} className="text-emerald-500" />
+                  <div>
+                    <p className="text-sm text-gray-600">Состояние</p>
+                    <p className="font-semibold text-emerald-600">Новостройка</p>
+                  </div>
+                </div>
+              )}
+
               {property.created_at && (
                 <div className="flex items-center gap-3">
                   <Icon name="Calendar" size={24} className="text-[#FF7A00]" />
