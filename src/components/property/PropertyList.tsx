@@ -67,6 +67,15 @@ export default function PropertyList({ properties }: PropertyListProps) {
                       alt={prop.title}
                       className="w-full h-full object-cover rounded-lg"
                     />
+                    {prop.badges && prop.badges.length > 0 && (
+                      <div className="absolute top-2 left-2 flex flex-col gap-1">
+                        {prop.badges.slice(0, 2).map((badge, idx) => (
+                          <span key={idx} className={`text-xs px-2 py-1 rounded font-semibold text-white shadow ${idx === 0 ? 'bg-blue-500' : 'bg-green-500'}`}>
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-1">

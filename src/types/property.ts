@@ -29,6 +29,7 @@ export interface Property {
   longitude: number;
   features: string[];
   images: string[];
+  badges?: string[];
   pets_allowed?: string;
   children_allowed?: string;
   is_new_building?: boolean;

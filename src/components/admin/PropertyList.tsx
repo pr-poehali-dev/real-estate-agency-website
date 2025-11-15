@@ -274,6 +274,15 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
                       <Icon name="Home" size={48} className="text-gray-400" />
                     </div>
                   )}
+                  {property.badges && property.badges.length > 0 && (
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
+                      {property.badges.slice(0, 2).map((badge, idx) => (
+                        <span key={idx} className={`text-xs px-2 py-1 rounded font-semibold text-white shadow ${idx === 0 ? 'bg-blue-500' : 'bg-green-500'}`}>
+                          {badge}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Контент */}

@@ -414,6 +414,49 @@ const PropertyForm: React.FC<PropertyFormProps> = ({
             </div>
           </div>
 
+          {/* Badges */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Бейджи (макс. 2)</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="badge1">Бейдж 1</Label>
+                <Input
+                  id="badge1"
+                  value={propertyForm.badges?.[0] || ''}
+                  onChange={(e) => {
+                    const newBadges = [...(propertyForm.badges || [])];
+                    if (e.target.value) {
+                      newBadges[0] = e.target.value;
+                    } else {
+                      newBadges.splice(0, 1);
+                    }
+                    setPropertyForm(prev => ({...prev, badges: newBadges.filter(b => b)}));
+                  }}
+                  placeholder="Например: Срочно"
+                  maxLength={20}
+                />
+              </div>
+              <div>
+                <Label htmlFor="badge2">Бейдж 2</Label>
+                <Input
+                  id="badge2"
+                  value={propertyForm.badges?.[1] || ''}
+                  onChange={(e) => {
+                    const newBadges = [...(propertyForm.badges || [])];
+                    if (e.target.value) {
+                      newBadges[1] = e.target.value;
+                    } else {
+                      newBadges.splice(1, 1);
+                    }
+                    setPropertyForm(prev => ({...prev, badges: newBadges.filter(b => b)}));
+                  }}
+                  placeholder="Например: Акция"
+                  maxLength={20}
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Images */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Фотографии</h3>

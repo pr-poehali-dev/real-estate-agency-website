@@ -54,6 +54,16 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
                   className="w-full h-[250px] md:h-[400px] object-cover rounded-2xl"
                 />
                 
+                {property.badges && property.badges.length > 0 && (
+                  <div className="absolute top-4 left-4 flex flex-col gap-2">
+                    {property.badges.slice(0, 2).map((badge, idx) => (
+                      <span key={idx} className={`text-sm px-3 py-1.5 rounded-lg font-semibold text-white shadow-lg ${idx === 0 ? 'bg-blue-500' : 'bg-green-500'}`}>
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                
                 {property.images.length > 1 && (
                   <>
                     <button
