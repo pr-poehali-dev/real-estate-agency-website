@@ -274,16 +274,6 @@ const PropertyList: React.FC<PropertyListProps> = ({ onEdit, onDelete, refetchTr
                       <Icon name="Home" size={48} className="text-gray-400" />
                     </div>
                   )}
-                  
-                  {/* Бейджи */}
-                  <div className="absolute top-2 left-2 flex flex-wrap gap-1">
-                    <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded shadow">
-                      {getPropertyTypeLabel(property.property_type)}
-                    </span>
-                    <span className="text-xs bg-green-500 text-white px-2 py-1 rounded shadow">
-                      {getTransactionTypeLabel(property.transaction_type)}
-                    </span>
-                  </div>
                 </div>
 
                 {/* Контент */}
