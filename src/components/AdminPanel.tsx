@@ -252,6 +252,7 @@ const AdminPanel: React.FC = () => {
         apartment_number: propertyForm.apartment_number?.trim() || '',
         features,
         images: propertyForm.images || [],
+        badges: propertyForm.badges || [],
         pets_allowed: propertyForm.pets_allowed || 'any',
         children_allowed: propertyForm.children_allowed || 'any',
         status: 'active'
