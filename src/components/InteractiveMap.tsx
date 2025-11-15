@@ -137,7 +137,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
                     <p><span className="font-medium">Площадь:</span> {property.area} м²</p>
                   )}
                   {property.rooms && (
-                    <p><span className="font-medium">Комнат:</span> {property.rooms}</p>
+                    <p><span className="font-medium">Спален:</span> {property.rooms}</p>
                   )}
                   <p className="text-gray-600 mt-2">{property.address}</p>
                 </div>

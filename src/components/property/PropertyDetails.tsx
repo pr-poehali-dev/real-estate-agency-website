@@ -124,7 +124,7 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
                 <div className="flex items-center gap-3">
                   <Icon name="Home" size={24} className="text-[#FF7A00]" />
                   <div>
-                    <p className="text-sm text-gray-600">Комнат</p>
+                    <p className="text-sm text-gray-600">Спален</p>
                     <p className="font-semibold">{property.rooms}</p>
                   </div>
                 </div>
