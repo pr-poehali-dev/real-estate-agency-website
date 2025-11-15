@@ -159,23 +159,6 @@ const MapFilters: React.FC<MapFiltersProps> = ({
               </SelectContent>
             </Select>
           </div>
-
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Icon name="Building2" size={14} className="text-gray-500" />
-              <label className="block text-sm font-semibold text-gray-700">Новостройка</label>
-            </div>
-            <Select value={isNewBuilding || 'any'} onValueChange={setIsNewBuilding}>
-              <SelectTrigger className="w-full h-10">
-                <SelectValue placeholder="Не важно" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Не важно</SelectItem>
-                <SelectItem value="yes">Только новостройки</SelectItem>
-                <SelectItem value="no">Вторичное жилье</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
         </div>
 
         {/* Разделитель */}
