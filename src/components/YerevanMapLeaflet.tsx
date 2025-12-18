@@ -244,7 +244,21 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       
       marker.bindPopup(popup);
       
-      const popupTimeout: NodeJS.Timeout | null = null;
+      let popupTimeout: NodeJS.Timeout | null = null;
+      
+      marker.on('mouseover', () => {
+        if (popupTimeout) {
+          clearTimeout(popupTimeout);
+          popupTimeout = null;
+        }
+        marker.openPopup();
+      });
+
+      marker.on('mouseout', () => {
+        popupTimeout = setTimeout(() => {
+          marker.closePopup();
+        }, 200);
+      });
       
       marker.on('click', () => {
         if (openOnClick) {
@@ -254,9 +268,22 @@ const YerevanMapLeaflet: React.FC<YerevanMapLeafletProps> = ({
       
       marker.on('popupopen', () => {
         setTimeout(() => {
-          const popupElement = document.querySelector(`[data-property-id="${property.id}"]`);
+          const popupElement = document.querySelector(`[data-property-id="${property.id}"]`) as HTMLElement;
           
           if (popupElement) {
+            popupElement.addEventListener('mouseenter', () => {
+              if (popupTimeout) {
+                clearTimeout(popupTimeout);
+                popupTimeout = null;
+              }
+            });
+            
+            popupElement.addEventListener('mouseleave', () => {
+              popupTimeout = setTimeout(() => {
+                marker.closePopup();
+              }, 200);
+            });
+            
             if (openOnClick) {
               const handleClick = (e: Event) => {
                 e.preventDefault();
