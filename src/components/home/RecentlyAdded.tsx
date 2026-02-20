@@ -243,7 +243,7 @@ export default function RecentlyAdded({ properties, loading }: RecentlyAddedProp
                               alt={property.title}
                               className="w-full aspect-[16/11] object-cover group-hover:scale-105 transition-transform duration-500"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute inset-0 from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-0 bg-[#cc151500]" />
                           </div>
                           
                           {imageCount > 1 && (
